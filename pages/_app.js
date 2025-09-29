@@ -34,7 +34,7 @@ export default function App({ Component, pageProps }) {
             }
           `,
         }}
-      /></Script>
+      />
       <Script
         id="google-translate-reinit"
         strategy="afterInteractive"
