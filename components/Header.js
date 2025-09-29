@@ -4,13 +4,14 @@ import { useCart } from '@/contexts/CartContext';
 import {
   FaTshirt, FaLaptop, FaMobileAlt, FaMicrochip, FaHome, FaBlender, FaTools, FaGem, FaLightbulb, FaSuitcase, FaShoePrints, FaBook, FaShieldAlt, FaFutbol, FaGamepad
 } from 'react-icons/fa';
+import LanguageDropdown from './LanguageDropdown';
 
 export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [showCategoriesDropdown, setShowCategoriesDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const { cartCount } = useCart();
-  
+
   const categories = [
     { name: 'Apparel Accessories', icon: <FaTshirt /> },
     { name: 'Computer and Office', icon: <FaLaptop /> },
@@ -28,7 +29,7 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
     { name: 'Sports & Entertainment', icon: <FaFutbol /> },
     { name: 'Toys & Hobbies', icon: <FaGamepad /> },
   ];
-  
+
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 bg-white transition-all duration-300 ${
       scrolled ? 'shadow-md' : 'shadow-sm'
@@ -49,7 +50,7 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
                     onMouseEnter={() => setShowCategoriesDropdown(true)}
                     onMouseLeave={() => setShowCategoriesDropdown(false)}
                   >
-                    <button 
+                    <button
                       className="flex flex-col space-y-1 p-2 hover:bg-gray-100 rounded-md transition-colors"
                       aria-label="Open categories menu"
                     >
@@ -100,7 +101,7 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
 
             {/* Right Icons and Language - Only on mobile first row */}
             <div className="flex items-center space-x-2 sm:hidden">
-              <button 
+              <button
                 className="relative"
                 aria-label="View wishlist"
               >
@@ -110,7 +111,7 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1">0</span>
               </button>
 
-              <button 
+              <button
                 className="relative"
                 aria-label="View shopping cart"
               >
@@ -120,7 +121,7 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1">{cartCount}</span>
               </button>
 
-              <button 
+              <button
                 className="text-gray-600"
                 aria-label="User account menu"
               >
@@ -136,7 +137,7 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
             <div className="flex w-full">
               <div className="relative group">
                 <label htmlFor="category-select" className="sr-only">Select category</label>
-                <select 
+                <select
                   id="category-select"
                   className="px-1 sm:px-2 py-1 sm:py-1.5 pr-5 sm:pr-7 border border-r-0 border-gray-300 bg-gray-50 text-gray-800 text-xs sm:text-sm min-w-0 focus:outline-none focus:bg-white focus:border-orange-500 w-10 sm:w-14 md:w-20 appearance-none custom-select-orange"
                 >
@@ -168,7 +169,7 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="flex-1 px-1 sm:px-2 md:px-3 py-1 sm:py-1.5 border border-gray-300 focus:outline-none focus:border-orange-500 text-xs sm:text-sm text-black"
               />
-              <button 
+              <button
                 className="px-1.5 sm:px-2.5 md:px-4 py-1 sm:py-1.5 bg-orange-500 text-white hover:bg-orange-600"
                 aria-label="Search"
               >
@@ -181,7 +182,7 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
 
           {/* Desktop: Right Icons */}
           <div className="hidden sm:flex sm:items-center sm:space-x-4">
-            <button 
+            <button
               className="relative"
               aria-label="View wishlist"
             >
@@ -191,7 +192,7 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
               <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1">0</span>
             </button>
 
-            <button 
+            <button
               className="relative"
               aria-label="View shopping cart"
             >
@@ -275,7 +276,7 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
             {/* Language Dropdown - Desktop only */}
             <div className="hidden sm:flex items-center">
               <div className="relative ml-4">
-                <div id="google_translate_element" className="google-translate-container"></div>
+                <LanguageDropdown />
               </div>
             </div>
           </div>
