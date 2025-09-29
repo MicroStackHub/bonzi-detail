@@ -35,7 +35,7 @@ export default function ProductDetail() {
 
   // Store access token in localStorage
   useEffect(() => {
-    const accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5MjBjMTIwZS0zY2IwLTQ3OGMtOTY0Yi1hM2ZhZmFjMDFhNGIiLCJqdGkiOiI1MTYwYzgzMTI1NjRiODEzYWQ0MDZmN2UzZDIxYzc1NGI4YWFiNjM5Y2ZmN2MxOGRhN2UwNTc3NDJjZGMyZWZmMWEyY2U4OWU2N2MxYzBjMiIsImlhdCI6MTc1ODk4MDkxNi4wNDcyODUsIm5iZiI6MTc1ODk4MDkxNi4wNDcyOSwiZXhwIjoxNzkwNTE2OTE2LjAwNjgwMiwic3ViIjoiNSIsInNjb3BlcyI6WyIqIl19.jVO8NQ6MG24sbDGcsFoC7-sNocL3GSOmavqYIjJLg594ldPL7DX7vDI1hJ68l8oBuUROYOJMi9UqcVZxqthpKlGb2uWXpmMXxl2hezyijR348Zoz4jwncJ3qumbLhZNIMadUiXahZhzvRk0HVEGrBH0RA_c2D5WxyeYNONgyURuO1MsCvgNqNjgus7fpK7-N3HYqggmRk6BMIU1oSTeghxKD-32aRXylPgfH5abhiDbkp_LzxScFcXgCU8GVNdXIm3mPgeZTQdXqtqxGsKp4fYSfIdnBjRxVLOBH_7w2PMPGmi6nG2PNAtyT1KnYdMqIDNlhHzmtqvQuXPLbvf5m3X5noPp8z_SUW523NeFe3t1J4VLAJMlFg6R34XMPOxGXEJBiBVXwOUjD5sVzo4dN07OYbM0-abPc9IknmaXDVLUnTIFvdDEjJvtWpUdW8PsfJO3IU7bhblWqHCKH3s1iNZF7LWYJmC1UH2M7Yn-oSUh1u4VYuu-mQXLu-6GeP_8CeON9CxLmaYm9QvXJvOEyTKd63vQzyv1edzun53zCHCgVPDCPNhvpHoS3oifK2GLnk1kS0etmq8FoESmS26Q2jKv_zFIDhi05xbuWSzTs3wj7AvZqkEmYdvBhzUrtclFX706rjwb1hLEmVr_16uorBpccOq5YfcYPPT1f_bzpJoE";
+    const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN || '';
     localStorage.setItem('access_token', accessToken);
   }, []);
 
@@ -50,7 +50,7 @@ export default function ProductDetail() {
       setLoading(true);
       
       // Fetch product details
-      const productResponse = await fetch(`https://api.glst.in/api/v2/product?product_id=${id}`);
+      const productResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/product?product_id=${id}`);
       const productData = await productResponse.json();
       
       if (!productData.success) {
@@ -58,7 +58,7 @@ export default function ProductDetail() {
       }
 
       // Fetch product description
-      const descriptionResponse = await fetch(`https://api.glst.in/api/v1/product-description/${id}`);
+      const descriptionResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/product-description/${id}`);
       const descriptionData = await descriptionResponse.json();
 
       if (descriptionData.success) {
@@ -90,7 +90,7 @@ export default function ProductDetail() {
     
     try {
       setPriceLoading(true);
-      const response = await fetch(`https://api.glst.in/api/v2/get-product-price?product_id=${id}&product_qty=${qty}`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/get-product-price?product_id=${id}&product_qty=${qty}`);
       const data = await response.json();
       
       if (data.success) {
@@ -783,7 +783,7 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
   try {
     // Fetch product data at build time for better performance
-    const productResponse = await fetch(`https://api.glst.in/api/v2/product?product_id=${params.id}`);
+    const productResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/product?product_id=${params.id}`);
     const productData = await productResponse.json();
     
     if (!productData.success) {
@@ -793,7 +793,7 @@ export async function getStaticProps({ params }) {
     }
 
     // Fetch product description
-    const descriptionResponse = await fetch(`https://api.glst.in/api/v1/product-description/${params.id}`);
+    const descriptionResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/product-description/${params.id}`);
     const descriptionData = await descriptionResponse.json();
 
     return {
@@ -802,7 +802,7 @@ export async function getStaticProps({ params }) {
         initialProductData: productData.data,
         initialDescription: descriptionData.success ? descriptionData.data : '',
       },
-      revalidate: 3600, // Revalidate every hour
+      revalidate: parseInt(process.env.REVALIDATION_TIME || '3600') // Use env variable for revalidation time
     };
   } catch (error) {
     return {
