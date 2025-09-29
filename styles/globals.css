@@ -64,3 +64,38 @@ html {
     text-wrap: balance;
   }
 }
+
+/* Hide Google Translate top banner */
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+body {
+  top: 0px !important;
+}
+
+/* Hide Powered by Google */
+.goog-te-gadget {
+  font-size: 0px !important;
+}
+
+/* Ensure dropdown is visible and styled */
+#google_translate_element select {
+  background: transparent;
+  border: none;
+  appearance: none;
+  font-size: 14px;
+  color: inherit;
+}
+
+/* Optional: Style the dropdown arrow */
+#google_translate_element select::-ms-expand {
+  display: none;
+}
+#google_translate_element::after {
+  content: '\25BC';
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}

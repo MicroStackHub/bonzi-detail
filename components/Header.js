@@ -273,23 +273,63 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
             </div>
 
             {/* Language Dropdown - Desktop only */}
-            <div className="hidden sm:block">
-              <label htmlFor="language-select" className="sr-only">Select language</label>
-              <select 
-                id="language-select"
-                className="text-sm text-gray-600 bg-transparent border-none focus:outline-none"
-              >
-                <option>English</option>
-                <option>Hindi</option>
-                <option>Bengali</option>
-                <option>Gujrati</option>
-                <option>Kannada</option>
-                <option>Marathi</option>
-                <option>Odiya</option>
-                <option>Punjabi</option>
-                <option>Tamil</option>
-                <option>Telugu</option>
-              </select>
+            {/* Google Translate Widget - Desktop only */}
+            <div className="hidden sm:block" id="google_translate_element">
+              <style jsx global>{`
+                /* Hide the top Google translate bar and branding */
+                .skiptranslate iframe,
+                .goog-te-banner-frame {
+                  display: none !important;
+                }
+                body {
+                  top: 0 !important;
+                }
+
+                /* Hide Google branding text */
+                .goog-te-gadget {
+                  font-size: 0 !important;
+                }
+                .goog-te-gadget .goog-te-combo {
+                  margin: 0 !important;
+                }
+                .goog-logo-link {
+                  display: none !important;
+                }
+                .goog-te-gadget span {
+                  display: none !important;
+                }
+
+                /* Style the language selector dropdown */
+                .goog-te-gadget-simple {
+                  border: 1px solid #e5e7eb !important;
+                  background-color: #f9fafb !important;
+                  padding: 4px 8px !important;
+                  border-radius: 0.375rem !important;
+                  font-size: 0.875rem !important;
+                  margin-left: 1rem !important;
+                }
+                .goog-te-gadget-simple:hover {
+                  background-color: #f3f4f6 !important;
+                  border-color: #f97316 !important;
+                }
+                .goog-te-menu-value {
+                  color: #4b5563 !important;
+                  display: flex !important;
+                  align-items: center !important;
+                }
+                .goog-te-menu-value:hover {
+                  color: #f97316 !important;
+                }
+                .goog-te-menu-value span:first-child {
+                  display: inline !important;
+                }
+                .goog-te-menu-value span:not(:first-child) {
+                  display: none !important;
+                }
+                .goog-te-gadget-icon {
+                  display: none !important;
+                }
+              `}</style>
             </div>
           </div>
         </div>
