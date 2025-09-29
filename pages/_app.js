@@ -57,7 +57,7 @@ export default function App({ Component, pageProps }) {
             }
           `,
         }}
-      /></Script>
+      />
       <Toaster
         position="top-right"
         toastOptions={{
