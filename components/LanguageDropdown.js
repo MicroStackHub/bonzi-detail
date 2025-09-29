@@ -38,13 +38,12 @@ export default function LanguageDropdown() {
   const router = useRouter();
 
   const initializeGoogleTranslate = () => {
-    if (typeof window !== 'undefined' && window.google && window.google.translate) {
+    if (typeof window !== 'undefined' && window.google && window.google.translate && window.google.translate.TranslateElement) {
       try {
         const element = new window.google.translate.TranslateElement(
           {
             pageLanguage: 'en',
             includedLanguages: 'en,hi,bn,te,mr,ta,gu,kn,ml,pa,or,as,ur',
-            layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
             autoDisplay: false,
           },
           'google_translate_element'
@@ -55,6 +54,9 @@ export default function LanguageDropdown() {
       } catch (error) {
         console.error('Error initializing Google Translate:', error);
       }
+    } else {
+      console.log('Google Translate not ready yet, retrying...');
+      setTimeout(initializeGoogleTranslate, 500);
     }
   };
 
@@ -75,6 +77,7 @@ export default function LanguageDropdown() {
       script.id = 'google-translate-script';
       script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
       script.async = true;
+      script.defer = true;
       
       script.onload = () => {
         console.log('Google Translate script loaded');

@@ -9,16 +9,20 @@ export default function App({ Component, pageProps }) {
   const { isFallback, events } = useRouter();
 
   const googleTranslateElementInit = () => {
-    if (window.google && window.google.translate) {
-      new window.google.translate.TranslateElement(
-        { 
-          pageLanguage: 'en',
-          includedLanguages: 'en,hi,bn,te,mr,ta,gu,kn,ml,pa,or,as,ur',
-          layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
-          autoDisplay: false
-        }, 
-        'google_translate_element'
-      );
+    if (typeof window !== 'undefined' && window.google && window.google.translate && window.google.translate.TranslateElement) {
+      try {
+        new window.google.translate.TranslateElement(
+          { 
+            pageLanguage: 'en',
+            includedLanguages: 'en,hi,bn,te,mr,ta,gu,kn,ml,pa,or,as,ur',
+            autoDisplay: false
+          }, 
+          'google_translate_element'
+        );
+        console.log('Google Translate initialized in _app.js');
+      } catch (error) {
+        console.error('Error in googleTranslateElementInit:', error);
+      }
     }
   };
 
@@ -26,24 +30,34 @@ export default function App({ Component, pageProps }) {
     const id = 'google-translate-script';
 
     const addScript = () => {
-      const s = document.createElement('script');
-      s.setAttribute('src', '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit');
-      s.setAttribute('id', id);
-      const q = document.getElementById(id);
-      if (!q) {
-        document.body.appendChild(s);
-        window.googleTranslateElementInit = googleTranslateElementInit;
+      if (typeof window !== 'undefined') {
+        const existingScript = document.getElementById(id);
+        if (!existingScript) {
+          const s = document.createElement('script');
+          s.setAttribute('src', 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit');
+          s.setAttribute('id', id);
+          s.setAttribute('async', 'true');
+          
+          window.googleTranslateElementInit = googleTranslateElementInit;
+          
+          document.head.appendChild(s);
+        }
       }
     };
 
     const removeScript = () => {
-      const q = document.getElementById(id);
-      if (q) q.remove();
-      const w = document.getElementById('google_translate_element');
-      if (w) w.innerHTML = '';
+      if (typeof window !== 'undefined') {
+        const q = document.getElementById(id);
+        if (q) q.remove();
+        const w = document.getElementById('google_translate_element');
+        if (w) w.innerHTML = '';
+        delete window.googleTranslateElementInit;
+      }
     };
 
-    isFallback || addScript();
+    if (!isFallback) {
+      addScript();
+    }
 
     events.on('routeChangeStart', removeScript);
     events.on('routeChangeComplete', addScript);
