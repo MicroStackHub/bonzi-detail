@@ -1,18 +1,31 @@
 import "@/styles/globals.css";
 import { CartProvider } from "@/contexts/CartContext";
 import { Toaster } from 'react-hot-toast';
-import dynamic from 'next/dynamic';
-
-// Dynamically import GoogleTranslate with no SSR
-const GoogleTranslate = dynamic(
-  () => import('../components/GoogleTranslate'),
-  { ssr: false }
-);
+import Script from 'next/script';
 
 export default function App({ Component, pageProps }) {
   return (
     <>
-      <GoogleTranslate />
+      <Script
+        src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+        strategy="lazyOnload"
+      />
+      <Script
+        id="google-translate-init"
+        strategy="lazyOnload"
+        dangerouslySetInnerHTML={{
+          __html: `
+            function googleTranslateElementInit() {
+              new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'ar,bn,de,es,fr,hi,id,it,ja,ko,ms,pt,ru,th,tr,vi,zh-CN',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false,
+              }, 'google_translate_element');
+            }
+          `,
+        }}
+      />
       <Toaster
         position="top-right"
         toastOptions={{

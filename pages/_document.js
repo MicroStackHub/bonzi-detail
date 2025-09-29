@@ -12,7 +12,6 @@ export default function Document() {
         />
       </Head>
       <body className="antialiased">
-        <div id="google_translate_element" className="fixed top-2 right-2 z-50"></div>
         <Main />
         <NextScript />
       </body>
