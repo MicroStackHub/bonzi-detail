@@ -86,22 +86,22 @@ export default function Footer() {
           </div>
           
           {/* Social Media and Payment Icons */}
-          <div className="mt-4 pt-3 border-t border-gray-200">
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
-              <div className="flex items-center space-x-3">
-                <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors"><FaFacebookF size={14} /></a>
-                <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors"><FaInstagram size={14} /></a>
-                <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors"><FaTwitter size={14} /></a>
-                <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors"><FaLinkedinIn size={14} /></a>
-                <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors"><FaYoutube size={14} /></a>
-              </div>
+          <div className="mt-3 pt-2 border-t border-gray-200">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-1.5">
               <div className="flex items-center space-x-2">
-                <FaCcVisa size={20} className="text-blue-700" />
-                <FaCcMastercard size={20} className="text-red-500" />
-                <FaCcAmex size={20} className="text-blue-500" />
+                <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors"><FaFacebookF size={12} /></a>
+                <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors"><FaInstagram size={12} /></a>
+                <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors"><FaTwitter size={12} /></a>
+                <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors"><FaLinkedinIn size={12} /></a>
+                <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors"><FaYoutube size={12} /></a>
+              </div>
+              <div className="flex items-center space-x-1.5">
+                <FaCcVisa size={18} className="text-blue-700" />
+                <FaCcMastercard size={18} className="text-red-500" />
+                <FaCcAmex size={18} className="text-blue-500" />
               </div>
             </div>
-            <div className="mt-3 text-center text-[10px] text-gray-500">
+            <div className="mt-2 text-center text-[10px] text-gray-500">
               © {new Date().getFullYear()} Bonzi Cart. All rights reserved.
             </div>
           </div>
