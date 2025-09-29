@@ -20,6 +20,21 @@ export default function App({ Component, pageProps }) {
           'google_translate_element'
         );
         console.log('Google Translate initialized in _app.js');
+        
+        // Hide banner after initialization
+        setTimeout(() => {
+          const banners = document.querySelectorAll('.goog-te-banner-frame, .skiptranslate');
+          banners.forEach(banner => {
+            if (banner) {
+              banner.style.display = 'none';
+              banner.style.visibility = 'hidden';
+              banner.style.height = '0';
+            }
+          });
+          document.body.style.top = '0px';
+          document.body.style.position = 'static';
+        }, 100);
+        
       } catch (error) {
         console.error('Error in googleTranslateElementInit:', error);
       }

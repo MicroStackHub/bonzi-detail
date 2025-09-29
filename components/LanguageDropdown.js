@@ -51,6 +51,22 @@ export default function LanguageDropdown() {
         setTranslateElement(element);
         setIsTranslateReady(true);
         console.log('Google Translate initialized successfully');
+        
+        // Hide any banner that might appear
+        setTimeout(() => {
+          const banners = document.querySelectorAll('.goog-te-banner-frame, .skiptranslate');
+          banners.forEach(banner => {
+            if (banner) {
+              banner.style.display = 'none';
+              banner.style.visibility = 'hidden';
+              banner.style.height = '0';
+            }
+          });
+          // Ensure body stays at top
+          document.body.style.top = '0px';
+          document.body.style.position = 'static';
+        }, 100);
+        
       } catch (error) {
         console.error('Error initializing Google Translate:', error);
       }
@@ -157,6 +173,21 @@ export default function LanguageDropdown() {
         selectElement.value = languageCode;
         selectElement.dispatchEvent(new Event('change', { bubbles: true }));
         console.log(`Translated to ${languageCode} using select method`);
+        
+        // Hide any banner that appears after translation
+        setTimeout(() => {
+          const banners = document.querySelectorAll('.goog-te-banner-frame, .skiptranslate');
+          banners.forEach(banner => {
+            if (banner) {
+              banner.style.display = 'none';
+              banner.style.visibility = 'hidden';
+              banner.style.height = '0';
+            }
+          });
+          document.body.style.top = '0px';
+          document.body.style.position = 'static';
+        }, 500);
+        
         return;
       }
 
@@ -173,6 +204,11 @@ export default function LanguageDropdown() {
         }
       }
     } catch (error) {
+      // Suppress Google Translate fetch errors
+      if (error.message && error.message.includes('Failed to fetch')) {
+        // This is a Google Translate internal error, ignore it
+        return;
+      }
       console.error('Error translating page:', error);
     }
   };

@@ -74,12 +74,43 @@ html {
   display: none !important;
 }
 
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+
 .goog-te-menu-frame {
   display: none !important;
 }
 
 .goog-te-ftab {
   display: none !important;
+}
+
+/* Hide the top translation bar completely */
+body > .skiptranslate.goog-te-banner-frame {
+  display: none !important;
+}
+
+.goog-te-banner-frame.skiptranslate {
+  visibility: hidden !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Ensure body doesn't get pushed down */
+body {
+  top: 0px !important;
+  position: static !important;
+}
+
+/* Hide any notification bars */
+.goog-te-banner-frame, 
+.goog-te-banner-frame * {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .goog-logo-link {
