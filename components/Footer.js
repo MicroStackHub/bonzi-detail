@@ -89,11 +89,12 @@ export default function Footer() {
           <div className="mt-3 pt-2 border-t border-gray-200">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-1.5">
               <div className="flex items-center space-x-2">
-                <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors"><FaFacebookF size={12} /></a>
-                <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors"><FaInstagram size={12} /></a>
-                <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors"><FaTwitter size={12} /></a>
-                <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors"><FaLinkedinIn size={12} /></a>
-                <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors"><FaYoutube size={12} /></a>
+                <a href="https://www.facebook.com/BonziCart4U#" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-orange-500 transition-colors"><FaFacebookF size={12} /></a>
+                <a href="https://www.instagram.com/bonzicart/" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-orange-500 transition-colors"><FaInstagram size={12} /></a>
+                <a href="https://x.com/BonziCart" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-orange-500 transition-colors"><FaTwitter size={12} /></a>
+                <a href="https://www.linkedin.com/in/bonzi-cart-510646204/" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-orange-500 transition-colors"><FaLinkedinIn size={12} /></a>
+                <a href="https://www.youtube.com/channel/UCOgOz_X-Vk-OWvNS9Dy4KoQ?guided_help_flow=5" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-orange-500 transition-colors"><FaYoutube size={12} /></a>
+                <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors"><FaPinterest size={12} /></a>
               </div>
               <div className="flex items-center space-x-1.5">
                 <FaCcVisa size={18} className="text-blue-700" />

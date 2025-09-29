@@ -528,11 +528,11 @@ export default function ProductDetail() {
                           <span className="text-sm sm:text-base font-bold text-red-600">₹{priceData.sale_price_with_tax ? parseFloat(priceData.sale_price_with_tax.replace('INR ', '')).toFixed(2) : 'N/A'} / Piece</span>
                           <span className="text-[10px] sm:text-xs text-gray-500">(Inclusive of all taxes)</span>
                         </div>
-                        {priceData.stock < 10 && (
+                        {/* {priceData.stock < 10 && (
                           <div className="text-xs text-red-600 mt-1.5 font-semibold">
                             Only {priceData.stock} left in stock!
                           </div>
-                        )}
+                        )} */}
                       </div>
                     ) : (
                       <div>
@@ -636,10 +636,10 @@ export default function ProductDetail() {
                 </div>
 
                 {/* Two-column layout starts here */}
-                <div className="flex flex-col xl:flex-row gap-3 sm:gap-4">
+                <div className="flex flex-col xl:flex-row gap-3 sm:gap-2">
                   {/* Left Column */}
                   <div className="w-full">
-                    <div className="grid grid-cols-[auto,1fr] items-center gap-x-3 sm:gap-x-4 gap-y-3 sm:gap-y-3 text-xs sm:text-sm">
+                    <div className="grid grid-cols-[auto,1fr] items-center gap-x-3 sm:gap-x-2 gap-y-3 sm:gap-y-2 text-xs sm:text-sm">
                       {/* Color - Only show if colors exist and are not just 'Default' */}
                       {product.colors && Array.isArray(product.colors) && product.colors.length > 0 && (
                         <>
@@ -682,13 +682,13 @@ export default function ProductDetail() {
                       <div className="flex flex-wrap items-center">
                         <div className="flex items-center">
                           <button 
-                            className="px-2.5 sm:px-3 py-1.5 bg-gray-200 text-black rounded-l text-xs sm:text-sm" 
+                            className="px-2.5 sm:px-2 py-1.5 bg-gray-200 text-black rounded-l text-xs sm:text-sm" 
                             onClick={() => handleQuantityChange(-1)}
                             aria-label="Decrease quantity"
                           >
                             -
                           </button>
-                          <span className="px-4 sm:px-5 py-1.5 border-t border-b text-xs sm:text-sm">{quantity}</span>
+                          <span className="px-4 sm:px-3 py-1.5 border-t border-b text-xs sm:text-sm">{quantity}</span>
                           <button 
                             className="px-2.5 sm:px-3 py-1.5 bg-gray-200 text-black rounded-r text-xs sm:text-sm" 
                             onClick={() => handleQuantityChange(1)}
@@ -697,7 +697,7 @@ export default function ProductDetail() {
                             +
                           </button>
                         </div>
-                        <span className="text-green-600 text-[10px] sm:text-xs ml-2 sm:ml-3">(Stock {priceData?.stock || product.stock} pieces)</span>
+                        <span className="text-green-600 text-[10px] sm:text-xs ml-2 sm:ml-3">({priceData?.stock || product.stock} pieces)</span>
                       </div>
 
                       {/* Empty cell for alignment */}
@@ -706,11 +706,11 @@ export default function ProductDetail() {
 
                       {/* Shipping */}
                       <span className="font-medium text-gray-500 text-xs sm:text-[12px]">Shipping</span>
-                      <span className="text-green-600 font-semibold text-xs sm:text-sm">Free Shipping</span>
+                      <span className="text-green-600 font-semibold text-xs sm:text-[12px]">Free Shipping</span>
 
                       {/* COD */}
                       <span className="font-medium text-gray-500 text-xs sm:text-[12px]">COD</span>
-                      <span className="text-gray-500 font-semibold text-xs sm:text-sm">{product.codAvailable ? 'Available' : 'Not Available'}</span>
+                      <span className="text-gray-500 font-semibold text-xs sm:text-[12px]">{product.codAvailable ? 'Available' : 'Not Available'}</span>
 
                       {/* Total Price */}
                       <span className="font-medium text-gray-500 text-xs sm:text-[12px]">Total Price</span>
