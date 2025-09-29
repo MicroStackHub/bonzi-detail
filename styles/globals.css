@@ -68,3 +68,38 @@ html {
 }
 
 /* Custom Language Dropdown Styles */
+
+/* Hide Google Translate elements */
+.goog-te-banner-frame {
+  display: none !important;
+}
+
+.goog-te-menu-frame {
+  display: none !important;
+}
+
+.goog-te-ftab {
+  display: none !important;
+}
+
+.goog-logo-link {
+  display: none !important;
+}
+
+.goog-te-gadget {
+  display: none !important;
+}
+
+body {
+  top: 0px !important;
+}
+
+#google_translate_element {
+  display: none !important;
+}
+
+/* Prevent Google Translate from affecting page layout */
+.goog-text-highlight {
+  background: none !important;
+  box-shadow: none !important;
+}

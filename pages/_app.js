@@ -1,7 +1,7 @@
+
 import "@/styles/globals.css";
 import { CartProvider } from "@/contexts/CartContext";
 import { Toaster } from 'react-hot-toast';
-import Script from 'next/script';
 
 export default function App({ Component, pageProps }) {
   return (
