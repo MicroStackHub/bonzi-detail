@@ -6,9 +6,9 @@ export default function Footer() {
   return (
     <footer className="w-full">
       {/* Main Footer Content */}
-      <div className="w-full py-4 sm:py-6 md:py-12 bg-white border-t border-gray-200 mt-4 sm:mt-8 md:mt-16">
+      <div className="w-full py-3 sm:py-4 bg-white border-t border-gray-200 mt-2">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 md:gap-8">
+          <div className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
             {/* Download Our App */}
             <div className="col-span-2 xs:col-span-2 sm:col-span-1">
               <h3 className="text-sm md:text-base lg:text-lg font-semibold text-gray-800 mb-2 md:mb-4">Download Our App</h3>
@@ -85,23 +85,23 @@ export default function Footer() {
             </div>
           </div>
           
-          {/* Social Media and Payment Icons - Added for better footer */}
-          <div className="mt-6 pt-4 border-t border-gray-200">
-            <div className="flex flex-col sm:flex-row justify-between items-center">
-              <div className="flex space-x-4 mb-4 sm:mb-0">
-                <a href="#" className="text-gray-500 hover:text-orange-500"><FaFacebookF size={16} /></a>
-                <a href="#" className="text-gray-500 hover:text-orange-500"><FaInstagram size={16} /></a>
-                <a href="#" className="text-gray-500 hover:text-orange-500"><FaTwitter size={16} /></a>
-                <a href="#" className="text-gray-500 hover:text-orange-500"><FaLinkedinIn size={16} /></a>
-                <a href="#" className="text-gray-500 hover:text-orange-500"><FaYoutube size={16} /></a>
+          {/* Social Media and Payment Icons */}
+          <div className="mt-4 pt-3 border-t border-gray-200">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
+              <div className="flex items-center space-x-3">
+                <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors"><FaFacebookF size={14} /></a>
+                <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors"><FaInstagram size={14} /></a>
+                <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors"><FaTwitter size={14} /></a>
+                <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors"><FaLinkedinIn size={14} /></a>
+                <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors"><FaYoutube size={14} /></a>
               </div>
-              <div className="flex space-x-3">
-                <FaCcVisa size={24} className="text-blue-700" />
-                <FaCcMastercard size={24} className="text-red-500" />
-                <FaCcAmex size={24} className="text-blue-500" />
+              <div className="flex items-center space-x-2">
+                <FaCcVisa size={20} className="text-blue-700" />
+                <FaCcMastercard size={20} className="text-red-500" />
+                <FaCcAmex size={20} className="text-blue-500" />
               </div>
             </div>
-            <div className="mt-4 text-center text-[10px] xs:text-xs text-gray-500">
+            <div className="mt-3 text-center text-[10px] text-gray-500">
               © {new Date().getFullYear()} Bonzi Cart. All rights reserved.
             </div>
           </div>
