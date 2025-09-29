@@ -608,18 +608,18 @@ export default function ProductDetail() {
 
                       {/* Empty cell for alignment */}
                       <span></span> 
-                      <div className="text-[10px] sm:text-xs text-orange-600">Want to buy in bulk? <a href="#" className="underline font-semibold">Learn about bulk pricing options</a></div>
+                      <div className="text-[10px] sm:text-[10px] text-orange-600">Want to buy in bulk? <a href="#" className="underline font-semibold">Learn about bulk pricing options</a></div>
 
                       {/* Shipping */}
-                      <span className="font-medium text-gray-500 text-xs sm:text-sm">Shipping</span>
+                      <span className="font-medium text-gray-500 text-xs sm:text-[12px]">Shipping</span>
                       <span className="text-green-600 font-semibold text-xs sm:text-sm">Free Shipping</span>
 
                       {/* COD */}
-                      <span className="font-medium text-gray-500 text-xs sm:text-sm">COD</span>
+                      <span className="font-medium text-gray-500 text-xs sm:text-[12px]">COD</span>
                       <span className="text-gray-500 font-semibold text-xs sm:text-sm">{product.codAvailable ? 'Available' : 'Not Available'}</span>
 
                       {/* Total Price */}
-                      <span className="font-medium text-gray-500 text-xs sm:text-sm">Total Price</span>
+                      <span className="font-medium text-gray-500 text-xs sm:text-[12px]">Total Price</span>
                       <div className="flex flex-col">
                         {priceData ? (
                           <div className="flex flex-col">
@@ -654,7 +654,7 @@ export default function ProductDetail() {
                       </div>
 
                       {/* Action */}
-                      <span className="font-medium text-gray-500 text-xs sm:text-sm">Action</span>
+                      <span className="font-medium text-gray-500 text-xs  sm:text-[12px]">Action</span>
                       <div className="flex flex-row flex-wrap gap-2.5 items-center">
                         <button 
                           className="flex-1 bg-orange-500 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded font-semibold shadow hover:bg-orange-600 text-xs text-center min-w-[90px]"
@@ -679,9 +679,9 @@ export default function ProductDetail() {
                       </div>
 
                       {/* Promotions */}
-                      <span className="font-medium text-gray-500 text-xs sm:text-sm">Promotions</span>
+                      <span className="font-medium text-gray-500 text-xs  sm:text-[12px]">Promotions</span>
                       <button 
-                        className="bg-gray-100 border border-gray-300 text-gray-700 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg shadow-sm flex items-center gap-1.5 sm:gap-2 text-xs hover:bg-gray-200 w-fit"
+                        className="bg-gray-100 border border-gray-300 text-gray-700 px-3 py-1.5 sm:px-2 sm:py-2 rounded-lg shadow-sm flex items-center gap-1.5 sm:gap-2 text-xs hover:bg-gray-200 w-fit"
                         aria-label="View available seller coupons"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -693,17 +693,17 @@ export default function ProductDetail() {
                   </div>
 
                   {/* Right Column */}
-                  <div className="w-full xl:w-64 flex flex-col gap-2 sm:gap-3">
+                  <div className="w-full xl:w-64 flex flex-col gap-1 sm:gap-1">
                     <div className="p-3 md:p-4 bg-gray-50 rounded-lg flex flex-col gap-2" style={{ height: 'auto' }}>
-                      <div className="text-xs sm:text-sm text-gray-600">Sold By</div>
-                      <div className="font-bold text-orange-600 text-sm md:text-base">{product.seller}</div>
+                      <div className="sm:text-[12px] sm:text-sm text-gray-600">Sold By</div>
+                      <div className="font-bold text-[14px] text-orange-600 text-sm md:text-base">{product.seller}</div>
                       <div className="flex flex-col text-xs sm:text-sm text-gray-700 gap-1">
-                        <span>{product.positiveSentiment}% Positive Sentiment</span>
-                        <span>{product.followers} Followers</span>
+                        <span className='text-[10px]'>{product.positiveSentiment}% Positive Sentiment</span>
+                        <span className='text-[10px]'>{product.followers} Followers</span>
                       </div>
                       <div className="flex flex-col gap-2 mt-1">
                         <button 
-                          className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg font-semibold shadow text-xs sm:text-sm"
+                          className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-2 py-1 sm:px-1 sm:py-2 rounded-lg font-semibold shadow text-xs sm:text-sm"
                           onClick={() => setShowContactModal(true)}
                           aria-label="Contact the seller"
                         >
@@ -711,7 +711,7 @@ export default function ProductDetail() {
                         </button>
                         <div className="flex flex-row gap-2">
                           <button 
-                            className={`flex-1 px-2 py-1.5 sm:px-3 sm:py-2 rounded shadow text-xs sm:text-sm transition-colors ${
+                            className={`flex-1 px-1 py-1 sm:px-1 sm:py-1 rounded shadow text-xs sm:text-[10px] transition-colors ${
                               isFollowing 
                                 ? 'bg-red-500 text-white border border-red-500 hover:bg-red-600' 
                                 : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
@@ -733,7 +733,7 @@ export default function ProductDetail() {
                             )}
                           </button>
                           <button 
-                            className="flex-1 bg-white border border-gray-300 text-gray-700 px-2 py-1.5 sm:px-3 sm:py-2 rounded shadow text-xs sm:text-sm" 
+                            className="flex-1 bg-white border border-gray-300 text-gray-700 px-1 py-1 sm:px-1 sm:py-1 rounded shadow text-xs sm:text-[10px]" 
                             onClick={handleVisitStore}
                             aria-label="Visit seller's store"
                           >
