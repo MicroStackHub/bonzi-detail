@@ -273,63 +273,91 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
             </div>
 
             {/* Language Dropdown - Desktop only */}
-            {/* Google Translate Widget - Desktop only */}
-            <div className="hidden sm:block" id="google_translate_element">
-              <style jsx global>{`
-                /* Hide the top Google translate bar and branding */
-                .skiptranslate iframe,
-                .goog-te-banner-frame {
-                  display: none !important;
-                }
-                body {
-                  top: 0 !important;
-                }
+            <div className="hidden sm:flex items-center">
+              <div className="relative ml-4">
+                <div id="google_translate_element"></div>
+                <style jsx global>{`
+                  /* Google Translate Widget Styles */
+                  .goog-te-gadget {
+                    font-family: inherit !important;
+                    font-size: 0 !important;
+                  }
+                  
+                  .goog-te-gadget select {
+                    padding: 8px 24px 8px 8px !important;
+                    border: 1px solid #e5e7eb !important;
+                    border-radius: 6px !important;
+                    background-color: white !important;
+                    color: #374151 !important;
+                    font-size: 14px !important;
+                    line-height: 1.25 !important;
+                    appearance: none !important;
+                    cursor: pointer !important;
+                    min-width: 160px !important;
+                    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E") !important;
+                    background-position: right 8px center !important;
+                    background-repeat: no-repeat !important;
+                    background-size: 20px 20px !important;
+                  }
 
-                /* Hide Google branding text */
-                .goog-te-gadget {
-                  font-size: 0 !important;
-                }
-                .goog-te-gadget .goog-te-combo {
-                  margin: 0 !important;
-                }
-                .goog-logo-link {
-                  display: none !important;
-                }
-                .goog-te-gadget span {
-                  display: none !important;
-                }
+                  .goog-te-gadget select:hover {
+                    border-color: #f97316 !important;
+                    background-color: #fff7ed !important;
+                  }
 
-                /* Style the language selector dropdown */
-                .goog-te-gadget-simple {
-                  border: 1px solid #e5e7eb !important;
-                  background-color: #f9fafb !important;
-                  padding: 4px 8px !important;
-                  border-radius: 0.375rem !important;
-                  font-size: 0.875rem !important;
-                  margin-left: 1rem !important;
-                }
-                .goog-te-gadget-simple:hover {
-                  background-color: #f3f4f6 !important;
-                  border-color: #f97316 !important;
-                }
-                .goog-te-menu-value {
-                  color: #4b5563 !important;
-                  display: flex !important;
-                  align-items: center !important;
-                }
-                .goog-te-menu-value:hover {
-                  color: #f97316 !important;
-                }
-                .goog-te-menu-value span:first-child {
-                  display: inline !important;
-                }
-                .goog-te-menu-value span:not(:first-child) {
-                  display: none !important;
-                }
-                .goog-te-gadget-icon {
-                  display: none !important;
-                }
-              `}</style>
+                  .goog-te-gadget select:focus {
+                    outline: 2px solid transparent !important;
+                    outline-offset: 2px !important;
+                    border-color: #f97316 !important;
+                    box-shadow: 0 0 0 2px #fed7aa !important;
+                  }
+
+                  /* Hide Google branding */
+                  .goog-logo-link, .goog-te-gadget span, .goog-te-banner-frame, .VIpgJd-ZVi9od-l4eHX-hSRGPd {
+                    display: none !important;
+                  }
+
+                  .goog-te-combo {
+                    margin: 0 !important;
+                  }
+
+                  /* Fix page position */
+                  body {
+                    top: 0 !important;
+                  }
+
+                  /* Style dropdown menu */
+                  .goog-te-menu-frame {
+                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+                    border-radius: 8px !important;
+                    overflow: hidden !important;
+                  }
+
+                  .goog-te-menu2 {
+                    border: none !important;
+                    padding: 4px !important;
+                    border-radius: 8px !important;
+                    background-color: white !important;
+                  }
+
+                  .goog-te-menu2-item div {
+                    padding: 8px 16px !important;
+                    color: #374151 !important;
+                    font-family: inherit !important;
+                    font-size: 14px !important;
+                  }
+
+                  .goog-te-menu2-item:hover div {
+                    background-color: #fff7ed !important;
+                    color: #f97316 !important;
+                  }
+
+                  .goog-te-menu2-item-selected div {
+                    background-color: #ffedd5 !important;
+                    color: #f97316 !important;
+                  }
+                `}</style>
+              </div>
             </div>
           </div>
         </div>

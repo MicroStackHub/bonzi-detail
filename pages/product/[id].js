@@ -887,7 +887,7 @@ export async function getStaticProps({ params }) {
     }
 
     // Fetch product description
-    const descriptionResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/product-description/${params.id}`);
+    const descriptionResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/product?product_id/${params.id}`);
     const descriptionData = await descriptionResponse.json();
 
     return {
