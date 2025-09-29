@@ -295,6 +295,44 @@ export default function ProductDetail() {
     return product.discount_percentage || 0;
   };
 
+  const getColorCode = (colorName) => {
+    const colorMap = {
+      'red': '#FF0000',
+      'blue': '#0000FF',
+      'green': '#008000',
+      'yellow': '#FFFF00',
+      'black': '#000000',
+      'white': '#FFFFFF',
+      'gray': '#808080',
+      'grey': '#808080',
+      'purple': '#800080',
+      'pink': '#FFC0CB',
+      'orange': '#FFA500',
+      'brown': '#A52A2A',
+      'navy': '#000080',
+      'silver': '#C0C0C0',
+      'gold': '#FFD700',
+      'maroon': '#800000',
+      'beige': '#F5F5DC',
+      'cream': '#FFFDD0',
+      'olive': '#808000',
+      'lightblue': '#ADD8E6',
+      'darkblue': '#00008B',
+      'lightgreen': '#90EE90',
+      'darkgreen': '#006400',
+      'violet': '#EE82EE',
+      'magenta': '#FF00FF',
+      'cyan': '#00FFFF',
+      'teal': '#008080',
+      'indigo': '#4B0082',
+      'coral': '#FF7F50',
+      'default': '#FFFFFF'
+    };
+    
+    const normalizedColor = colorName.toLowerCase().trim();
+    return colorMap[normalizedColor] || colorMap['default'];
+  };
+
   return (
     <>
       <Head>
@@ -316,80 +354,125 @@ export default function ProductDetail() {
             <div className="bg-white p-1 sm:p-2 md:p-3 lg:p-4 rounded-lg shadow-sm flex flex-col lg:flex-row gap-1 sm:gap-2 md:gap-3 lg:gap-4">
               {/* Left: Product Gallery */}
               <div className="w-full lg:w-1/2 flex flex-col items-center">
-                <div className="w-full max-w-full sm:max-w-xs md:max-w-sm lg:max-w-md aspect-square bg-gray-100 flex items-center justify-center rounded-lg overflow-hidden mb-1 sm:mb-2 md:mb-3 relative">
-                  {selectedMedia ? (
-                    selectedMedia.type === 'video' ? (
-                      <video src={selectedMedia.url} controls autoPlay muted loop className="w-full h-full object-contain" />
+                {/* Main Image Container */}
+                <div className="w-full bg-white rounded-lg overflow-hidden mb-3 sm:mb-4">
+                  <div className="relative pb-[100%]">
+                    {selectedMedia ? (
+                      <div className="absolute inset-0 flex items-center justify-center bg-gray-50">
+                        {selectedMedia.type === 'video' ? (
+                          <video 
+                            src={selectedMedia.url} 
+                            controls 
+                            autoPlay 
+                            muted 
+                            loop 
+                            className="w-full h-full object-contain"
+                          />
+                        ) : (
+                          <div className="group relative w-full h-full">
+                            <Image 
+                              src={selectedMedia.url} 
+                              alt={product.name} 
+                              fill
+                              className="object-contain transition-transform duration-300 ease-out hover:scale-105"
+                              priority
+                              quality={85}
+                              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 800px"
+                            />
+                          </div>
+                        )}
+                      </div>
                     ) : (
-                      <Image 
-                        src={selectedMedia.url} 
-                        alt={product.name} 
-                        width={400}
-                        height={400}
-                        className="w-full h-full object-contain"
-                        priority
-                        quality={75}
-                      />
-                    )
-                  ) : (
-                    <div className="text-gray-400 text-xs sm:text-sm">No image available</div>
-                  )}
-                  
-                  {/* Share Button */}
-                  <button
-                    className="absolute top-2 right-2 p-2 sm:p-1.5 rounded hover:bg-gray-100 text-orange-500 border border-gray-200 bg-white shadow-sm"
-                    aria-label="Share product"
-                    onClick={() => {
-                      if (navigator.share) {
-                        navigator.share({
-                          title: product.name,
-                          text: product.description,
-                          url: window.location.href
-                        });
-                      } else {
-                        alert('Sharing is not supported on this browser.');
-                      }
-                    }}
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                    </svg>
-                  </button>
+                      <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+                        <div className="text-gray-400 text-sm">No image available</div>
+                      </div>
+                    )}
+                    
+                    {/* Controls */}
+                    <div className="absolute top-4 right-4 flex gap-2">
+                      {/* Share Button */}
+                      <button
+                        className="p-2 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white text-gray-700 shadow-lg transition-all duration-200 hover:scale-105"
+                        aria-label="Share product"
+                        onClick={() => {
+                          if (navigator.share) {
+                            navigator.share({
+                              title: product.name,
+                              text: product.description,
+                              url: window.location.href
+                            });
+                          } else {
+                            alert('Sharing is not supported on this browser.');
+                          }
+                        }}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                        </svg>
+                      </button>
+                      {/* Favorite Button */}
+                      <button
+                        className="p-2 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white text-gray-700 shadow-lg transition-all duration-200 hover:scale-105"
+                        aria-label="Add to favorites"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex gap-1 sm:gap-1.5 justify-start overflow-x-auto w-full py-0.5 sm:py-1 px-0.5 sm:px-1 scrollbar-hide -mx-0.5 sm:-mx-1 px-0.5 sm:px-1">
-                  {product.media && product.media.length > 0 && product.media.map((media, idx) => (
-                    <button
-                      key={idx}
-                      className={`border-2 rounded-lg w-8 h-8 sm:w-10 md:w-14 lg:w-16 flex items-center justify-center overflow-hidden flex-shrink-0 ${selectedMedia && selectedMedia.url === media.url ? 'border-orange-500' : 'border-gray-200'}`}
-                      onClick={() => setSelectedMedia(media)}
-                      aria-label={`View ${media.type === 'video' ? 'video' : 'image'} ${idx + 1} of ${product.media.length}`}
-                    >
-                      {media.type === 'video' ? (
-                        <Image 
-                          src={media.thumbnail} 
-                          alt="Video thumbnail" 
-                          width={64}
-                          height={64}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <Image 
-                          src={media.url} 
-                          alt="Thumbnail" 
-                          width={64}
-                          height={64}
-                          className="w-full h-full object-cover"
-                        />
-                      )}
-                    </button>
-                  ))}
+
+                {/* Thumbnails */}
+                <div className="relative w-full">
+                  <div className="flex gap-2 sm:gap-3 justify-start items-center overflow-x-auto w-full py-2 px-1 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+                    {product.media && product.media.length > 0 && product.media.map((media, idx) => (
+                      <button
+                        key={idx}
+                        className={`relative flex-shrink-0 rounded-lg overflow-hidden transition-all duration-200 ${
+                          selectedMedia && selectedMedia.url === media.url 
+                            ? 'ring-2 ring-orange-500 scale-105' 
+                            : 'ring-1 ring-gray-200 hover:ring-orange-300'
+                        }`}
+                        onClick={() => setSelectedMedia(media)}
+                        aria-label={`View ${media.type === 'video' ? 'video' : 'image'} ${idx + 1} of ${product.media.length}`}
+                      >
+                        <div className="relative w-16 sm:w-20 aspect-square">
+                          {media.type === 'video' ? (
+                            <>
+                              <Image 
+                                src={media.thumbnail} 
+                                alt="Video thumbnail"
+                                fill
+                                className="object-cover"
+                              />
+                              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                              </div>
+                            </>
+                          ) : (
+                            <Image 
+                              src={media.url} 
+                              alt={`Product thumbnail ${idx + 1}`}
+                              fill
+                              className="object-cover"
+                              sizes="(max-width: 768px) 64px, 80px"
+                            />
+                          )}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
               {/* Right: Product Info */}
-              <div className="w-full lg:w-1/2 flex flex-col gap-1.5 sm:gap-2 md:gap-2.5 lg:gap-3 mt-0.5 sm:mt-1">
+              <div className="w-full lg:w-1/2 flex flex-col gap-1.5 sm:gap-2 md:gap-2 lg:gap-2 mt-0.5 sm:mt-1">
                 <div className="flex items-start justify-between">
-                  <h1 className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-gray-800 leading-tight flex-1 pr-1 sm:pr-2">{product.name}</h1>
+                  <h1 className="text-xs sm:text-sm md:text-base lg:text-md font-semibold text-gray-800 leading-tight flex-1 pr-1 sm:pr-2">{product.name}</h1>
                   <button
                     className="p-1.5 sm:p-2 rounded hover:bg-gray-100 text-orange-500 border border-gray-200 flex-shrink-0"
                     aria-label="Share product"
@@ -565,9 +648,13 @@ export default function ProductDetail() {
                             {product.colors.map((color) => (
                               <button 
                                 key={color.id} 
-                                className={`px-2 sm:px-2.5 py-1 sm:py-1.5 bg-gray-100 rounded border text-gray-700 hover:bg-orange-100 text-xs sm:text-sm flex-shrink-0 ${
-                                  selectedColor === color.id ? 'border-orange-500 bg-orange-50 ring-1 ring-orange-200' : 'border-gray-300'
+                                className={`w-6 h-6 rounded-full border-2 flex items-center justify-center relative ${
+                                  selectedColor === color.id ? 'border-orange-500 ring-2 ring-orange-200' : 'border-gray-300 hover:border-orange-300'
                                 }`}
+                                style={{
+                                  backgroundColor: getColorCode(color.name),
+                                  cursor: 'pointer'
+                                }}
                                 onClick={() => {
                                   setSelectedColor(color.id);
                                   if (color.image) {
@@ -575,8 +662,15 @@ export default function ProductDetail() {
                                   }
                                 }}
                                 aria-label={`Select ${color.name} color`}
+                                title={color.name}
                               >
-                                {color.name}
+                                {selectedColor === color.id && (
+                                  <div className="absolute inset-0 flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-white" viewBox="0 0 20 20" fill="currentColor">
+                                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                    </svg>
+                                  </div>
+                                )}
                               </button>
                             ))}
                           </div>

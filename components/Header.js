@@ -274,14 +274,8 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
 
             {/* Language Dropdown - Desktop only */}
             {/* Google Translate Widget - Desktop only */}
-            <div className="block z-50" id="google_translate_element">
+            <div className="hidden sm:block" id="google_translate_element">
               <style jsx global>{`
-                #google_translate_element {
-                  position: relative;
-                  display: block !important;
-                  visibility: visible !important;
-                }
-                
                 /* Hide the top Google translate bar and branding */
                 .skiptranslate iframe,
                 .goog-te-banner-frame {
@@ -313,10 +307,6 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
                   border-radius: 0.375rem !important;
                   font-size: 0.875rem !important;
                   margin-left: 1rem !important;
-                  display: inline-block !important;
-                  visibility: visible !important;
-                  position: relative !important;
-                  z-index: 9999 !important;
                 }
                 .goog-te-gadget-simple:hover {
                   background-color: #f3f4f6 !important;
@@ -326,25 +316,18 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
                   color: #4b5563 !important;
                   display: flex !important;
                   align-items: center !important;
-                  visibility: visible !important;
                 }
                 .goog-te-menu-value:hover {
                   color: #f97316 !important;
                 }
                 .goog-te-menu-value span:first-child {
                   display: inline !important;
-                  visibility: visible !important;
                 }
                 .goog-te-menu-value span:not(:first-child) {
                   display: none !important;
                 }
                 .goog-te-gadget-icon {
                   display: none !important;
-                }
-                .goog-te-menu-frame {
-                  visibility: visible !important;
-                  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
-                  z-index: 9999 !important;
                 }
               `}</style>
             </div>
