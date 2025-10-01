@@ -6,9 +6,17 @@ export function CartProvider({ children }) {
   const [cartCount, setCartCount] = useState(0);
   const [cartItems, setCartItems] = useState([]);
   const [cartLoading, setCartLoading] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  // Set client flag after mount to prevent hydration mismatch
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Load cart data from localStorage on mount
   useEffect(() => {
+    if (!isClient) return;
+
     const savedCartCount = localStorage.getItem('cart_count');
     const savedCartItems = localStorage.getItem('cart_items');
 
@@ -23,13 +31,15 @@ export function CartProvider({ children }) {
         console.error('Error parsing cart items from localStorage:', error);
       }
     }
-  }, []);
+  }, [isClient]);
 
   // Save cart data to localStorage whenever it changes
   useEffect(() => {
+    if (!isClient) return;
+    
     localStorage.setItem('cart_count', cartCount.toString());
     localStorage.setItem('cart_items', JSON.stringify(cartItems));
-  }, [cartCount, cartItems]);
+  }, [cartCount, cartItems, isClient]);
 
   const addToCart = async (productId, quantity = 1, colorId = null, sizeId = null) => {
     setCartLoading(true);

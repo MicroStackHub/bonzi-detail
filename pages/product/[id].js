@@ -30,8 +30,14 @@ export default function ProductDetail({ productId, initialProductData, initialDe
   const [priceLoading, setPriceLoading] = useState(false);
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
+  const [isClient, setIsClient] = useState(false);
 
   const { addToCart, cartLoading } = useCart();
+
+  // Set client flag after mount
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Initialize with server-side data if available
   useEffect(() => {
@@ -54,11 +60,11 @@ export default function ProductDetail({ productId, initialProductData, initialDe
 
   // Store access token in localStorage (only on client side)
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN || '';
-      localStorage.setItem('access_token', accessToken);
-    }
-  }, []);
+    if (!isClient) return;
+    
+    const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN || '';
+    localStorage.setItem('access_token', accessToken);
+  }, [isClient]);
 
   const fetchProductData = async () => {
     try {
@@ -270,7 +276,7 @@ export default function ProductDetail({ productId, initialProductData, initialDe
   };
 
   const handleFollowToggle = async () => {
-    if (!product || !product.store_id) return;
+    if (!product || !product.store_id || !isClient) return;
     
     setIsFollowLoading(true);
     try {

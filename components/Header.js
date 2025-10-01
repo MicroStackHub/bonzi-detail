@@ -10,10 +10,18 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
   const [showCategoriesDropdown, setShowCategoriesDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState('en');
+  const [isClient, setIsClient] = useState(false);
   const { cartCount } = useCart();
+
+  // Set client flag after mount
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Check current language on component mount
   useEffect(() => {
+    if (!isClient) return;
+
     const checkCurrentLanguage = () => {
       const url = window.location.href;
       const cookie = document.cookie;
@@ -49,62 +57,7 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
     
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
-
-  // Hide Google Translate bar after each translation
-  useEffect(() => {
-    const hideGoogleTranslateBar = () => {
-      // Hide the banner frame
-      const bannerFrames = document.querySelectorAll('.goog-te-banner-frame, iframe.goog-te-banner-frame, .skiptranslate');
-      bannerFrames.forEach(frame => {
-        if (frame) {
-          frame.style.display = 'none !important';
-          frame.style.visibility = 'hidden !important';
-          frame.style.height = '0px !important';
-          frame.style.width = '0px !important';
-        }
-      });
-
-      // Reset body position
-      if (document.body) {
-        document.body.style.top = '0px !important';
-        document.body.style.position = 'static !important';
-        document.body.style.marginTop = '0px !important';
-        document.body.style.paddingTop = '0px !important';
-      }
-
-      // Hide any remaining Google Translate elements
-      const translateElements = document.querySelectorAll('[id^="google_translate"], .goog-te-ftab, .goog-te-menu-frame, .goog-te-balloon-frame');
-      translateElements.forEach(element => {
-        if (element) {
-          element.style.display = 'none !important';
-        }
-      });
-    };
-
-    // Initial hide
-    hideGoogleTranslateBar();
-
-    // Set up MutationObserver to watch for new Google Translate elements
-    const observer = new MutationObserver(() => {
-      hideGoogleTranslateBar();
-    });
-
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
-
-    // Also run on window load and after a short delay
-    window.addEventListener('load', hideGoogleTranslateBar);
-    const timeout = setTimeout(hideGoogleTranslateBar, 1000);
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('load', hideGoogleTranslateBar);
-      clearTimeout(timeout);
-    };
-  }, [currentLanguage]);
+  }, [isClient]);
 
   const categories = [
     { name: 'Apparel Accessories', icon: <FaTshirt /> },
@@ -373,122 +326,139 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
 
             {/* Language Dropdown */}
             <div className="flex items-center">
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-600">Language:</span>
-                <select 
-                  value={currentLanguage}
-                  className="bg-gray-100 text-gray-700 border border-gray-300 rounded-md px-3 py-2 text-sm cursor-pointer hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                  onChange={(e) => {
-                    const langCode = e.target.value;
-                    console.log('Language selected:', langCode);
-                    setCurrentLanguage(langCode);
-                    
-                    // Helper function to translate using the widget
-                    const translatePage = (targetLang) => {
-                      console.log('Attempting to translate page to:', targetLang);
+              {isClient && (
+                <div className="flex items-center space-x-2">
+                  <select 
+                    value={currentLanguage}
+                    className="bg-gray-100 text-gray-700 border border-gray-300 rounded px-2 py-1 text-xs cursor-pointer hover:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
+                    onChange={(e) => {
+                      if (typeof window === 'undefined') return;
+
+                      const langCode = e.target.value;
+                      console.log('Language selected:', langCode);
+                      setCurrentLanguage(langCode);
                       
-                      // Update URL hash
-                      const baseUrl = window.location.href.split('#')[0];
-                      const newUrl = targetLang === 'en' ? baseUrl : `${baseUrl}#googtrans(en|${targetLang})`;
-                      window.history.replaceState({}, document.title, newUrl);
-                      
-                      // Update cookie
-                      if (targetLang === 'en') {
-                        document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-                      } else {
-                        document.cookie = `googtrans=/en/${targetLang}; path=/; domain=${window.location.hostname}`;
-                      }
-                      
-                      // Method 1: Use the global widget helper if available
-                      if (window.googleTranslateWidget && window.googleTranslateWidget.translate) {
-                        console.log('Using global widget helper');
-                        const success = window.googleTranslateWidget.translate(targetLang);
-                        if (success) {
-                          console.log('Translation triggered successfully via widget helper');
-                          return;
-                        }
-                      }
-                      
-                      // Method 2: Direct widget interaction
-                      const googleSelect = document.querySelector('.goog-te-combo');
-                      if (googleSelect) {
-                        console.log('Using direct widget interaction');
-                        googleSelect.value = targetLang;
+                      // Helper function to translate using the widget
+                      const translatePage = (targetLang) => {
+                        console.log('Attempting to translate page to:', targetLang);
                         
-                        // Try multiple event types to ensure translation triggers
-                        googleSelect.dispatchEvent(new Event('change', { bubbles: true }));
-                        googleSelect.dispatchEvent(new Event('input', { bubbles: true }));
+                        // Update URL hash
+                        const baseUrl = window.location.href.split('#')[0];
+                        const newUrl = targetLang === 'en' ? baseUrl : `${baseUrl}#googtrans(en|${targetLang})`;
+                        window.history.replaceState({}, document.title, newUrl);
                         
-                        // Additional trigger with delay
-                        setTimeout(() => {
-                          googleSelect.dispatchEvent(new Event('change', { bubbles: true }));
-                        }, 100);
-                        
-                        console.log('Translation events dispatched');
-                        return;
-                      }
-                      
-                      // Method 3: Wait for widget and retry
-                      console.log('Widget not ready, waiting and retrying...');
-                      let retryCount = 0;
-                      const retryTranslation = () => {
-                        retryCount++;
-                        const googleSelectRetry = document.querySelector('.goog-te-combo');
-                        
-                        if (googleSelectRetry) {
-                          console.log(`Retry ${retryCount}: Found widget, triggering translation`);
-                          googleSelectRetry.value = targetLang;
-                          googleSelectRetry.dispatchEvent(new Event('change', { bubbles: true }));
-                        } else if (retryCount < 10) {
-                          setTimeout(retryTranslation, 500);
+                        // Update cookie
+                        if (targetLang === 'en') {
+                          document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
                         } else {
-                          console.log('Widget not available after retries, using page reload fallback');
-                          // Fallback to reload method
-                          if (targetLang === 'en') {
-                            window.location.href = baseUrl;
-                          } else {
-                            window.location.href = `${baseUrl}#googtrans(en|${targetLang})`;
-                            setTimeout(() => window.location.reload(), 100);
+                          document.cookie = `googtrans=/en/${targetLang}; path=/; domain=${window.location.hostname}`;
+                        }
+                        
+                        // Method 1: Use the global widget helper if available
+                        if (window.googleTranslateWidget && window.googleTranslateWidget.translate) {
+                          console.log('Using global widget helper');
+                          const success = window.googleTranslateWidget.translate(targetLang);
+                          if (success) {
+                            console.log('Translation triggered successfully via widget helper');
+                            return;
                           }
                         }
+                        
+                        // Method 2: Direct widget interaction
+                        const googleSelect = document.querySelector('.goog-te-combo');
+                        if (googleSelect) {
+                          console.log('Using direct widget interaction');
+                          googleSelect.value = targetLang;
+                          
+                          // Try multiple event types to ensure translation triggers
+                          googleSelect.dispatchEvent(new Event('change', { bubbles: true }));
+                          googleSelect.dispatchEvent(new Event('input', { bubbles: true }));
+                          
+                          // Additional trigger with delay
+                          setTimeout(() => {
+                            googleSelect.dispatchEvent(new Event('change', { bubbles: true }));
+                          }, 100);
+                          
+                          console.log('Translation events dispatched');
+                          return;
+                        }
+                        
+                        // Method 3: Wait for widget and retry
+                        console.log('Widget not ready, waiting and retrying...');
+                        let retryCount = 0;
+                        const retryTranslation = () => {
+                          retryCount++;
+                          const googleSelectRetry = document.querySelector('.goog-te-combo');
+                          
+                          if (googleSelectRetry) {
+                            console.log(`Retry ${retryCount}: Found widget, triggering translation`);
+                            googleSelectRetry.value = targetLang;
+                            googleSelectRetry.dispatchEvent(new Event('change', { bubbles: true }));
+                          } else if (retryCount < 10) {
+                            setTimeout(retryTranslation, 500);
+                          } else {
+                            console.log('Widget not available after retries, using page reload fallback');
+                            // Fallback to reload method
+                            if (targetLang === 'en') {
+                              window.location.href = baseUrl;
+                            } else {
+                              window.location.href = `${baseUrl}#googtrans(en|${targetLang})`;
+                              setTimeout(() => window.location.reload(), 100);
+                            }
+                          }
+                        };
+                        
+                        setTimeout(retryTranslation, 500);
                       };
                       
-                      setTimeout(retryTranslation, 500);
-                    };
-                    
-                    // Execute translation
-                    if (langCode === 'en') {
-                      console.log('Switching to English');
-                      translatePage('en');
-                    } else if (langCode) {
-                      console.log('Switching to language:', langCode);
-                      translatePage(langCode);
-                    }
-                  }}
-                >
-                  <option value="">Select Language</option>
-                  <option value="en">English</option>
-                  <option value="hi">हिन्दी (Hindi)</option>
-                  <option value="bn">বাংলা (Bengali)</option>
-                  <option value="ta">தமிழ் (Tamil)</option>
-                  <option value="te">తెలుగు (Telugu)</option>
-                  <option value="mr">मराठी (Marathi)</option>
-                  <option value="gu">ગુજરાતી (Gujarati)</option>
-                  <option value="kn">ಕನ್ನಡ (Kannada)</option>
-                  <option value="ml">മലയാളം (Malayalam)</option>
-                  <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
-                  <option value="ur">اردو (Urdu)</option>
-                </select>
-                <div id="google_translate_element" style={{ display: 'none' }}></div>
-              </div>
+                      // Execute translation
+                      if (langCode === 'en') {
+                        console.log('Switching to English');
+                        translatePage('en');
+                      } else if (langCode) {
+                        console.log('Switching to language:', langCode);
+                        translatePage(langCode);
+                      }
+                    }}
+                  >
+                    <option value="">Select Language</option>
+                    <option value="en">English</option>
+                    <option value="hi">हिन्दी (Hindi)</option>
+                    <option value="bn">বাংলা (Bengali)</option>
+                    <option value="ta">தமிழ் (Tamil)</option>
+                    <option value="te">తెలుగు (Telugu)</option>
+                    <option value="mr">मराठी (Marathi)</option>
+                    <option value="gu">ગુજરાતી (Gujarati)</option>
+                    <option value="kn">ಕನ್ನಡ (Kannada)</option>
+                    <option value="ml">മലയാളം (Malayalam)</option>
+                    <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
+                    <option value="ur">اردو (Urdu)</option>
+                  </select>
+                  <div id="google_translate_element" style={{ display: 'none' }}></div>
+                </div>
+              )}
               <style jsx global>{`
-                /* Hide the Google banner */
+                /* Hide the Google Translate banner strip completely */
                 .goog-te-banner-frame {
                   display: none !important;
+                  visibility: hidden !important;
                 }
+                
+                .goog-te-banner-frame.skiptranslate {
+                  display: none !important;
+                }
+                
                 body {
                   top: 0px !important;
                   position: static !important;
+                }
+                
+                iframe.goog-te-banner-frame {
+                  display: none !important;
+                }
+                
+                .goog-te-balloon-frame {
+                  display: none !important;
                 }
                 
                 /* Hide the default Google Translate widget but keep it functional */
@@ -498,6 +468,15 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
                 
                 .goog-te-gadget {
                   display: none !important;
+                }
+                
+                /* Remove any top padding/margin that might be added by Google Translate */
+                body.translated-ltr {
+                  top: 0 !important;
+                }
+                
+                body.translated-rtl {
+                  top: 0 !important;
                 }
               `}</style>
             </div>

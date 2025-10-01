@@ -8,6 +8,23 @@ export default function App({ Component, pageProps }) {
   const router = useRouter();
 
   useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+
+    // Load Google Translate script dynamically
+    const loadGoogleTranslateScript = () => {
+      // Check if script already exists
+      if (document.getElementById('google-translate-script')) {
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.id = 'google-translate-script';
+      script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+      script.async = true;
+      document.body.appendChild(script);
+    };
+
     const googleTranslateElementInit = () => {
       if (window.google && window.google.translate) {
         try {
@@ -35,7 +52,9 @@ export default function App({ Component, pageProps }) {
         }
       }
     };
+    
     window.googleTranslateElementInit = googleTranslateElementInit;
+    
     // Ensure the translate element container exists
     if (!document.getElementById('google_translate_element')) {
       const container = document.createElement('div');
@@ -43,6 +62,10 @@ export default function App({ Component, pageProps }) {
       container.style.display = 'none';
       document.body.appendChild(container);
     }
+    
+    // Load the script
+    loadGoogleTranslateScript();
+    
     // Try to initialize widget if script is already loaded
     if (window.google && window.google.translate) {
       googleTranslateElementInit();
@@ -51,6 +74,53 @@ export default function App({ Component, pageProps }) {
 
   return (
     <>
+      <style jsx global>{`
+        /* Completely hide Google Translate banner strip */
+        .goog-te-banner-frame {
+          display: none !important;
+          visibility: hidden !important;
+          opacity: 0 !important;
+          height: 0 !important;
+          max-height: 0 !important;
+          overflow: hidden !important;
+        }
+        
+        .goog-te-banner-frame.skiptranslate {
+          display: none !important;
+        }
+        
+        body > .skiptranslate.goog-te-banner-frame {
+          display: none !important;
+        }
+        
+        iframe.goog-te-banner-frame {
+          display: none !important;
+        }
+        
+        .goog-te-balloon-frame {
+          display: none !important;
+        }
+        
+        /* Force body to stay at top */
+        body {
+          top: 0 !important;
+          position: static !important;
+        }
+        
+        body.translated-ltr,
+        body.translated-rtl {
+          top: 0 !important;
+          margin-top: 0 !important;
+          padding-top: 0 !important;
+        }
+        
+        /* Hide Google logo and branding */
+        .goog-logo-link,
+        .goog-te-gadget img,
+        .goog-te-gadget span {
+          display: none !important;
+        }
+      `}</style>
       <Toaster
         position="top-right"
         toastOptions={{
