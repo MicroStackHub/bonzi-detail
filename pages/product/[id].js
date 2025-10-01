@@ -11,12 +11,12 @@ import { useCart } from '../../contexts/CartContext';
 
 import RelatedProducts from '../../components/product/RelatedProducts';
 
-export default function ProductDetail() {
+export default function ProductDetail({ productId, initialProductData, initialDescription }) {
   const router = useRouter();
   const { id } = router.query;
   const [product, setProduct] = useState(null);
-  const [productDescription, setProductDescription] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [productDescription, setProductDescription] = useState(initialDescription || '');
+  const [loading, setLoading] = useState(!initialProductData);
   const [error, setError] = useState(null);
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [activeTab, setActiveTab] = useState('details');
@@ -33,33 +33,51 @@ export default function ProductDetail() {
 
   const { addToCart, cartLoading } = useCart();
 
-  // Store access token in localStorage
+  // Initialize with server-side data if available
   useEffect(() => {
-    const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN || '';
-    localStorage.setItem('access_token', accessToken);
-  }, []);
-
-  useEffect(() => {
-    if (id) {
+    if (initialProductData) {
+      const transformedProduct = transformApiData(initialProductData);
+      setProduct(transformedProduct);
+      
+      // Set initial selected media
+      if (transformedProduct.media && Array.isArray(transformedProduct.media) && transformedProduct.media.length > 0) {
+        setSelectedMedia(transformedProduct.media[0]);
+      }
+      
+      // Fetch price data for initial quantity
+      fetchPriceData(1);
+    } else if (id) {
+      // Fallback to client-side fetching only if no initial data
       fetchProductData();
     }
-  }, [id]);
+  }, [id, initialProductData]);
+
+  // Store access token in localStorage (only on client side)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN || '';
+      localStorage.setItem('access_token', accessToken);
+    }
+  }, []);
 
   const fetchProductData = async () => {
     try {
       setLoading(true);
       
-      // Fetch product details
-      const productResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/product?product_id=${id}`);
-      const productData = await productResponse.json();
+      // Fetch both product details and description in parallel for better performance
+      const [productResponse, descriptionResponse] = await Promise.all([
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/product?product_id=${id}`),
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/product-description/${id}`)
+      ]);
+      
+      const [productData, descriptionData] = await Promise.all([
+        productResponse.json(),
+        descriptionResponse.json()
+      ]);
       
       if (!productData.success) {
         throw new Error(productData.message || 'Failed to fetch product data');
       }
-
-      // Fetch product description
-      const descriptionResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/product-description/${id}`);
-      const descriptionData = await descriptionResponse.json();
 
       if (descriptionData.success) {
         setProductDescription(descriptionData.data);
@@ -867,18 +885,28 @@ export default function ProductDetail() {
 
 // Static Generation for better performance
 export async function getStaticPaths() {
-  // You can pre-generate pages for popular products
+  // Pre-generate pages for popular products if you have a list
+  // For now, we'll generate on-demand for better performance
   return {
-    paths: [], // No pre-generated paths, will be generated on-demand
-    fallback: 'blocking' // Enable ISR (Incremental Static Regeneration)
+    paths: [], // No pre-generated paths initially
+    fallback: 'blocking' // Enable ISR with blocking fallback
   };
 }
 
 export async function getStaticProps({ params }) {
   try {
-    // Fetch product data at build time for better performance
-    const productResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/product?product_id=${params.id}`);
-    const productData = await productResponse.json();
+    const { id } = params;
+    
+    // Fetch product data and description in parallel for better performance
+    const [productResponse, descriptionResponse] = await Promise.all([
+      fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/product?product_id=${id}`),
+      fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/product-description/${id}`)
+    ]);
+
+    const [productData, descriptionData] = await Promise.all([
+      productResponse.json(),
+      descriptionResponse.json()
+    ]);
     
     if (!productData.success) {
       return {
@@ -886,19 +914,17 @@ export async function getStaticProps({ params }) {
       };
     }
 
-    // Fetch product description
-    const descriptionResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/product?product_id/${params.id}`);
-    const descriptionData = await descriptionResponse.json();
-
     return {
       props: {
-        productId: params.id,
+        productId: id,
         initialProductData: productData.data,
         initialDescription: descriptionData.success ? descriptionData.data : '',
       },
-      revalidate: parseInt(process.env.REVALIDATION_TIME || '3600') // Use env variable for revalidation time
+      // Revalidate every hour (3600 seconds) for fresh data
+      revalidate: 3600,
     };
   } catch (error) {
+    console.error('Error in getStaticProps:', error);
     return {
       notFound: true,
     };

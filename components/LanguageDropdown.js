@@ -40,6 +40,12 @@ export default function LanguageDropdown() {
   const initializeGoogleTranslate = () => {
     if (typeof window !== 'undefined' && window.google && window.google.translate && window.google.translate.TranslateElement) {
       try {
+        // Clear existing element first
+        const existingElement = document.getElementById('google_translate_element');
+        if (existingElement) {
+          existingElement.innerHTML = '';
+        }
+        
         const element = new window.google.translate.TranslateElement(
           {
             pageLanguage: 'en',
@@ -54,21 +60,24 @@ export default function LanguageDropdown() {
         
         // Hide any banner that might appear
         setTimeout(() => {
-          const banners = document.querySelectorAll('.goog-te-banner-frame, .skiptranslate');
+          const banners = document.querySelectorAll('.goog-te-banner-frame, .skiptranslate iframe');
           banners.forEach(banner => {
-            if (banner) {
+            if (banner && banner.style) {
               banner.style.display = 'none';
               banner.style.visibility = 'hidden';
               banner.style.height = '0';
             }
           });
           // Ensure body stays at top
-          document.body.style.top = '0px';
-          document.body.style.position = 'static';
+          if (document.body.style) {
+            document.body.style.top = '0px';
+            document.body.style.position = 'static';
+          }
         }, 100);
         
       } catch (error) {
         console.error('Error initializing Google Translate:', error);
+        setIsTranslateReady(false);
       }
     } else {
       console.log('Google Translate not ready yet, retrying...');
@@ -167,40 +176,54 @@ export default function LanguageDropdown() {
         return;
       }
 
-      // Method 1: Try using the select element
+      // Find the select element
       const selectElement = document.querySelector('.goog-te-combo');
       if (selectElement) {
+        console.log(`Translating to ${languageCode}...`);
+        
+        // Set the value
         selectElement.value = languageCode;
-        selectElement.dispatchEvent(new Event('change', { bubbles: true }));
-        console.log(`Translated to ${languageCode} using select method`);
+        
+        // Trigger change event with all possible methods
+        selectElement.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }));
+        selectElement.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
+        
+        // Also try manual trigger if available
+        if (selectElement.onchange) {
+          selectElement.onchange();
+        }
+        
+        console.log(`Translation triggered for ${languageCode}`);
         
         // Hide any banner that appears after translation
         setTimeout(() => {
-          const banners = document.querySelectorAll('.goog-te-banner-frame, .skiptranslate');
+          const banners = document.querySelectorAll('.goog-te-banner-frame, .skiptranslate iframe');
           banners.forEach(banner => {
-            if (banner) {
+            if (banner && banner.style) {
               banner.style.display = 'none';
               banner.style.visibility = 'hidden';
               banner.style.height = '0';
             }
           });
-          document.body.style.top = '0px';
-          document.body.style.position = 'static';
+          if (document.body.style) {
+            document.body.style.top = '0px';
+            document.body.style.position = 'static';
+          }
         }, 500);
         
         return;
-      }
-
-      // Method 2: Try using the translate API directly
-      if (window.google && window.google.translate) {
-        const translateService = window.google.translate;
-        if (translateService && translateService.TranslateElement) {
-          // Force reinitialize if needed
-          const element = document.getElementById('google_translate_element');
-          if (element) {
-            element.innerHTML = '';
+      } else {
+        console.warn('Google Translate select element not found, reinitializing...');
+        // Reinitialize if select element is missing
+        const element = document.getElementById('google_translate_element');
+        if (element) {
+          element.innerHTML = '';
+          setIsTranslateReady(false);
+          setTimeout(() => {
             initializeGoogleTranslate();
-          }
+            // Try translation again after reinit
+            setTimeout(() => translatePage(languageCode), 1000);
+          }, 100);
         }
       }
     } catch (error) {
@@ -217,20 +240,44 @@ export default function LanguageDropdown() {
     setSelectedLanguage(language);
     setIsOpen(false);
     
-    console.log(`Switching to ${language.name}`);
+    console.log(`Switching to ${language.name} (${language.googleCode})`);
     
     if (language.googleCode === 'en') {
-      // Reset to original language
+      // Reset to original language by removing translation cookie and reloading
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i];
+        const eqPos = cookie.indexOf("=");
+        const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        if (name.trim().indexOf('googtrans') !== -1) {
+          document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+        }
+      }
       window.location.reload();
     } else {
-      // Wait for translate to be ready and then translate
-      const attemptTranslate = () => {
+      // For translation, ensure widget is ready
+      const attemptTranslate = (retries = 0) => {
+        const maxRetries = 10;
+        
+        if (retries >= maxRetries) {
+          console.error('Failed to translate after maximum retries');
+          return;
+        }
+        
         if (isTranslateReady) {
-          translatePage(language.googleCode);
+          const selectElement = document.querySelector('.goog-te-combo');
+          if (selectElement) {
+            translatePage(language.googleCode);
+          } else {
+            console.log(`Select element not found, retry ${retries + 1}/${maxRetries}`);
+            setTimeout(() => attemptTranslate(retries + 1), 500);
+          }
         } else {
-          setTimeout(attemptTranslate, 500);
+          console.log(`Translate not ready, retry ${retries + 1}/${maxRetries}`);
+          setTimeout(() => attemptTranslate(retries + 1), 500);
         }
       };
+      
       attemptTranslate();
     }
   };

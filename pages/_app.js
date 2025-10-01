@@ -1,4 +1,3 @@
-
 import "@/styles/globals.css";
 import { CartProvider } from "@/contexts/CartContext";
 import { Toaster } from 'react-hot-toast';
@@ -6,82 +5,49 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 export default function App({ Component, pageProps }) {
-  const { isFallback, events } = useRouter();
-
-  const googleTranslateElementInit = () => {
-    if (typeof window !== 'undefined' && window.google && window.google.translate && window.google.translate.TranslateElement) {
-      try {
-        new window.google.translate.TranslateElement(
-          { 
-            pageLanguage: 'en',
-            includedLanguages: 'en,hi,bn,te,mr,ta,gu,kn,ml,pa,or,as,ur',
-            autoDisplay: false
-          }, 
-          'google_translate_element'
-        );
-        console.log('Google Translate initialized in _app.js');
-        
-        // Hide banner after initialization
-        setTimeout(() => {
-          const banners = document.querySelectorAll('.goog-te-banner-frame, .skiptranslate');
-          banners.forEach(banner => {
-            if (banner) {
-              banner.style.display = 'none';
-              banner.style.visibility = 'hidden';
-              banner.style.height = '0';
-            }
-          });
-          document.body.style.top = '0px';
-          document.body.style.position = 'static';
-        }, 100);
-        
-      } catch (error) {
-        console.error('Error in googleTranslateElementInit:', error);
-      }
-    }
-  };
+  const router = useRouter();
 
   useEffect(() => {
-    const id = 'google-translate-script';
-
-    const addScript = () => {
-      if (typeof window !== 'undefined') {
-        const existingScript = document.getElementById(id);
-        if (!existingScript) {
-          const s = document.createElement('script');
-          s.setAttribute('src', 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit');
-          s.setAttribute('id', id);
-          s.setAttribute('async', 'true');
-          
-          window.googleTranslateElementInit = googleTranslateElementInit;
-          
-          document.head.appendChild(s);
+    const googleTranslateElementInit = () => {
+      if (window.google && window.google.translate) {
+        try {
+          const translateElement = new window.google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'en,hi,bn,ta,te,mr,gu,kn,ml,pa,ur',
+            layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false,
+            multilanguagePage: true
+          }, 'google_translate_element');
+          window.googleTranslateWidget = {
+            element: translateElement,
+            translate: (langCode) => {
+              const selectElement = document.querySelector('.goog-te-combo');
+              if (selectElement) {
+                selectElement.value = langCode;
+                selectElement.dispatchEvent(new Event('change', { bubbles: true }));
+                return true;
+              }
+              return false;
+            }
+          };
+        } catch (error) {
+          console.error('Error initializing Google Translate:', error);
         }
       }
     };
-
-    const removeScript = () => {
-      if (typeof window !== 'undefined') {
-        const q = document.getElementById(id);
-        if (q) q.remove();
-        const w = document.getElementById('google_translate_element');
-        if (w) w.innerHTML = '';
-        delete window.googleTranslateElementInit;
-      }
-    };
-
-    if (!isFallback) {
-      addScript();
+    window.googleTranslateElementInit = googleTranslateElementInit;
+    // Ensure the translate element container exists
+    if (!document.getElementById('google_translate_element')) {
+      const container = document.createElement('div');
+      container.id = 'google_translate_element';
+      container.style.display = 'none';
+      document.body.appendChild(container);
     }
-
-    events.on('routeChangeStart', removeScript);
-    events.on('routeChangeComplete', addScript);
-
-    return () => {
-      events.off('routeChangeStart', removeScript);
-      events.off('routeChangeComplete', addScript);
-    };
-  }, [isFallback, events]);
+    // Try to initialize widget if script is already loaded
+    if (window.google && window.google.translate) {
+      googleTranslateElementInit();
+    }
+  }, []);
 
   return (
     <>
