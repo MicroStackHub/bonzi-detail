@@ -15,6 +15,9 @@ const nextConfig = {
     ],
     formats: ['image/webp', 'image/avif'],
   },
+  experimental: {
+    allowedOrigins: ['*'],
+  },
 };
 
 export default nextConfig;
