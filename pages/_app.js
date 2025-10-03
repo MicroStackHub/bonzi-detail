@@ -1,17 +1,17 @@
+
 import "@/styles/globals.css";
 import { CartProvider } from "@/contexts/CartContext";
 import { Toaster } from 'react-hot-toast';
 import { useEffect } from 'react';
-import { useRouter } from 'next/router';
 
 export default function App({ Component, pageProps }) {
-  const router = useRouter();
-
   useEffect(() => {
     // Only run on client side
     if (typeof window === 'undefined') return;
 
-    // Load Google Translate script dynamically
+    // Prevent multiple initializations
+    if (window.googleTranslateInitialized) return;
+
     const loadGoogleTranslateScript = () => {
       // Check if script already exists
       if (document.getElementById('google-translate-script')) {
@@ -22,19 +22,32 @@ export default function App({ Component, pageProps }) {
       script.id = 'google-translate-script';
       script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
       script.async = true;
+      script.onerror = () => {
+        console.error('Failed to load Google Translate script');
+      };
       document.body.appendChild(script);
     };
 
     const googleTranslateElementInit = () => {
-      if (window.google && window.google.translate) {
+      if (window.google && window.google.translate && !window.googleTranslateWidget) {
         try {
+          // Ensure the translate element container exists
+          let container = document.getElementById('google_translate_element');
+          if (!container) {
+            container = document.createElement('div');
+            container.id = 'google_translate_element';
+            container.style.display = 'none';
+            document.body.appendChild(container);
+          }
+
           const translateElement = new window.google.translate.TranslateElement({
             pageLanguage: 'en',
-            includedLanguages: 'en,hi,bn,ta,te,mr,gu,kn,ml,pa,ur',
+            includedLanguages: 'en,hi,bn,ta,te,mr,gu,kn,ml,pa,ur,or,as',
             layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
             autoDisplay: false,
             multilanguagePage: true
           }, 'google_translate_element');
+
           window.googleTranslateWidget = {
             element: translateElement,
             translate: (langCode) => {
@@ -47,6 +60,8 @@ export default function App({ Component, pageProps }) {
               return false;
             }
           };
+          
+          window.googleTranslateInitialized = true;
         } catch (error) {
           console.error('Error initializing Google Translate:', error);
         }
@@ -55,27 +70,18 @@ export default function App({ Component, pageProps }) {
     
     window.googleTranslateElementInit = googleTranslateElementInit;
     
-    // Ensure the translate element container exists
-    if (!document.getElementById('google_translate_element')) {
-      const container = document.createElement('div');
-      container.id = 'google_translate_element';
-      container.style.display = 'none';
-      document.body.appendChild(container);
-    }
-    
-    // Load the script
+    // Load the script only once
     loadGoogleTranslateScript();
     
-    // Try to initialize widget if script is already loaded
+    // Try to initialize if script is already loaded
     if (window.google && window.google.translate) {
       googleTranslateElementInit();
     }
-  }, []);
+  }, []); // Empty dependency array - run only once
 
   return (
     <>
       <style jsx global>{`
-        /* Completely hide Google Translate banner strip */
         .goog-te-banner-frame {
           display: none !important;
           visibility: hidden !important;
@@ -101,7 +107,6 @@ export default function App({ Component, pageProps }) {
           display: none !important;
         }
         
-        /* Force body to stay at top */
         body {
           top: 0 !important;
           position: static !important;
@@ -114,7 +119,6 @@ export default function App({ Component, pageProps }) {
           padding-top: 0 !important;
         }
         
-        /* Hide Google logo and branding */
         .goog-logo-link,
         .goog-te-gadget img,
         .goog-te-gadget span {
