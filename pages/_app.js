@@ -80,7 +80,7 @@ export default function App({ Component, pageProps }) {
   }, []); // Empty dependency array - run only once
 
   return (
-    <>
+    <div suppressHydrationWarning>
       <style jsx global>{`
         .goog-te-banner-frame {
           display: none !important;
@@ -164,6 +164,6 @@ export default function App({ Component, pageProps }) {
       <CartProvider>
         <Component {...pageProps} />
       </CartProvider>
-    </>
+    </div>
   );
 }
