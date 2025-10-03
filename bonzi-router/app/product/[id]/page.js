@@ -3,6 +3,7 @@ import ProductInteractive from './components/ProductInteractive';
 import SellerInfo from './components/SellerInfo';
 import ProductTabs from './components/ProductTabs';
 import BulkPriceButton from './components/BulkPriceButton';
+import ProductPolicies from './components/ProductPolicies';
 
 async function fetchProductData(productId) {
   try {
@@ -135,6 +136,7 @@ function transformApiData(apiData) {
       image: color.image
     })) : [],
     discount_percentage: parseInt(apiData.discount_percentage || 0),
+    refundPolicy: apiData.product?.refund_policy_template || 'No refund policy available',
     relatedProducts: []
   };
 }
@@ -174,17 +176,17 @@ export default async function ProductDetailPage({ params }) {
 
     return (
       <div className="bg-gray-100 py-1 sm:py-2 md:py-4 pt-16 sm:pt-20 md:pt-24 lg:pt-28 mx-auto">
-        <div className="max-w-6xl mx-auto px-1 sm:px-2 md:px-4 lg:px-8">
+        <div className="max-w-6xl mx-auto px-2 sm:px-3 md:px-4 lg:px-8">
 
           {/* Main Product Section */}
-          <div className="bg-white p-1 sm:p-2 md:p-3 lg:p-4 rounded-lg shadow-sm flex flex-col lg:flex-row gap-1 sm:gap-2 md:gap-3 lg:gap-4">
+          <div className="bg-white p-2 sm:p-3 md:p-4 lg:p-5 rounded-lg shadow-sm flex flex-col lg:flex-row gap-2 sm:gap-3 md:gap-4 lg:gap-5">
             {/* Left: Product Gallery */}
             <ProductGallery product={product} />
 
             {/* Right: Product Info */}
-            <div className="w-full lg:w-1/2 flex flex-col gap-1.5 sm:gap-2 md:gap-2 lg:gap-2 mt-0.5 sm:mt-1">
+            <div className="w-full lg:w-1/2 flex flex-col gap-2 sm:gap-3 md:gap-3 lg:gap-3 mt-1 sm:mt-2">
               <div className="flex items-start justify-between">
-                <h1 className="text-xs sm:text-sm md:text-base lg:text-md font-semibold text-gray-800 leading-tight flex-1 pr-1 sm:pr-2">{product.name}</h1>
+                <h1 className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-gray-800 leading-tight flex-1 pr-1 sm:pr-2">{product.name}</h1>
                 <button
                   className="p-1.5 sm:p-2 rounded hover:bg-gray-100 text-orange-500 border border-gray-200 flex-shrink-0"
                   aria-label="Share product"
@@ -205,12 +207,12 @@ export default async function ProductDetailPage({ params }) {
                     <span key={i} className={`text-[8px] sm:text-[10px] md:text-xs ${i < Math.floor(product.rating) ? 'text-yellow-400' : 'text-gray-300'}`}>⭐</span>
                   ))}
                 </span>
-                <span className="text-[8px] sm:text-[10px] md:text-xs">{product.rating} ({product.reviews} feedbacks)</span>
-                <span className="text-[8px] sm:text-[10px] md:text-xs">{product.orders} orders</span>
+                <span className="text-[10px] sm:text-xs">{product.rating} ({product.reviews} feedbacks)</span>
+                <span className="text-[10px] sm:text-xs">{product.orders} orders</span>
               </div>
 
               <div className="flex flex-col sm:flex-row justify-between items-start gap-2.5">
-                <div className="bg-gray-50 p-2.5 rounded-md flex-1 w-full">
+                <div className="bg-gray-50 p-3 sm:p-4 rounded-md flex-1 w-full">
                   {priceData ? (
                     <div>
                       <div className="flex flex-wrap items-center gap-2 mb-1.5 sm:mb-2">
@@ -218,11 +220,11 @@ export default async function ProductDetailPage({ params }) {
                         <span className="text-green-600 font-semibold text-[10px] sm:text-xs">Save {Math.round(priceData.save_percentage)}%</span>
                       </div>
                       <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                        <span className="text-base sm:text-lg md:text-xl font-bold text-orange-600">Price: ₹{priceData.sale_price ? parseFloat(priceData.sale_price.replace('INR ', '')).toFixed(2) : 'N/A'}</span>
+                        <span className="text-sm sm:text-lg md:text-xl font-bold text-orange-600">Price: ₹{priceData.sale_price ? parseFloat(priceData.sale_price.replace('INR ', '')).toFixed(2) : 'N/A'}</span>
                         <span className="text-[10px] sm:text-xs text-gray-500">(Exclusive of all taxes)</span>
                       </div>
                       <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                        <span className="text-sm sm:text-base font-bold text-red-600">₹{priceData.sale_price_with_tax ? parseFloat(priceData.sale_price_with_tax.replace('INR ', '')).toFixed(2) : 'N/A'} / Piece</span>
+                        <span className="text-xs sm:text-sm font-bold text-red-600">₹{priceData.sale_price_with_tax ? parseFloat(priceData.sale_price_with_tax.replace('INR ', '')).toFixed(2) : 'N/A'} / Piece</span>
                         <span className="text-[10px] sm:text-xs text-gray-500">(Inclusive of all taxes)</span>
                       </div>
                     </div>
@@ -233,11 +235,11 @@ export default async function ProductDetailPage({ params }) {
                         <span className="text-green-600 font-semibold text-[10px] sm:text-xs">Save {getSavePercentage(priceData, product)}%</span>
                       </div>
                       <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                        <span className="text-base sm:text-lg md:text-xl font-bold text-orange-600">Price: ₹{product.priceDetails.price.toFixed(2)}</span>
+                        <span className="text-sm sm:text-lg md:text-xl font-bold text-orange-600">Price: ₹{product.priceDetails.price.toFixed(2)}</span>
                         <span className="text-[10px] sm:text-xs text-gray-500">(Exclusive of all taxes)</span>
                       </div>
                       <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                        <span className="text-sm sm:text-base font-bold text-red-600">₹{product.priceDetails.finalPrice.toFixed(2)} / Piece</span>
+                        <span className="text-xs sm:text-sm font-bold text-red-600">₹{product.priceDetails.finalPrice.toFixed(2)} / Piece</span>
                         <span className="text-[10px] sm:text-xs text-gray-500">(Inclusive of all taxes)</span>
                       </div>
                     </div>
@@ -247,7 +249,7 @@ export default async function ProductDetailPage({ params }) {
                 <BulkPriceButton product={product} priceData={priceData} />
               </div>
 
-              <div className="flex gap-2 text-center text-xs border-y py-2.5 overflow-x-auto scrollbar-hide md:grid md:grid-cols-5 md:gap-1">
+              <div className="flex gap-2 sm:gap-3 text-center text-xs sm:text-sm border-y py-2.5 sm:py-3 overflow-x-auto scrollbar-hide md:grid md:grid-cols-5 md:gap-1">
                 {[{
                   icon: "M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0011.664 0l3.181-3.183m-4.991-2.696a8.25 8.25 0 00-11.664 0l-3.181 3.183",
                   title: "Replacement",
@@ -286,20 +288,16 @@ export default async function ProductDetailPage({ params }) {
               </div>
 
               {/* Two-column layout starts here */}
-              <div className="flex flex-col xl:flex-row gap-3 sm:gap-2">
+              <div className="flex flex-col xl:flex-row gap-4 sm:gap-5">
                 {/* Left Column */}
                 <div className="w-full">
                   <ProductInteractive product={product} initialPriceData={priceData} productId={id} />
                 </div>
 
-                {/* Right Column */}
                 <SellerInfo product={product} />
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mt-2 text-xs sm:text-sm border-t pt-2 justify-between">
-                <span className="text-orange-600 font-semibold text-xs sm:text-sm">Seller Return Policy</span>
-                <span className="text-blue-600 font-semibold text-xs sm:text-sm">Buyer Protection</span>
-              </div>
+              <ProductPolicies product={product} />
             </div>
           </div>
 

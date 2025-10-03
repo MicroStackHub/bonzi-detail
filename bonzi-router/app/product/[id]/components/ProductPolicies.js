@@ -1,0 +1,47 @@
+'use client';
+
+import { useState } from 'react';
+
+export default function ProductPolicies({ product }) {
+  const [showRefundModal, setShowRefundModal] = useState(false);
+
+  return (
+    <>
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mt-2 text-xs sm:text-sm border-t pt-2 justify-between">
+        <button
+          onClick={() => setShowRefundModal(true)}
+          className="text-orange-600 font-semibold text-xs sm:text-sm hover:underline cursor-pointer"
+        >
+          Seller Return Policy
+        </button>
+        <span className="text-blue-600 font-semibold text-xs sm:text-sm">Buyer Protection</span>
+      </div>
+
+      {/* Refund Policy Modal */}
+      {showRefundModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full max-h-[80vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-bold">Seller Return Policy</h3>
+              <button
+                onClick={() => setShowRefundModal(false)}
+                className="text-gray-500 hover:text-gray-700 text-xl"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="text-gray-700 mb-4 whitespace-pre-line">
+              {product.refundPolicy}
+            </div>
+            <button
+              onClick={() => setShowRefundModal(false)}
+              className="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}

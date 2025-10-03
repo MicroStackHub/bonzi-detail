@@ -16,7 +16,34 @@ export default function ProductInteractive({ product, initialPriceData, productI
   };
 
   const handleAddToCart = async () => {
-    toast.success('Product added to cart successfully!');
+    try {
+      const payload = {
+        product_id: parseInt(productId),
+        product_qty: quantity,
+        color_id: selectedColor || "",
+        size_id: ""
+      };
+
+      const response = await fetch('https://api.glst.in/api/v3/cart/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5MjBjMTIwZS0zY2IwLTQ3OGMtOTY0Yi1hM2ZhZmFjMDFhNGIiLCJqdGkiOiI2Zjc1Y2EwZWQzODQyNTNhYTNjODU2MzFlYzRkMjJlYzIyYjU2NzFkMGE0MzgzYjc4MGNkNWEzODcyNWRjZTAzYWFjM2VjOTczMGU1NjRiNyIsImlhdCI6MTc1OTUzMTk5NC4wMTc5MTcsIm5iZiI6MTc1OTUzMTk5NC4wMTc5MjEsImV4cCI6MTc5MTA2Nzk5My45OTc0NDIsInN1YiI6IjUiLCJzY29wZXMiOlsiKiJdfQ.maL879O50zK45IlcGMZychVDLjIoKotGFZtlIloi1jCJbtLlFaqh7L30VUHrjDbWn9QNHskuwu8w1gTzb3k0f0ZiPJEyo0RButhjqkpQlLrtdGs1QhtirWmx9nZnw31OF5qe8RcJXZ41Wuv_FggkiO4ufVxSYkfSbprnnTV49qrzBQ8PCdNAMGlNdhqJeybC0blgvOF8KAADMNkF04YogxMy_8vRLZDe59mCwurrPg2ZrJEwFLuYcfSEp93aoUbMZYntB6cL3acwONqsURGS7xtpQObaXAFlLvtBMbXP-K-_hHOTBPZrLciAOFcjeEAx5_AelLQkbZvNXeGjfknc-0Tlh1rlHpZj4wwaHa59R2avDLcmJRJjRBoPhNlbTzm7WF51mk0qu1erTj3bxh-sz8RQasw53P3GwHJboSWm25VmhoHQYl9RvaNBTxk1UOFKLNdQPHlB8My5D2bMxa9hVqx0qz35REtkui_xAeenxJsHXfoXuIGfzq_YhdRSET5GW7zCaHKTsgbY_hq_OwszocQ1U_XMcL8_Qz-6g0BKWppC3sQN5OzBJgDGNET6TsnF3JpJ7f3NaxMkggf1yEsYrBYK6qKuI-PBZV0NX34vH4cJC_7pWlz5EavNzQ7TIb3OtW0XBzhl23-xxNPJ0Rnk592syGbMMwTwrpSjmubTGRU`,
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success(data.message || 'Product added to cart successfully!');
+      } else {
+        toast.error(data.message || 'Failed to add product to cart');
+      }
+    } catch (error) {
+      console.error('Add to cart error:', error);
+      toast.error('Network error. Please try again later.');
+    }
   };
 
   const getColorCode = (colorName) => {
@@ -36,7 +63,7 @@ export default function ProductInteractive({ product, initialPriceData, productI
   };
 
   return (
-    <div className="grid grid-cols-[auto,1fr] items-center gap-x-3 sm:gap-x-2 gap-y-3 sm:gap-y-2 text-xs sm:text-sm">
+    <div className="grid grid-cols-1 sm:grid-cols-[auto,1fr] items-start gap-x-3 sm:gap-x-2 gap-y-3 sm:gap-y-2 text-xs sm:text-sm">
       {/* Color */}
       {product.colors && Array.isArray(product.colors) && product.colors.length > 0 && (
         <>
@@ -74,29 +101,33 @@ export default function ProductInteractive({ product, initialPriceData, productI
       {/* Quantity */}
       <span className="font-medium text-gray-500">Quantity</span>
       <div className="flex flex-col items-start">
-        <div className="flex items-center">
+        <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
           <button 
-            className="px-2.5 sm:px-2 py-1.5 bg-gray-200 text-black rounded-l text-xs sm:text-sm" 
+            className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold transition-colors duration-200 flex items-center justify-center" 
             onClick={() => handleQuantityChange(-1)}
             aria-label="Decrease quantity"
           >
-            -
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
+            </svg>
           </button>
-          <span className="px-4 sm:px-3 py-1.5 border-t border-b text-xs sm:text-sm">{quantity}</span>
+          <span className="px-4 py-2 border-l border-r border-gray-300 text-center min-w-[50px] font-semibold">{quantity}</span>
           <button 
-            className="px-2.5 sm:px-3 py-1.5 bg-gray-200 text-black rounded-r text-xs sm:text-sm" 
+            className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold transition-colors duration-200 flex items-center justify-center" 
             onClick={() => handleQuantityChange(1)}
             aria-label="Increase quantity"
           >
-            +
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
           </button>
         </div>
-        <span className="text-green-600 text-[10px] sm:text-xs">({priceData?.stock || product.stock} pieces)</span>
+        <span className="text-green-600 text-[10px] sm:text-xs mt-1">({priceData?.stock || product.stock} pieces available)</span>
       </div>
 
       {/* COD */}
       <span className="font-medium text-gray-500">COD</span>
-      <span className={`font-bold text-sm ${product.codAvailable ? 'text-green-600' : 'text-gray-700'}`}>
+      <span className={`font-bold text-xs ${product.codAvailable ? 'text-green-600' : 'text-gray-700'}`}>
         {product.codAvailable ? 'Available' : 'Not Available'}
       </span>
 
@@ -111,20 +142,20 @@ export default function ProductInteractive({ product, initialPriceData, productI
               const unitPriceWithTax = priceData.sale_price_with_tax ? parseFloat(priceData.sale_price_with_tax.replace('INR ', '')) : 0;
               const totalPrice = (quantity * unitPriceWithTax).toFixed(2);
               return (
-                <div className="text-green-600 font-bold text-base">
+                <div className="text-green-600 font-bold text-sm">
                   ₹{totalPrice} <span className="text-gray-600 font-normal text-xs">(incl. tax)</span>
                 </div>
               );
             } catch (error) {
               return (
-                <div className="text-green-600 font-bold text-base">
+                <div className="text-green-600 font-bold text-sm">
                   ₹{(product.priceDetails.finalPrice * quantity).toFixed(2)} <span className="text-gray-600 font-normal text-xs">(incl. tax)</span>
                 </div>
               );
             }
           })()
         ) : (
-          <div className="text-green-600 font-bold text-base">
+          <div className="text-green-600 font-bold text-sm">
             ₹{(product.priceDetails.finalPrice * quantity).toFixed(2)} <span className="text-gray-600 font-normal text-xs">(incl. tax)</span>
           </div>
         )}
@@ -134,13 +165,13 @@ export default function ProductInteractive({ product, initialPriceData, productI
       <span className="font-medium text-gray-500">Action</span>
       <div className="flex flex-row flex-wrap gap-2.5 items-center">
         <button 
-          className="flex-1 bg-orange-500 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded font-semibold shadow hover:bg-orange-600 text-xs text-center min-w-[90px]"
+          className="flex-1 bg-orange-500 text-white px-2 py-1 sm:px-3 sm:py-1.5 rounded font-semibold shadow hover:bg-orange-600 text-xs text-center min-w-[80px]"
           aria-label="Buy this product now"
         >
           Buy Now
         </button>
         <button 
-          className="flex-1 bg-white border border-orange-500 text-orange-500 px-3 py-1.5 sm:px-4 sm:py-2 rounded font-semibold shadow hover:bg-orange-50 text-xs text-center min-w-[90px]"
+          className="flex-1 bg-white border border-orange-500 text-orange-500 px-2 py-1 sm:px-3 sm:py-1.5 rounded font-semibold shadow hover:bg-orange-50 text-xs text-center min-w-[80px]"
           onClick={handleAddToCart}
           aria-label="Add this product to cart"
         >
