@@ -30,11 +30,11 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
   ];
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 bg-white transition-all duration-300 ${
+    <header suppressHydrationWarning className={`fixed top-0 left-0 right-0 z-50 bg-white transition-all duration-300 ${
       scrolled ? 'shadow-md' : 'shadow-sm'
     }`}>
-      <div className="max-w-6xl mx-auto px-2 sm:px-6 lg:px-8 py-4">
-        <div className="block sm:flex sm:items-center sm:justify-between">
+      <div suppressHydrationWarning className="max-w-6xl mx-auto px-2 sm:px-6 lg:px-8 py-4">
+        <div suppressHydrationWarning className="block sm:flex sm:items-center sm:justify-between">
           <div className="flex items-center justify-between sm:flex-shrink-0">
             <div className="flex-shrink-0" style={{ minWidth: 120 }}>
               {scrolled ? (
