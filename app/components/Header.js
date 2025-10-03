@@ -166,7 +166,11 @@ export default function Header() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="flex-1 px-1 sm:px-2 md:px-3 py-1 sm:py-1.5 border border-gray-300 focus:outline-none focus:border-orange-500 text-xs sm:text-sm text-black"
-                suppressHydrationWarning
+                autoComplete="off"
+                spellCheck="false"
+                data-gramm="false"
+                data-gramm_editor="false"
+                data-enable-grammarly="false"
               />
               <button
                 className="px-1.5 sm:px-2.5 md:px-4 py-1 sm:py-1.5 bg-orange-500 text-white hover:bg-orange-600"
