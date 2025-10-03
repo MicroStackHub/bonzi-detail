@@ -42,7 +42,7 @@ export default function ProductDetail({ productId, initialProductData, initialDe
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState(null);
-
+ const [isClient,setIsclient]  = useState(false);
   useEffect(() => {
     if (!initialProductData && id) {
       const fetchProductData = async () => {

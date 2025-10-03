@@ -4,12 +4,13 @@ import { useCart } from '@/contexts/CartContext';
 import {
   FaTshirt, FaLaptop, FaMobileAlt, FaMicrochip, FaHome, FaBlender, FaTools, FaGem, FaLightbulb, FaSuitcase, FaShoePrints, FaBook, FaShieldAlt, FaFutbol, FaGamepad
 } from 'react-icons/fa';
-
+const cartCount = 1;
 export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [showCategoriesDropdown, setShowCategoriesDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
-  const { cartCount } = useCart();
+ // const { cartCount } = useCart();
+ 
 
   const categories = [
     { name: 'Apparel Accessories', icon: <FaTshirt /> },
@@ -30,11 +31,11 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
   ];
 
   return (
-    <header suppressHydrationWarning className={`fixed top-0 left-0 right-0 z-50 bg-white transition-all duration-300 ${
+    <header className={`fixed top-0 left-0 right-0 z-50 bg-white transition-all duration-300 ${
       scrolled ? 'shadow-md' : 'shadow-sm'
     }`}>
-      <div suppressHydrationWarning className="max-w-6xl mx-auto px-2 sm:px-6 lg:px-8 py-4">
-        <div suppressHydrationWarning className="block sm:flex sm:items-center sm:justify-between">
+      <div className="max-w-6xl mx-auto px-2 sm:px-6 lg:px-8 py-4">
+        <div className="block sm:flex sm:items-center sm:justify-between">
           <div className="flex items-center justify-between sm:flex-shrink-0">
             <div className="flex-shrink-0" style={{ minWidth: 120 }}>
               {scrolled ? (

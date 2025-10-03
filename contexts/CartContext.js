@@ -7,7 +7,10 @@ export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
   const [cartLoading, setCartLoading] = useState(false);
 
+  // Load from localStorage only on client side
   useEffect(() => {
+     
+    
     const savedCartCount = localStorage.getItem('cart_count');
     const savedCartItems = localStorage.getItem('cart_items');
 
@@ -24,12 +27,17 @@ export function CartProvider({ children }) {
     }
   }, []);
 
+  // Save to localStorage only on client side
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     localStorage.setItem('cart_count', cartCount.toString());
     localStorage.setItem('cart_items', JSON.stringify(cartItems));
   }, [cartCount, cartItems]);
 
   const addToCart = async (productId, quantity = 1, colorId = null, sizeId = null) => {
+    if (typeof window === 'undefined') return { success: false, message: 'Not available on server' };
+    
     setCartLoading(true);
     try {
       const accessToken = localStorage.getItem('access_token');
