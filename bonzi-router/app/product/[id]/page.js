@@ -672,47 +672,53 @@ export default function ProductDetailPage({ params }) {
                   <div className="text-[10px] sm:text-[10px] text-orange-600">Want to buy in bulk? <a href="#" className="underline font-semibold">Learn about bulk pricing options</a></div>
                 </div>
 
-                {/* Shipping Info Section - Redesigned as key-value pairs */}
-                <div className="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
-                  <div className="grid grid-cols-[auto,1fr] gap-x-4 gap-y-2 text-sm">
+                {/* Shipping Info Section - Key-Value Pair Layout */}
+                <div className="mt-3 p-4 bg-white rounded-lg border border-gray-200">
+                  <div className="space-y-3 text-sm">
                     {/* Shipping */}
-                    <span className="font-medium text-gray-700">Shipping:</span>
-                    <span className="text-green-600 font-semibold">Free Shipping</span>
+                    <div className="flex flex-col">
+                      <span className="text-gray-600 text-xs mb-1">Shipping:</span>
+                      <span className="text-green-600 font-bold text-base">Free Shipping</span>
+                    </div>
 
                     {/* COD */}
-                    <span className="font-medium text-gray-700">COD:</span>
-                    <span className="text-gray-700 font-semibold">{product.codAvailable ? 'Available' : 'Not Available'}</span>
+                    <div className="flex flex-col">
+                      <span className="text-gray-600 text-xs mb-1">COD:</span>
+                      <span className={`font-bold text-base ${product.codAvailable ? 'text-green-600' : 'text-gray-700'}`}>
+                        {product.codAvailable ? 'Available' : 'Not Available'}
+                      </span>
+                    </div>
 
                     {/* Total Price */}
-                    <span className="font-medium text-gray-700">Total Price:</span>
                     <div className="flex flex-col">
-                      {priceLoading ? (
-                        <div className="h-5 bg-gray-200 rounded w-32 animate-pulse"></div>
-                      ) : priceData ? (
-                        <div className="flex flex-col">
-                          {(() => {
+                      <span className="text-gray-600 text-xs mb-1">Total Price:</span>
+                      <div>
+                        {priceLoading ? (
+                          <div className="h-6 bg-gray-200 rounded w-32 animate-pulse"></div>
+                        ) : priceData ? (
+                          (() => {
                             try {
                               const unitPriceWithTax = priceData.sale_price_with_tax ? parseFloat(priceData.sale_price_with_tax.replace('INR ', '')) : 0;
                               const totalPrice = (quantity * unitPriceWithTax).toFixed(2);
                               return (
-                                <span className="text-green-600 font-bold text-sm">
+                                <div className="text-green-600 font-bold text-base">
                                   ₹{totalPrice} <span className="text-gray-600 font-normal text-xs">(incl. tax)</span>
-                                </span>
+                                </div>
                               );
                             } catch (error) {
                               return (
-                                <span className="text-green-600 font-bold text-sm">
+                                <div className="text-green-600 font-bold text-base">
                                   ₹{(product.priceDetails.finalPrice * quantity).toFixed(2)} <span className="text-gray-600 font-normal text-xs">(incl. tax)</span>
-                                </span>
+                                </div>
                               );
                             }
-                          })()}
-                        </div>
-                      ) : (
-                        <span className="text-green-600 font-bold text-sm">
-                          ₹{(product.priceDetails.finalPrice * quantity).toFixed(2)} <span className="text-gray-600 font-normal text-xs">(incl. tax)</span>
-                        </span>
-                      )}
+                          })()
+                        ) : (
+                          <div className="text-green-600 font-bold text-base">
+                            ₹{(product.priceDetails.finalPrice * quantity).toFixed(2)} <span className="text-gray-600 font-normal text-xs">(incl. tax)</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
