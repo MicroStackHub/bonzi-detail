@@ -1,0 +1,187 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  overflow-x: hidden;
+  position: relative;
+  top: 0px !important;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+/* Ensure copyright strip always takes full viewport width */
+.fixed-full-width {
+  width: 100vw !important;
+  margin-left: calc(-50vw + 50%) !important;
+  margin-right: calc(-50vw + 50%) !important;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+@keyframes scroll {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+@keyframes scroll-vertical {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+.animate-scroll-vertical {
+  animation: scroll-vertical 20s linear infinite;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Custom Language Dropdown Styles */
+
+/* Hide Google Translate elements completely */
+.goog-te-banner-frame {
+  display: none !important;
+}
+
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+
+.goog-te-menu-frame {
+  display: none !important;
+}
+
+.goog-te-ftab {
+  display: none !important;
+}
+
+/* Hide the top translation bar completely */
+body > .skiptranslate.goog-te-banner-frame {
+  display: none !important;
+}
+
+.goog-te-banner-frame.skiptranslate {
+  visibility: hidden !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Ensure body doesn't get pushed down */
+body {
+  top: 0px !important;
+  position: static !important;
+}
+
+/* Hide any notification bars */
+.goog-te-banner-frame, 
+.goog-te-banner-frame * {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.goog-logo-link {
+  display: none !important;
+}
+
+.goog-te-gadget {
+  display: none !important;
+}
+
+body {
+  top: 0px !important;
+}
+
+#google_translate_element {
+  display: none !important;
+}
+
+/* Prevent Google Translate from affecting page layout */
+.goog-text-highlight {
+  background: none !important;
+  box-shadow: none !important;
+}
+
+/* Additional rules to hide Google Translate top bar */
+iframe.goog-te-banner-frame {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0px !important;
+  width: 0px !important;
+}
+
+.goog-te-balloon-frame {
+  display: none !important;
+}
+
+.goog-te-menu2 {
+  display: none !important;
+}
+
+/* Force hide all possible Google Translate UI elements */
+div[id^="google_translate"] {
+  display: none !important;
+}
+
+iframe[src*="translate.google"] {
+  display: none !important;
+}
+
+/* Override any top margin/padding that Google Translate might add */
+html, body {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Hide the "Translated into" notification */
+.goog-te-spinner-pos,
+.goog-te-spinner {
+  display: none !important;
+}
+
+/* Hide Google Translate attribution */
+.goog-logo-link,
+.goog-te-gadget {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* Additional selector to catch the top bar */
+body > iframe.skiptranslate {
+  display: none !important;
+  height: 0 !important;
+  visibility: hidden !important;
+}

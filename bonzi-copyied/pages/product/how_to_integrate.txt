@@ -1,0 +1,320 @@
+https://api.glst.in/api/v2/product?product_id=1
+
+in tihs product detailed page you can see what i want you  is that you are going to integrate this api in this for just product detail page please 
+and you are going to get this kidn of data 
+{
+    "response_code": 200,
+    "success": true,
+    "message": "product data successfully",
+    "data": {
+        "display_product_id": 1,
+        "product_id": 1,
+        "slug": "high-quality-men-s-fashion-retro-wool-newsboy-golf-beret-flat-ivy-herringbone-duckbill-hat/9f2e9035-ca2a-4848-be92-eff59f0d7832",
+        "short_link": "https://link.glst.in/eeHm2X",
+        "short_desc": "This stylish men's wool newsboy hat offers a classic retro look with a herringbone pattern. Perfect for golf enthusiasts, it features a duckbill design, offering a comfortable fit and timeless appeal. Ideal for any casual or smart-casual occasion, combining fashion with function.",
+        "store_id": 3,
+        "category_id": 2,
+        "sub_category_id": 7,
+        "sub_sub_category_id": null,
+        "product_name": "High Quality Men's Fashion Retro Wool Newsboy Golf Beret Flat Ivy Herringbone Duckbill Hat",
+        "display_min_price": "2000.00",
+        "display_max_price": null,
+        "display_image": "https://admin.glst.in/media-storage/1/1/2025061810392765198.jpg",
+        "display_min_mrp": "4999.00",
+        "display_max_mrp": null,
+        "brand_name": "Generic",
+        "product_keywords": [
+            "Hat",
+            "cap",
+            "head wear"
+        ],
+        "has_video": null,
+        "product_status": 1,
+        "prodcut_approved": 0,
+        "searchCount": 0,
+        "feedback_rating": {
+            "total_feedback": 0,
+            "avg_rate": 0,
+            "rate1": 0,
+            "rate1avg_count": 0,
+            "rate2": 0,
+            "rate2avg_count": 0,
+            "rate3": 0,
+            "rate3avg_count": 0,
+            "rate4": 0,
+            "rate4avg_count": 0,
+            "rate5": 0,
+            "rate5avg_count": 0
+        },
+        "saleCount": 0,
+        "isCOD": 0,
+        "created_at": "2025-06-18T05:09:27.000000Z",
+        "updated_at": "2025-08-18T14:17:30.000000Z",
+        "discount_percentage": "60",
+        "display_min_tax": 180,
+        "display_min_price_with_tax": 2180,
+        "display_max_tax": 0,
+        "display_max_price_with_tax": 0,
+        "coupon_and_discount": [],
+        "stock": 0,
+        "isWishlist": false,
+        "product": {
+            "product_id": 1,
+            "uuid": "9f2e9035-ca2a-4848-be92-eff59f0d7832",
+            "slug": "high-quality-men-s-fashion-retro-wool-newsboy-golf-beret-flat-ivy-herringbone-duckbill-hat/9f2e9035-ca2a-4848-be92-eff59f0d7832",
+            "sort_code": "1jsca50",
+            "store_id": 3,
+            "CatID": 2,
+            "SubCatID": 7,
+            "SubSubCatID": null,
+            "ProductName": "High Quality Men's Fashion Retro Wool Newsboy Golf Beret Flat Ivy Herringbone Duckbill Hat",
+            "short_desc": "This stylish men's wool newsboy hat offers a classic retro look with a herringbone pattern. Perfect for golf enthusiasts, it features a duckbill design, offering a comfortable fit and timeless appeal. Ideal for any casual or smart-casual occasion, combining fashion with function.",
+            "ProductCode": "5949998840448",
+            "BrandName": "Generic",
+            "sellersku": null,
+            "sellersku_id": null,
+            "HSNCode": "71179090",
+            "ProductMadeIn": "China",
+            "HasWarranty": "No",
+            "WarrantyType": "0",
+            "WarrantyPeriodTime": null,
+            "WarrantyPeriod": "0",
+            "ProductCondition": "1",
+            "ProductConditionComment": "Its brand new ready to use",
+            "productKeywords": "[\"Hat\",\"cap\",\"head wear\"]",
+            "UnitType": "Number",
+            "Soldin": "Units",
+            "SoldinNoOfUnitsInLot": null,
+            "ProcessingTimeInDays": "15",
+            "BulkProcessingTimeInDays": 0,
+            "VideoFileName": null,
+            "ProductDescFile": "https://admin.glst.in/media-storage/1/1/2025061810392741776.txt",
+            "HasVariation": "1",
+            "is_bulk_price": "0",
+            "HasBulkPriceForNoVariation": null,
+            "SellingPrice": null,
+            "InitialStock": null,
+            "CurrentStock": null,
+            "tax_template_id": 1,
+            "package_weight": "0.10",
+            "package_length": "10",
+            "package_width": "10",
+            "package_height": "18",
+            "shipping_template_id": 1,
+            "isCOD": 0,
+            "refund_policy_template": "The buyer covers the cost of return shipping",
+            "salestype": "Immediate Sales",
+            "start_date": null,
+            "end_date": "2027-06-09 00:00:00",
+            "launch_date": null,
+            "product_group_id": null,
+            "product_sub_group_id": null,
+            "product_return_period": "7 Days",
+            "legal_disclaimer": null,
+            "term_and_condition_consent": "1",
+            "product_status": "1",
+            "prodcut_approved": 0,
+            "created_at": "2025-06-18T05:09:27.000000Z",
+            "updated_at": "2025-06-21T01:10:49.000000Z",
+            "deleted_at": null,
+            "shipping_template": {
+                "id": 1,
+                "type": "Free",
+                "shipping_days": 4,
+                "product_origin": "Bangalore",
+                "shipping_city": []
+            },
+            "tax_template": {
+                "id": 1,
+                "store_id": 1,
+                "name": "General",
+                "help_text": "tax-template/685249e57f131.txt",
+                "tax_template_rate": [
+                    {
+                        "id": 1,
+                        "tax_template_id": 1,
+                        "name": "IGST",
+                        "value": "9.00"
+                    },
+                    {
+                        "id": 2,
+                        "tax_template_id": 1,
+                        "name": "CGST",
+                        "value": "9.00"
+                    },
+                    {
+                        "id": 3,
+                        "tax_template_id": 1,
+                        "name": "SGST",
+                        "value": "18.00"
+                    },
+                    {
+                        "id": 4,
+                        "tax_template_id": 1,
+                        "name": "CESS",
+                        "value": "0.00"
+                    }
+                ]
+            }
+        },
+        "product_image": [
+            {
+                "product_image_id": 1,
+                "product_id": 1,
+                "store_id": null,
+                "ImageLink": "https://admin.glst.in/media-storage/1/1/2025061810392765198.jpg",
+                "DefaultImageStatus": "1",
+                "index": 0,
+                "created_at": "2025-06-18T05:09:27.000000Z",
+                "updated_at": "2025-06-18T05:09:27.000000Z"
+            },
+            {
+                "product_image_id": 2,
+                "product_id": 1,
+                "store_id": null,
+                "ImageLink": "https://admin.glst.in/media-storage/1/1/2025061810392735508.jpg",
+                "DefaultImageStatus": "1",
+                "index": 1,
+                "created_at": "2025-06-18T05:09:27.000000Z",
+                "updated_at": "2025-06-18T05:09:27.000000Z"
+            },
+            {
+                "product_image_id": 3,
+                "product_id": 1,
+                "store_id": null,
+                "ImageLink": "https://admin.glst.in/media-storage/1/1/2025061810392774721.jpg",
+                "DefaultImageStatus": "1",
+                "index": 2,
+                "created_at": "2025-06-18T05:09:27.000000Z",
+                "updated_at": "2025-06-18T05:09:27.000000Z"
+            },
+            {
+                "product_image_id": 4,
+                "product_id": 1,
+                "store_id": null,
+                "ImageLink": "https://admin.glst.in/media-storage/1/1/2025061810392789631.jpg",
+                "DefaultImageStatus": "1",
+                "index": 3,
+                "created_at": "2025-06-18T05:09:27.000000Z",
+                "updated_at": "2025-06-18T05:09:27.000000Z"
+            },
+            {
+                "product_image_id": 5,
+                "product_id": 1,
+                "store_id": null,
+                "ImageLink": "https://admin.glst.in/media-storage/1/1/2025061810392755868.jpg",
+                "DefaultImageStatus": "1",
+                "index": 4,
+                "created_at": "2025-06-18T05:09:27.000000Z",
+                "updated_at": "2025-06-18T05:09:27.000000Z"
+            },
+            {
+                "product_image_id": 6,
+                "product_id": 1,
+                "store_id": null,
+                "ImageLink": "https://admin.glst.in/media-storage/1/1/2025061810392779813.jpg",
+                "DefaultImageStatus": "1",
+                "index": 5,
+                "created_at": "2025-06-18T05:09:27.000000Z",
+                "updated_at": "2025-06-18T05:09:27.000000Z"
+            }
+        ],
+        "product_size": [],
+        "product_color": [
+            {
+                "product_variation_colorid": 9,
+                "product_id": 1,
+                "color": "Black",
+                "image": "https://admin.glst.in/media-storage/3/1/2025061913061121606.jpg",
+                "created_at": "2025-06-19T02:06:11.000000Z",
+                "updated_at": "2025-06-19T02:06:11.000000Z"
+            }
+        ],
+        "shipping_package_included": [
+            {
+                "shipping_detail_id": 14,
+                "product_id": 1,
+                "quantity": 1,
+                "content": "Cap",
+                "created_at": "2025-06-19T07:36:11.000000Z",
+                "updated_at": "2025-06-19T07:36:11.000000Z"
+            }
+        ],
+        "bulk_price": [],
+        "product_specification": [
+            {
+                "PropertyName": "Color",
+                "PropertyValue": "Available",
+                "product_id": 1,
+                "image": "https://admin.glst.in/media-storage/product_specification/Unknown.png"
+            },
+            {
+                "PropertyName": "Design",
+                "PropertyValue": "Herringbone",
+                "product_id": 1,
+                "image": "https://admin.glst.in/media-storage/product_specification/Unknown.png"
+            },
+            {
+                "PropertyName": "Material",
+                "PropertyValue": "Wool",
+                "product_id": 1,
+                "image": "https://admin.glst.in/media-storage/product_specification/Unknown.png"
+            },
+            {
+                "PropertyName": "Pattern",
+                "PropertyValue": "Retro",
+                "product_id": 1,
+                "image": "https://admin.glst.in/media-storage/product_specification/Unknown.png"
+            },
+            {
+                "PropertyName": "Season",
+                "PropertyValue": "All Season",
+                "product_id": 1,
+                "image": "https://admin.glst.in/media-storage/product_specification/Unknown.png"
+            },
+            {
+                "PropertyName": "Shape",
+                "PropertyValue": "Flat cap",
+                "product_id": 1,
+                "image": "https://admin.glst.in/media-storage/product_specification/Unknown.png"
+            },
+            {
+                "PropertyName": "Style",
+                "PropertyValue": "Newsboy",
+                "product_id": 1,
+                "image": "https://admin.glst.in/media-storage/product_specification/Unknown.png"
+            },
+            {
+                "PropertyName": "Type",
+                "PropertyValue": "Beret",
+                "product_id": 1,
+                "image": "https://admin.glst.in/media-storage/product_specification/Unknown.png"
+            }
+        ],
+        "business_detail": {
+            "store_id": 3,
+            "CompanyName": "STORE INDIA",
+            "State": 19,
+            "state_detail": {
+                "name": "Karnataka",
+                "id": 19
+            }
+        },
+        "whishlist_post": null
+    }
+}
+after extracting the id from the url okay 
+so what i want from you is that i want you to integrate this api in the product detail page please instead of using the mock data 
+
+first integrate this data and then the product description that you are going to get is the html page that you need 
+to put that as it is that i am giving you with the
+product description url and the result okay 
+https://api.glst.in/api/v1/product-description/1
+{
+    "response_code": 200,
+    "success": true,
+    "message": "product description data successfully",
+    "data": "<meta charset=\"UTF-8\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n    <title>High Quality Men's Fashion Retro Wool Newsboy Golf Beret Flat Ivy Herringbone Duckbill Hat</title>\r\n    <style>\r\n        /* Basic Reset */\r\n        body {\r\n            font-family: 'Helvetica Neue', Arial, sans-serif;\r\n            background-color: #fff;\r\n            color: #333;\r\n            padding: 20px;\r\n            margin: 0;\r\n            line-height: 1.7;\r\n        }\r\n\r\n        /* Product Container */\r\n        .product-container {\r\n            background-color: #fff;\r\n            border-radius: 10px;\r\n            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);\r\n            max-width: 1200px;\r\n            margin: 20px auto;\r\n            padding: 30px;\r\n            overflow: hidden;\r\n        }\r\n\r\n        /* Product Name */\r\n        .product-container h1 {\r\n            font-size: 2.5em;\r\n            margin-bottom: 20px;\r\n            text-align: center;\r\n            color: #333;\r\n            font-weight: 700;\r\n            letter-spacing: 1px;\r\n        }\r\n\r\n        /* Headings */\r\n        .product-container h2 {\r\n            font-size: 1.8em;\r\n            margin-top: 30px;\r\n            margin-bottom: 15px;\r\n            color: #333;\r\n            border-left: 5px solid #ffdd59;\r\n            padding-left: 10px;\r\n            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);\r\n        }\r\n\r\n        /* Section */\r\n        .product-container .section {\r\n            margin-bottom: 25px;\r\n        }\r\n\r\n        /* Text and Lists */\r\n        .product-container p,\r\n        .product-container li {\r\n            font-size: 1.1em;\r\n            line-height: 1.7;\r\n            color: #333;\r\n        }\r\n\r\n        .product-container ul {\r\n            padding-left: 20px;\r\n        }\r\n\r\n        .product-container ul li {\r\n            margin-bottom: 10px;\r\n            position: relative;\r\n            padding-left: 20px;\r\n        }\r\n\r\n        .product-container ul li::before {\r\n            content: '✔';\r\n            position: absolute;\r\n            left: 0;\r\n            color: #2ecc71;\r\n            font-weight: bold;\r\n        }\r\n\r\n        /* Tables */\r\n        .product-container table {\r\n            width: 100%;\r\n            border-collapse: collapse;\r\n            margin: 20px 0;\r\n        }\r\n\r\n        .product-container th,\r\n        .product-container td {\r\n            padding: 12px 15px;\r\n            text-align: left;\r\n            border-bottom: 1px solid #444;\r\n            color: #333;\r\n        }\r\n\r\n        .product-container th {\r\n            background-color: #444;\r\n            color: #fff;\r\n            font-weight: bold;\r\n        }\r\n\r\n        .responsive-table {\r\n            overflow-x: auto;\r\n        }\r\n\r\n        /* Buy Now Button */\r\n        .buy-now-button {\r\n            display: block;\r\n            width: 200px;\r\n            margin: 20px auto;\r\n            padding: 15px;\r\n            text-align: center;\r\n            background-color: #1e90ff;\r\n            color: #fff;\r\n            font-size: 1.2em;\r\n            font-weight: bold;\r\n            border: none;\r\n            border-radius: 5px;\r\n            cursor: pointer;\r\n            transition: background-color 0.3s ease;\r\n            text-decoration: none;\r\n        }\r\n\r\n        .buy-now-button:hover {\r\n            background-color: #1c86ee;\r\n        }\r\n\r\n        /* Buttons Styling */\r\n        button {\r\n            cursor: pointer;\r\n            padding: 10px 20px;\r\n            font-size: 1em;\r\n            border: none;\r\n            border-radius: 5px;\r\n            margin-top: 10px;\r\n        }\r\n\r\n        #speak-btn {\r\n            background-color: #007bff;\r\n            color: white;\r\n        }\r\n\r\n        #stop-btn {\r\n            background-color: #dc3545;\r\n            color: white;\r\n        }\r\n\r\n        #read-selected-btn {\r\n            background-color: #28a745;\r\n            color: white;\r\n        }\r\n\r\n        #speak-btn:hover {\r\n            background-color: #0056b3;\r\n        }\r\n\r\n        #stop-btn:hover {\r\n            background-color: #c82333;\r\n        }\r\n\r\n        #read-selected-btn:hover {\r\n            background-color: #218838;\r\n        }\r\n    </style>\r\n\r\n\r\n\r\n    <div class=\"container\" id=\"readme\">\r\n        <div class=\"product-container\">\r\n            <!-- Product Description -->\r\n            <div class=\"section\">\r\n                <p>This men's wool newsboy hat offers a timeless, retro style with its herringbone design. Ideal for golf lovers and fashion-conscious individuals, it combines comfort with a classic flat ivy shape. The duckbill design ensures a perfect fit and chic appearance for casual and semi-formal outings.</p>\r\n            </div>\r\n\r\n            <!-- Key Features and Benefits -->\r\n            <div class=\"section\">\r\n                <h2>✨ Key Features and Benefits</h2>\r\n                <ul>\r\n                    <li>Stylish retro design</li>\r\n                    <li>Comfortable wool material</li>\r\n                    <li>Classic herringbone pattern</li>\r\n                    <li>Duckbill brim for added flair</li>\r\n                    <li>Perfect for casual and semi-formal wear</li>\r\n                </ul>\r\n            </div>\r\n\r\n            <!-- Material and Construction Details -->\r\n            <div class=\"section\">\r\n                <h2>🔧 Material and Construction Details</h2>\r\n                <div class=\"responsive-table\">\r\n                    <table>\r\n                        <tbody><tr>\r\n                            <th>Component</th>\r\n                            <th>Material</th>\r\n                            <th>Description</th>\r\n                        </tr>\r\n                        <tr>\r\n                            <td>Body</td>\r\n                            <td>Wool</td>\r\n                            <td>Soft and warm, ideal for colder seasons</td>\r\n                        </tr>\r\n                        <tr>\r\n                            <td>Brim</td>\r\n                            <td>Duckbill</td>\r\n                            <td>Distinctive style that enhances the look</td>\r\n                        </tr>\r\n                    </tbody></table>\r\n                </div>\r\n            </div>\r\n\r\n            <!-- Technical Specifications -->\r\n            <div class=\"section\">\r\n                <h2>🔍 Technical Specifications</h2>\r\n                <div class=\"responsive-table\">\r\n                    <table>\r\n                        <tbody><tr>\r\n                            <th>Specification</th>\r\n                            <th>Details</th>\r\n                        </tr>\r\n                        <tr>\r\n                            <td>Material</td>\r\n                            <td>Wool</td>\r\n                        </tr>\r\n                        <tr>\r\n                            <td>Design</td>\r\n                            <td>Herringbone</td>\r\n                        </tr>\r\n                        <tr>\r\n                            <td>Fit</td>\r\n                            <td>Adjustable</td>\r\n                        </tr>\r\n                        <tr>\r\n                            <td>Brim</td>\r\n                            <td>Duckbill</td>\r\n                        </tr>\r\n                    </tbody></table>\r\n                </div>\r\n            </div>\r\n\r\n            <!-- Care Instructions -->\r\n            <div class=\"section\">\r\n                <h2>🧼 Care Instructions</h2>\r\n                <p>Hand wash gently with cold water. Air dry to maintain shape. Avoid machine washing.</p>\r\n            </div>\r\n\r\n            <!-- Buttons for Speech Synthesis -->\r\n            <div class=\"section\">\r\n                <button id=\"speak-btn\">Listen Description Instead of Read!</button>\r\n                <button id=\"stop-btn\">Stop</button>\r\n                <button id=\"read-selected-btn\">Read Selected Text</button>\r\n            </div>\r\n\r\n            <!-- Product Images Section -->\r\n            <div class=\"section\">\r\n                <h2>🅿️ Product Images:</h2>\r\n                <p><img class=\"card-img-top\" src=\"https://admin.bonzicart.com/media-storage/images/product/cap_8b066d9c-8572-47ab-b83c-c3125176215f.jpg\" alt=\"CAP\"><img class=\"card-img-top\" src=\"https://admin.bonzicart.com/media-storage/images/product/cap_ca8f628a-6b10-4cd9-9181-72cdf2e4f665.jpg\" alt=\"CAP\"><img class=\"card-img-top\" src=\"https://admin.bonzicart.com/media-storage/images/product/cap_a9e0970d-d1c0-4192-98a4-08f12f9cd5ac.jpg\" alt=\"CAP\"><img class=\"card-img-top\" src=\"https://admin.bonzicart.com/media-storage/images/product/cap_82dd442f-75ee-4b04-bb12-b87cd45043a1.jpg\" alt=\"CAP\"><img class=\"card-img-top\" src=\"https://admin.bonzicart.com/media-storage/images/product/cap_4538c704-fcee-4b6d-85cd-667473a4e372.jpg\" alt=\"CAP\"><img class=\"card-img-top\" src=\"https://admin.bonzicart.com/media-storage/images/product/cap_d00b4a02-349b-4af2-a735-16baf3a86a93.jpg\" alt=\"CAP\"><img class=\"card-img-top\" src=\"https://admin.bonzicart.com/media-storage/images/product/cap_b06acd2f-c7db-487a-b3a7-179dca7f15b0.jpg\" alt=\"CAP\"><img class=\"card-img-top\" src=\"https://admin.bonzicart.com/media-storage/images/product/cap_49b33c29-d686-49cb-b402-a55b8d9d5ca5.jpg\" alt=\"CAP\"><img class=\"card-img-top\" src=\"https://admin.bonzicart.com/media-storage/images/product/cap_68b6edc3-68a6-4035-ac98-cc619c71f047.jpg\" alt=\"CAP\"><img class=\"card-img-top\" src=\"https://admin.bonzicart.com/media-storage/images/product/cap_88d0fdd0-509f-4792-b869-6ec9abcb5b88.jpg\" alt=\"CAP\"><br></p>\r\n            </div>\r\n\r\n        </div>\r\n    </div>\r\n\r\n    <script>\r\n        let currentIndex = 0;\r\n        let sentences = [];\r\n        let isSpeaking = false;\r\n\r\n        function splitIntoSentences(text) {\r\n            return text.match(/[^\\.!\\?]+[\\.!\\?]+/g) || [];\r\n        }\r\n\r\n        function speakSentence(index) {\r\n            if (index < sentences.length) {\r\n                let msg = new SpeechSynthesisUtterance(sentences[index]);\r\n                msg.onend = function() {\r\n                    currentIndex++;\r\n                    if (currentIndex < sentences.length && isSpeaking) {\r\n                        speakSentence(currentIndex);\r\n                    }\r\n                };\r\n                window.speechSynthesis.speak(msg);\r\n            } else {\r\n                resetState();\r\n            }\r\n        }\r\n\r\n        function resetState() {\r\n            currentIndex = 0;\r\n            sentences = [];\r\n            isSpeaking = false;\r\n        }\r\n\r\n        document.getElementById('speak-btn').addEventListener('click', function() {\r\n            if (!isSpeaking || sentences.length === 0) {\r\n                sentences = splitIntoSentences(document.getElementById('readme').textContent);\r\n                isSpeaking = true;\r\n                speakSentence(currentIndex);\r\n            }\r\n        });\r\n\r\n        document.getElementById('stop-btn').addEventListener('click', function() {\r\n            isSpeaking = false;\r\n            window.speechSynthesis.cancel();\r\n        });\r\n\r\n        document.getElementById('read-selected-btn').addEventListener('click', function() {\r\n            let selectedText = window.getSelection().toString();\r\n            if (selectedText.trim()) {\r\n                window.speechSynthesis.cancel(); // Stop any ongoing speech\r\n                let msg = new SpeechSynthesisUtterance(selectedText);\r\n                window.speechSynthesis.speak(msg);\r\n            }\r\n        });\r\n    </script>"
+}
+
+so what i want from you is that first implement these things in the [id].js page okay 

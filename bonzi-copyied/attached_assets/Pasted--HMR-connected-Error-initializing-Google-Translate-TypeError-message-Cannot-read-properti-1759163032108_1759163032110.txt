@@ -1,0 +1,33 @@
+[HMR] connected
+Error initializing Google Translate: 
+TypeError {}
+message: "Cannot read properties of undefined (reading 'InlineLayout')"
+stack: "TypeError: Cannot read properties of undefined (reading 'InlineLayout')↵ at initializeGoogleTranslate (webpack-internal:///./components/LanguageDropdown.js:141:70)↵ at setupGoogleTranslate (webpack-internal:///./components/LanguageDropdown.js:192:21)"
+get stack: ƒ ()
+set stack: ƒ ()
+[[Prototype]]: Object
+constructor: ƒ TypeError()
+message: "Cannot read properties of undefined (reading 'InlineLayout')"
+name: "TypeError"
+[[Prototype]]: Object
+
+at t.value (https://b00d48f9-706d-4a86-86d7-b390f615736f-00-3fgp8kllue7nu.sisko.replit.dev:3000/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://b00d48f9-706d-4a86-86d7-b390f615736f-00-3fgp8kllue7nu.sisko.replit.dev:3000/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://b00d48f9-706d-4a86-86d7-b390f615736f-00-3fgp8kllue7nu.sisko.replit.dev:3000/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://b00d48f9-706d-4a86-86d7-b390f615736f-00-3fgp8kllue7nu.sisko.replit.dev:3000/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+Google Translate initialized successfully
+Switching to Bengali
+Google Translate initialized successfully
+Failed to fetch
+at window.fetch (https://b00d48f9-706d-4a86-86d7-b390f615736f-00-3fgp8kllue7nu.sisko.replit.dev:3000/__replco/static/devtools/eruda/3.2.3/eruda.js:2:218642)
+at Object.apply (https://b00d48f9-706d-4a86-86d7-b390f615736f-00-3fgp8kllue7nu.sisko.replit.dev:3000/__replco/static/devtools/injected.js:278:39)
+at zi.h (https://translate.googleapis.com/_/translate_http/_/js/k=translate_http.tr.en_GB.m9XUR-6KYdw.O/am=AAAE/d=1/exm=el_conf/ed=1/rs=AN8SPfpiUZ3tTuF6ph1C-fs0MeesXfP2TQ/m=el_main:84:379)
+at Bi (https://translate.googleapis.com/_/translate_http/_/js/k=translate_http.tr.en_GB.m9XUR-6KYdw.O/am=AAAE/d=1/exm=el_conf/ed=1/rs=AN8SPfpiUZ3tTuF6ph1C-fs0MeesXfP2TQ/m=el_main:34:40)
+at Di.next (https://translate.googleapis.com/_/translate_http/_/js/k=translate_http.tr.en_GB.m9XUR-6KYdw.O/am=AAAE/d=1/exm=el_conf/ed=1/rs=AN8SPfpiUZ3tTuF6ph1C-fs0MeesXfP2TQ/m=el_main:35:91)
+at https://translate.googleapis.com/_/translate_http/_/js/k=translate_http.tr.en_GB.m9XUR-6KYdw.O/am=AAAE/d=1/exm=el_conf/ed=1/rs=AN8SPfpiUZ3tTuF6ph1C-fs0MeesXfP2TQ/m=el_main:35:485
+at new Promise (<anonymous>)
+at Ei (https://translate.googleapis.com/_/translate_http/_/js/k=translate_http.tr.en_GB.m9XUR-6KYdw.O/am=AAAE/d=1/exm=el_conf/ed=1/rs=AN8SPfpiUZ3tTuF6ph1C-fs0MeesXfP2TQ/m=el_main:35:378)
+at _.Fi (https://translate.googleapis.com/_/translate_http/_/js/k=translate_http.tr.en_GB.m9XUR-6KYdw.O/am=AAAE/d=1/exm=el_conf/ed=1/rs=AN8SPfpiUZ3tTuF6ph1C-fs0MeesXfP2TQ/m=el_main:35:520)
+at Uk.send (https://translate.googleapis.com/_/translate_http/_/js/k=translate_http.tr.en_GB.m9XUR-6KYdw.O/am=AAAE/d=1/exm=el_conf/ed=1/rs=AN8SPfpiUZ3tTuF6ph1C-fs0MeesXfP2TQ/m=el_main:84:75)
+at p (https://translate.googleapis.com/_/translate_http/_/js/k=translate_http.tr.en_GB.m9XUR-6KYdw.O/am=AAAE/d=1/exm=el_conf/ed=1/rs=AN8SPfpiUZ3tTuF6ph1C-fs0MeesXfP2TQ/m=el_main:80:6)
+at https://translate.googleapis.com/_/translate_http/_/js/k=translate_http.tr.en_GB.m9XUR-6KYdw.O/am=AAAE/d=1/exm=el_conf/ed=1/rs=AN8SPfpiUZ3tTuF6ph1C-fs0MeesXfP2TQ/m=el_main:80:140
