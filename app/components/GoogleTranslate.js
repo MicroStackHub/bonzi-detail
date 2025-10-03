@@ -32,21 +32,17 @@ export default function GoogleTranslate() {
     };
 
     const initializeWidget = () => {
-      // Desktop version
-      if (document.getElementById('google_translate_element') && !document.getElementById('google_translate_element').hasChildNodes()) {
-        new window.google.translate.TranslateElement(
-          {
-            pageLanguage: 'en',
-            includedLanguages: 'hi,bn,te,mr,ta,gu,kn,ml,pa,or,as,ur',
-            layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
-            autoDisplay: false,
-          },
-          'google_translate_element'
-        );
+      // Create a hidden container for Google Translate
+      let hiddenContainer = document.getElementById('google_translate_element_hidden');
+      if (!hiddenContainer) {
+        hiddenContainer = document.createElement('div');
+        hiddenContainer.id = 'google_translate_element_hidden';
+        hiddenContainer.style.display = 'none';
+        document.body.appendChild(hiddenContainer);
       }
 
-      // Mobile version
-      if (document.getElementById('google_translate_element_mobile') && !document.getElementById('google_translate_element_mobile').hasChildNodes()) {
+      // Initialize Google Translate in the hidden container
+      if (hiddenContainer && !hiddenContainer.hasChildNodes()) {
         new window.google.translate.TranslateElement(
           {
             pageLanguage: 'en',
@@ -54,7 +50,7 @@ export default function GoogleTranslate() {
             layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
             autoDisplay: false,
           },
-          'google_translate_element_mobile'
+          'google_translate_element_hidden'
         );
       }
     };
@@ -68,11 +64,9 @@ export default function GoogleTranslate() {
       document.body.style.top = '0px';
       document.body.style.position = 'static';
       
-      // Clear the widget containers
-      const desktopWidget = document.getElementById('google_translate_element');
-      const mobileWidget = document.getElementById('google_translate_element_mobile');
-      if (desktopWidget) desktopWidget.innerHTML = '';
-      if (mobileWidget) mobileWidget.innerHTML = '';
+      // Clear the hidden widget container
+      const hiddenWidget = document.getElementById('google_translate_element_hidden');
+      if (hiddenWidget) hiddenWidget.innerHTML = '';
     };
 
     // Remove old widgets and reinitialize on route change
@@ -85,10 +79,8 @@ export default function GoogleTranslate() {
 
     // Cleanup on unmount
     return () => {
-      const desktopWidget = document.getElementById('google_translate_element');
-      const mobileWidget = document.getElementById('google_translate_element_mobile');
-      if (desktopWidget) desktopWidget.innerHTML = '';
-      if (mobileWidget) mobileWidget.innerHTML = '';
+      const hiddenWidget = document.getElementById('google_translate_element_hidden');
+      if (hiddenWidget) hiddenWidget.innerHTML = '';
     };
   }, [pathname]);
 
