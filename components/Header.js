@@ -195,12 +195,12 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
                   </svg>
                 </div>
                 <style jsx global>{`
-                  select.custom-select-orange option:hover, select.custom-select-orange option:focus {
-                    background-color: #fff7ed !important;
-                    color: #ea580c !important;
-                  }
-                `}</style>
-              </div>
+                select.custom-select-orange option:hover, select.custom-select-orange option:focus {
+                  background-color: #fff7ed !important;
+                  color: #ea580c !important;
+                }
+              `}</style>
+            </div>
               <label htmlFor="search-input" className="sr-only">Search for products</label>
               <input
                 id="search-input"
