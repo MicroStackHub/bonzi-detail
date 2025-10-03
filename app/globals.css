@@ -27,7 +27,8 @@ body {
 /* Google Translate Widget Styling */
 #google_translate_element,
 #google_translate_element_mobile {
-  display: inline-block;
+  display: inline-block !important;
+  vertical-align: middle;
 }
 
 /* Hide Google Translate banner */
@@ -39,34 +40,59 @@ body {
   top: 0 !important;
 }
 
+.skiptranslate {
+  display: inline-block !important;
+}
+
 /* Style the Google Translate dropdown */
 .goog-te-gadget {
   font-family: Arial, Helvetica, sans-serif !important;
   font-size: 0 !important;
+  color: transparent !important;
 }
 
 .goog-te-gadget .goog-te-combo {
-  padding: 4px 8px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  font-size: 14px;
-  background-color: white;
-  color: #374151;
-  cursor: pointer;
-  outline: none;
+  padding: 6px 12px !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 6px !important;
+  font-size: 14px !important;
+  background-color: white !important;
+  color: #374151 !important;
+  cursor: pointer !important;
+  outline: none !important;
+  margin: 0 !important;
 }
 
 .goog-te-gadget .goog-te-combo:hover {
-  background-color: #f9fafb;
-  border-color: #f97316;
+  background-color: #f9fafb !important;
+  border-color: #f97316 !important;
 }
 
 .goog-te-gadget .goog-te-combo:focus {
-  border-color: #f97316;
+  border-color: #f97316 !important;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1) !important;
 }
 
-/* Hide Google Translate branding text */
-.goog-te-gadget span {
+/* Hide Google Translate branding text but keep the select visible */
+.goog-te-gadget .goog-te-gadget-simple {
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  display: inline-block !important;
+}
+
+.goog-te-gadget .goog-te-gadget-simple .goog-te-menu-value {
+  color: #374151 !important;
+  font-size: 14px !important;
+}
+
+.goog-te-gadget .goog-te-gadget-simple .goog-te-menu-value span {
+  color: #374151 !important;
+  display: inline !important;
+}
+
+/* Hide the "Powered by" text */
+.goog-te-gadget .goog-te-gadget-simple span:first-child {
   display: none !important;
 }
 
@@ -74,11 +100,19 @@ body {
   display: none !important;
 }
 
+.goog-logo-link {
+  display: none !important;
+}
+
 /* Mobile styling */
 @media (max-width: 640px) {
   .goog-te-gadget .goog-te-combo {
-    padding: 2px 4px;
-    font-size: 12px;
+    padding: 4px 8px !important;
+    font-size: 12px !important;
+  }
+  
+  .goog-te-gadget .goog-te-gadget-simple .goog-te-menu-value {
+    font-size: 12px !important;
   }
 }
 
