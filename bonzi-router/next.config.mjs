@@ -1,4 +1,20 @@
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  images: {
+    unoptimized: false,
+    domains: [
+      'admin.glst.in',
+      'api.glst.in',
+    ],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
+    formats: ['image/webp', 'image/avif'],
+  },
+};
 
 export default nextConfig;

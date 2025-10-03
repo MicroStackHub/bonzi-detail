@@ -33,7 +33,7 @@ async function getProductData(id) {
 }
 
 export async function generateMetadata({ params }) {
-  const { id } = params;
+  const { id } = await params;
   const data = await getProductData(id);
   
   if (!data) {
@@ -56,7 +56,7 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function ProductDetailPage({ params }) {
-  const { id } = params;
+  const { id } = await params;
   const data = await getProductData(id);
 
   if (!data) {
@@ -66,7 +66,7 @@ export default async function ProductDetailPage({ params }) {
   const { product, description } = data;
 
   return (
-    <div className="container mx-auto px-4 py-8 mt-20">
+    <div className="container mx-auto px-4 py-8 mt-32">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Product Gallery */}
         <ProductGallery product={product} />
@@ -93,8 +93,9 @@ function ProductGallery({ product }) {
       <div className="aspect-square relative bg-gray-100 rounded-lg overflow-hidden">
         <Image
           src={firstMedia.url}
-          alt={product.name}
+          alt={product.name || 'Product image'}
           fill
+          sizes="(max-width: 768px) 100vw, 50vw"
           className="object-contain"
           priority
         />
@@ -109,6 +110,7 @@ function ProductGallery({ product }) {
               src={image.url}
               alt={`${product.name} ${index + 1}`}
               fill
+              sizes="(max-width: 768px) 25vw, 12vw"
               className="object-cover"
             />
           </div>
@@ -244,6 +246,7 @@ async function RelatedProducts({ productId, category }) {
                       src={related.media[0].url}
                       alt={related.name}
                       fill
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
                       className="object-cover"
                     />
                   )}
