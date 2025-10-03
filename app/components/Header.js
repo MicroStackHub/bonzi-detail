@@ -13,6 +13,8 @@ export default function Header() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showCategoriesDropdown, setShowCategoriesDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
+  const [currentLanguage, setCurrentLanguage] = useState('en');
   const [scrolled, setScrolled] = useState(false);
 
   const categories = [
@@ -32,6 +34,25 @@ export default function Header() {
     { name: 'Sports & Entertainment', icon: <FaFutbol /> },
     { name: 'Toys & Hobbies', icon: <FaGamepad /> },
   ];
+
+  const languages = [
+    { code: 'en', name: 'English' },
+    { code: 'hi', name: 'हिंदी' },
+    { code: 'mr', name: 'मराठी' },
+    { code: 'bn', name: 'বাংলা' },
+    { code: 'ta', name: 'தமிழ்' },
+    { code: 'te', name: 'తెలుగు' },
+    { code: 'gu', name: 'ગુજરાતી' },
+    { code: 'pa', name: 'ਪੰਜਾਬੀ' },
+  ];
+
+  const handleLanguageChange = (langCode) => {
+    setCurrentLanguage(langCode);
+    setShowLanguageDropdown(false);
+    // Here you can add logic to change the app language
+    // For example, update i18n context or reload with locale
+    console.log(`Language changed to: ${langCode}`);
+  };
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 bg-white transition-all duration-300 ${
@@ -115,6 +136,37 @@ export default function Header() {
                 </svg>
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1">{cartCount}</span>
               </button>
+
+              {/* Mobile Language Selector */}
+              <div className="relative">
+                <button
+                  className="flex items-center px-1 py-1 border border-gray-300 rounded text-sm"
+                  onClick={() => setShowLanguageDropdown((v) => !v)}
+                  aria-label="Select language"
+                >
+                  <svg className="w-3 h-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {showLanguageDropdown && (
+                  <div className="absolute right-0 mt-1 w-28 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
+                       onMouseLeave={() => setShowLanguageDropdown(false)}>
+                    <div className="py-1">
+                      {languages.map((lang) => (
+                        <button
+                          key={lang.code}
+                          onClick={() => handleLanguageChange(lang.code)}
+                          className={`flex items-center w-full px-2 py-1 text-xs hover:bg-gray-50 transition-colors ${
+                            currentLanguage === lang.code ? 'text-orange-500 bg-orange-50' : 'text-gray-700'
+                          }`}
+                        >
+                          <span>{lang.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
 
               <button
                 className="text-gray-600"
@@ -263,6 +315,38 @@ export default function Header() {
                   <a href="https://www.bonzicart.com/sales/smart-home" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-2 py-1.5 rounded transition-colors whitespace-nowrap">SMART HOME</a>
                 </div>
               </div>
+            </div>
+
+            {/* Language Selector */}
+            <div className="relative ml-4">
+              <button
+                className="flex items-center space-x-1 px-2 py-1 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:border-orange-500"
+                onClick={() => setShowLanguageDropdown((v) => !v)}
+                aria-label="Select language"
+              >
+                <span className="text-sm text-gray-700 hidden sm:inline">{languages.find(lang => lang.code === currentLanguage)?.name}</span>
+                <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {showLanguageDropdown && (
+                <div className="absolute right-0 mt-2 w-32 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
+                     onMouseLeave={() => setShowLanguageDropdown(false)}>
+                  <div className="py-1">
+                    {languages.map((lang) => (
+                      <button
+                        key={lang.code}
+                        onClick={() => handleLanguageChange(lang.code)}
+                        className={`flex items-center w-full px-3 py-2 text-sm hover:bg-gray-50 transition-colors ${
+                          currentLanguage === lang.code ? 'text-orange-500 bg-orange-50' : 'text-gray-700'
+                        }`}
+                      >
+                        <span>{lang.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
