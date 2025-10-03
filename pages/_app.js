@@ -6,9 +6,6 @@ import { useEffect } from 'react';
 
 export default function App({ Component, pageProps }) {
   useEffect(() => {
-    // Only run on client side
-    if (typeof window === 'undefined') return;
-
     // Prevent multiple initializations
     if (window.googleTranslateInitialized) return;
 
@@ -22,16 +19,12 @@ export default function App({ Component, pageProps }) {
       script.id = 'google-translate-script';
       script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
       script.async = true;
-      script.onerror = () => {
-        console.error('Failed to load Google Translate script');
-      };
       document.body.appendChild(script);
     };
 
-    const googleTranslateElementInit = () => {
+    window.googleTranslateElementInit = () => {
       if (window.google && window.google.translate && !window.googleTranslateWidget) {
         try {
-          // Ensure the translate element container exists
           let container = document.getElementById('google_translate_element');
           if (!container) {
             container = document.createElement('div');
@@ -68,16 +61,8 @@ export default function App({ Component, pageProps }) {
       }
     };
     
-    window.googleTranslateElementInit = googleTranslateElementInit;
-    
-    // Load the script only once
     loadGoogleTranslateScript();
-    
-    // Try to initialize if script is already loaded
-    if (window.google && window.google.translate) {
-      googleTranslateElementInit();
-    }
-  }, []); // Empty dependency array - run only once
+  }, []);
 
   return (
     <>

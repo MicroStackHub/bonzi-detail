@@ -10,11 +10,17 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
   const [showCategoriesDropdown, setShowCategoriesDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState('en');
+  const [isClient, setIsClient] = useState(false);
   const { cartCount } = useCart();
 
-  // Effect to handle language selection and translation
+  // Set client-side flag
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    setIsClient(true);
+  }, []);
+
+  // Effect to handle language selection and translation - only on client
+  useEffect(() => {
+    if (!isClient) return;
 
     const checkCurrentLanguage = () => {
       const url = window.location.href;
@@ -50,7 +56,7 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
 
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
+  }, [isClient]);
 
   const categories = [
     { name: 'Apparel Accessories', icon: <FaTshirt /> },
@@ -318,12 +324,13 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
             </div>
 
             {/* Language Dropdown */}
-            <div className="flex items-center">
-              <div className="flex items-center space-x-2" suppressHydrationWarning>
-                <select
-                    value={currentLanguage}
-                    className="bg-gray-100 text-gray-700 border border-gray-300 rounded px-2 py-1 text-xs cursor-pointer hover:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
-                    onChange={(e) => {
+            {isClient && (
+              <div className="flex items-center">
+                <div className="flex items-center space-x-2" suppressHydrationWarning>
+                  <select
+                      value={currentLanguage}
+                      className="bg-gray-100 text-gray-700 border border-gray-300 rounded px-2 py-1 text-xs cursor-pointer hover:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
+                      onChange={(e) => {
                       if (typeof window === 'undefined') return;
 
                       const langCode = e.target.value;
@@ -395,9 +402,11 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
                     <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
                     <option value="ur">اردو (Urdu)</option>
                   </select>
-                <div id="google_translate_element" style={{ display: 'none' }}></div>
+                  <div id="google_translate_element" style={{ display: 'none' }}></div>
+                </div>
               </div>
-              <style jsx global>{`
+            )}
+            <style jsx global>{`
                 .goog-te-banner-frame {
                   display: none !important;
                   visibility: hidden !important;
