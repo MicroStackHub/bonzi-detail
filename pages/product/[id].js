@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -10,7 +9,6 @@ import { useCart } from '../../contexts/CartContext';
 import RelatedProducts from '../../components/product/RelatedProducts';
 
 export default function ProductDetail({ product, description }) {
-  const router = useRouter();
   const { addToCart } = useCart();
 
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);

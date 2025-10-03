@@ -10,23 +10,18 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
   const [showCategoriesDropdown, setShowCategoriesDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState('en');
-  const [isClient, setIsClient] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const { cartCount } = useCart();
 
-  // Set client-side flag
   useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  // Effect to handle language selection and translation - only on client
-  useEffect(() => {
-    if (!isClient) return;
+    setMounted(true);
 
     const checkCurrentLanguage = () => {
+      if (typeof window === 'undefined') return;
+      
       const url = window.location.href;
       const cookie = document.cookie;
 
-      // Check URL hash for language
       if (url.includes('#googtrans(')) {
         const match = url.match(/#googtrans\(en\|([^)]+)\)/);
         if (match) {
@@ -35,7 +30,6 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
         }
       }
 
-      // Check cookie for language
       if (cookie.includes('googtrans=')) {
         const match = cookie.match(/googtrans=\/en\/([^;]+)/);
         if (match) {
@@ -44,7 +38,6 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
         }
       }
 
-      // Default to English
       setCurrentLanguage('en');
     };
 
@@ -56,7 +49,7 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
 
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, [isClient]);
+  }, []);
 
   const categories = [
     { name: 'Apparel Accessories', icon: <FaTshirt /> },
@@ -324,9 +317,9 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
             </div>
 
             {/* Language Dropdown */}
-            {isClient && (
+            {mounted && (
               <div className="flex items-center">
-                <div className="flex items-center space-x-2" suppressHydrationWarning>
+                <div className="flex items-center space-x-2">
                   <select
                       value={currentLanguage}
                       className="bg-gray-100 text-gray-700 border border-gray-300 rounded px-2 py-1 text-xs cursor-pointer hover:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
@@ -406,49 +399,49 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
                 </div>
               </div>
             )}
-            <style jsx global>{`
-                .goog-te-banner-frame {
-                  display: none !important;
-                  visibility: hidden !important;
-                }
-
-                .goog-te-banner-frame.skiptranslate {
-                  display: none !important;
-                }
-
-                body {
-                  top: 0px !important;
-                  position: static !important;
-                }
-
-                iframe.goog-te-banner-frame {
-                  display: none !important;
-                }
-
-                .goog-te-balloon-frame {
-                  display: none !important;
-                }
-
-                #google_translate_element {
-                  display: none !important;
-                }
-
-                .goog-te-gadget {
-                  display: none !important;
-                }
-
-                body.translated-ltr {
-                  top: 0 !important;
-                }
-
-                body.translated-rtl {
-                  top: 0 !important;
-                }
-              `}</style>
-            </div>
           </div>
         </div>
       </div>
+
+      <style jsx global>{`
+        .goog-te-banner-frame {
+          display: none !important;
+          visibility: hidden !important;
+        }
+
+        .goog-te-banner-frame.skiptranslate {
+          display: none !important;
+        }
+
+        body {
+          top: 0px !important;
+          position: static !important;
+        }
+
+        iframe.goog-te-banner-frame {
+          display: none !important;
+        }
+
+        .goog-te-balloon-frame {
+          display: none !important;
+        }
+
+        #google_translate_element {
+          display: none !important;
+        }
+
+        .goog-te-gadget {
+          display: none !important;
+        }
+
+        body.translated-ltr {
+          top: 0 !important;
+        }
+
+        body.translated-rtl {
+          top: 0 !important;
+        }
+      `}</style>
     </header>
   );
 }

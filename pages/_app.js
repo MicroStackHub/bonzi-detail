@@ -2,66 +2,69 @@
 import "@/styles/globals.css";
 import { CartProvider } from "@/contexts/CartContext";
 import { Toaster } from 'react-hot-toast';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function App({ Component, pageProps }) {
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
-    // Prevent multiple initializations
-    if (window.googleTranslateInitialized) return;
-
-    const loadGoogleTranslateScript = () => {
-      // Check if script already exists
-      if (document.getElementById('google-translate-script')) {
-        return;
-      }
-
-      const script = document.createElement('script');
-      script.id = 'google-translate-script';
-      script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-      script.async = true;
-      document.body.appendChild(script);
-    };
-
-    window.googleTranslateElementInit = () => {
-      if (window.google && window.google.translate && !window.googleTranslateWidget) {
-        try {
-          let container = document.getElementById('google_translate_element');
-          if (!container) {
-            container = document.createElement('div');
-            container.id = 'google_translate_element';
-            container.style.display = 'none';
-            document.body.appendChild(container);
-          }
-
-          const translateElement = new window.google.translate.TranslateElement({
-            pageLanguage: 'en',
-            includedLanguages: 'en,hi,bn,ta,te,mr,gu,kn,ml,pa,ur,or,as',
-            layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
-            autoDisplay: false,
-            multilanguagePage: true
-          }, 'google_translate_element');
-
-          window.googleTranslateWidget = {
-            element: translateElement,
-            translate: (langCode) => {
-              const selectElement = document.querySelector('.goog-te-combo');
-              if (selectElement) {
-                selectElement.value = langCode;
-                selectElement.dispatchEvent(new Event('change', { bubbles: true }));
-                return true;
-              }
-              return false;
-            }
-          };
-          
-          window.googleTranslateInitialized = true;
-        } catch (error) {
-          console.error('Error initializing Google Translate:', error);
-        }
-      }
-    };
+    setMounted(true);
     
-    loadGoogleTranslateScript();
+    // Prevent multiple initializations
+    if (typeof window !== 'undefined' && !window.googleTranslateInitialized) {
+      const loadGoogleTranslateScript = () => {
+        if (document.getElementById('google-translate-script')) {
+          return;
+        }
+
+        const script = document.createElement('script');
+        script.id = 'google-translate-script';
+        script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+        script.async = true;
+        document.body.appendChild(script);
+      };
+
+      window.googleTranslateElementInit = () => {
+        if (window.google && window.google.translate && !window.googleTranslateWidget) {
+          try {
+            let container = document.getElementById('google_translate_element');
+            if (!container) {
+              container = document.createElement('div');
+              container.id = 'google_translate_element';
+              container.style.display = 'none';
+              document.body.appendChild(container);
+            }
+
+            const translateElement = new window.google.translate.TranslateElement({
+              pageLanguage: 'en',
+              includedLanguages: 'en,hi,bn,ta,te,mr,gu,kn,ml,pa,ur,or,as',
+              layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+              autoDisplay: false,
+              multilanguagePage: true
+            }, 'google_translate_element');
+
+            window.googleTranslateWidget = {
+              element: translateElement,
+              translate: (langCode) => {
+                const selectElement = document.querySelector('.goog-te-combo');
+                if (selectElement) {
+                  selectElement.value = langCode;
+                  selectElement.dispatchEvent(new Event('change', { bubbles: true }));
+                  return true;
+                }
+                return false;
+              }
+            };
+            
+            window.googleTranslateInitialized = true;
+          } catch (error) {
+            console.error('Error initializing Google Translate:', error);
+          }
+        }
+      };
+      
+      loadGoogleTranslateScript();
+    }
   }, []);
 
   return (
@@ -147,9 +150,11 @@ export default function App({ Component, pageProps }) {
         }}
       />
       <CartProvider>
-        <div suppressHydrationWarning>
-          <Component {...pageProps} suppressHydrationWarning />
-        </div>
+        {mounted ? (
+          <Component {...pageProps} />
+        ) : (
+          <div suppressHydrationWarning />
+        )}
       </CartProvider>
     </>
   );
