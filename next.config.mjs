@@ -24,10 +24,10 @@ const nextConfig = {
     minimumCacheTTL: 60,
   },
   
-  // Performance optimizations
+  // Performance optimizations and Replit proxy support
   experimental: {
-    optimizeCss: true,
     scrollRestoration: true,
+    allowedOrigins: ['*'],
   },
   
   // Compress responses
