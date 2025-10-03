@@ -11,14 +11,106 @@ import { useCart } from '../../contexts/CartContext';
 
 import RelatedProducts from '../../components/product/RelatedProducts';
 
+// Transform API data function moved outside component for SSR usage
+function transformApiData(apiData) {
+  // Transform API data structure to match existing component expectations
+  const media = [];
+  
+  // Add product images as media
+  if (apiData.product_image && apiData.product_image.length > 0) {
+    apiData.product_image.forEach((img, index) => {
+      media.push({
+        type: 'image',
+        url: img.ImageLink,
+        thumbnail: img.ImageLink
+      });
+    });
+  }
+
+  // Create specifications object
+  const specifications = {};
+  if (apiData.product_specification && apiData.product_specification.length > 0) {
+    apiData.product_specification.forEach(spec => {
+      specifications[spec.PropertyName] = spec.PropertyValue;
+    });
+  }
+
+  // Calculate bulk pricing from API data
+  const bulkPricing = apiData.bulk_price && apiData.bulk_price.length > 0 
+    ? apiData.bulk_price.map(bulk => ({
+        from: bulk.min_qty || 0,
+        to: bulk.max_qty || 999,
+        price: parseFloat(bulk.price || 0)
+      }))
+    : [
+        { from: 20, to: 49, price: parseFloat(apiData.display_min_price) * 0.95 },
+        { from: 50, to: 99, price: parseFloat(apiData.display_min_price) * 0.90 }
+      ];
+
+  return {
+    id: apiData.product_id,
+    store_id: apiData.store_id,
+    name: apiData.product_name,
+    media: media,
+    productImages: apiData.product_image ? apiData.product_image.map(img => img.ImageLink) : [],
+    rating: parseFloat(apiData.feedback_rating?.avg_rate || 0),
+    reviews: parseInt(apiData.feedback_rating?.total_feedback || 0),
+    orders: parseInt(apiData.saleCount || 0),
+    priceDetails: {
+      mrp: parseFloat(apiData.display_min_mrp || 0),
+      price: parseFloat(apiData.display_min_price || 0),
+      finalPrice: parseFloat(apiData.display_min_price_with_tax || apiData.display_min_price || 0),
+    },
+    bulkPricing: bulkPricing,
+    seller: apiData.business_detail?.CompanyName || 'Unknown Seller',
+    positiveSentiment: 95, // Default value since not in API
+    followers: 1200, // Default value since not in API
+    shippingInfo: {
+      Replacement: apiData.product?.product_return_period || '7 Days',
+      Processing: apiData.product?.ProcessingTimeInDays ? `${apiData.product.ProcessingTimeInDays} days` : '15 days',
+      Shipping: apiData.product?.shipping_template?.shipping_days ? `${apiData.product.shipping_template.shipping_days} days` : '4 days',
+      Seller: apiData.business_detail?.state_detail?.name || 'India',
+      Warranty: apiData.product?.HasWarranty === 'Yes' ? 'Available' : 'No',
+    },
+    stock: parseInt(apiData.stock || 0),
+    codAvailable: apiData.isCOD === 1,
+    specifications: specifications,
+    productSpecifications: apiData.product_specification || [],
+    feedbackRating: apiData.feedback_rating || {},
+    description: apiData.short_desc || '',
+    colors: apiData.product_color ? apiData.product_color.map(color => ({
+      id: color.product_variation_colorid,
+      name: color.color,
+      image: color.image
+    })) : [],
+    discount_percentage: parseInt(apiData.discount_percentage || 0),
+    relatedProducts: [] // This would need a separate API call for related products
+  };
+}
+
 export default function ProductDetail({ productId, initialProductData, initialDescription }) {
   const router = useRouter();
   const { id } = router.query;
-  const [product, setProduct] = useState(null);
+  
+  // Initialize state with server-side data for better SSR
+  const [product, setProduct] = useState(() => {
+    return initialProductData ? transformApiData(initialProductData) : null;
+  });
   const [productDescription, setProductDescription] = useState(initialDescription || '');
   const [loading, setLoading] = useState(!initialProductData);
   const [error, setError] = useState(null);
-  const [selectedMedia, setSelectedMedia] = useState(null);
+  
+  // Initialize selectedMedia with server-side data
+  const [selectedMedia, setSelectedMedia] = useState(() => {
+    if (initialProductData) {
+      const transformed = transformApiData(initialProductData);
+      return transformed.media && Array.isArray(transformed.media) && transformed.media.length > 0 
+        ? transformed.media[0] 
+        : null;
+    }
+    return null;
+  });
+  
   const [activeTab, setActiveTab] = useState('details');
   const [feedbackSubTab, setFeedbackSubTab] = useState('product');
   const [quantity, setQuantity] = useState(1);
@@ -39,20 +131,12 @@ export default function ProductDetail({ productId, initialProductData, initialDe
     setIsClient(true);
   }, []);
 
-  // Initialize with server-side data if available
+  // Only fetch additional price data when we have server-side product data
   useEffect(() => {
-    if (initialProductData) {
-      const transformedProduct = transformApiData(initialProductData);
-      setProduct(transformedProduct);
-      
-      // Set initial selected media
-      if (transformedProduct.media && Array.isArray(transformedProduct.media) && transformedProduct.media.length > 0) {
-        setSelectedMedia(transformedProduct.media[0]);
-      }
-      
-      // Fetch price data for initial quantity
+    if (initialProductData && id) {
+      // We have server-side data, just fetch price data for initial quantity
       fetchPriceData(1);
-    } else if (id) {
+    } else if (id && !initialProductData) {
       // Fallback to client-side fetching only if no initial data
       fetchProductData();
     }
@@ -129,82 +213,6 @@ export default function ProductDetail({ productId, initialProductData, initialDe
     } finally {
       setPriceLoading(false);
     }
-  };
-
-  const transformApiData = (apiData) => {
-    // Transform API data structure to match existing component expectations
-    const media = [];
-    
-    // Add product images as media
-    if (apiData.product_image && apiData.product_image.length > 0) {
-      apiData.product_image.forEach((img, index) => {
-        media.push({
-          type: 'image',
-          url: img.ImageLink,
-          thumbnail: img.ImageLink
-        });
-      });
-    }
-
-    // Create specifications object
-    const specifications = {};
-    if (apiData.product_specification && apiData.product_specification.length > 0) {
-      apiData.product_specification.forEach(spec => {
-        specifications[spec.PropertyName] = spec.PropertyValue;
-      });
-    }
-
-    // Calculate bulk pricing from API data
-    const bulkPricing = apiData.bulk_price && apiData.bulk_price.length > 0 
-      ? apiData.bulk_price.map(bulk => ({
-          from: bulk.min_qty || 0,
-          to: bulk.max_qty || 999,
-          price: parseFloat(bulk.price || 0)
-        }))
-      : [
-          { from: 20, to: 49, price: parseFloat(apiData.display_min_price) * 0.95 },
-          { from: 50, to: 99, price: parseFloat(apiData.display_min_price) * 0.90 }
-        ];
-
-    return {
-      id: apiData.product_id,
-      store_id: apiData.store_id,
-      name: apiData.product_name,
-      media: media,
-      productImages: apiData.product_image ? apiData.product_image.map(img => img.ImageLink) : [],
-      rating: parseFloat(apiData.feedback_rating?.avg_rate || 0),
-      reviews: parseInt(apiData.feedback_rating?.total_feedback || 0),
-      orders: parseInt(apiData.saleCount || 0),
-      priceDetails: {
-        mrp: parseFloat(apiData.display_min_mrp || 0),
-        price: parseFloat(apiData.display_min_price || 0),
-        finalPrice: parseFloat(apiData.display_min_price_with_tax || apiData.display_min_price || 0),
-      },
-      bulkPricing: bulkPricing,
-      seller: apiData.business_detail?.CompanyName || 'Unknown Seller',
-      positiveSentiment: 95, // Default value since not in API
-      followers: 1200, // Default value since not in API
-      shippingInfo: {
-        Replacement: apiData.product?.product_return_period || '7 Days',
-        Processing: apiData.product?.ProcessingTimeInDays ? `${apiData.product.ProcessingTimeInDays} days` : '15 days',
-        Shipping: apiData.product?.shipping_template?.shipping_days ? `${apiData.product.shipping_template.shipping_days} days` : '4 days',
-        Seller: apiData.business_detail?.state_detail?.name || 'India',
-        Warranty: apiData.product?.HasWarranty === 'Yes' ? 'Available' : 'No',
-      },
-      stock: parseInt(apiData.stock || 0),
-      codAvailable: apiData.isCOD === 1,
-      specifications: specifications,
-      productSpecifications: apiData.product_specification || [],
-      feedbackRating: apiData.feedback_rating || {},
-      description: apiData.short_desc || '',
-      colors: apiData.product_color ? apiData.product_color.map(color => ({
-        id: color.product_variation_colorid,
-        name: color.color,
-        image: color.image
-      })) : [],
-      discount_percentage: parseInt(apiData.discount_percentage || 0),
-      relatedProducts: [] // This would need a separate API call for related products
-    };
   };
 
   if (loading) {
