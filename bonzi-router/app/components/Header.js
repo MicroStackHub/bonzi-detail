@@ -37,16 +37,62 @@ export default function Header({ scrolled = false }) {
       scrolled ? 'shadow-md' : 'shadow-sm'
     }`}>
       <div className="max-w-6xl mx-auto px-2 sm:px-6 lg:px-8 py-4">
+        {/* First Row: Logo, Search, Icons */}
         <div className="block sm:flex sm:items-center sm:justify-between">
           <div className="flex items-center justify-between sm:flex-shrink-0">
             <div className="flex-shrink-0" style={{ minWidth: 120 }}>
-              <Link href="/" className="flex items-center bg-white rounded-md px-2 py-1" style={{ minWidth: 120, minHeight: 40 }}>
-                <img
-                  src="/BonziLogo.png"
-                  alt="BonziCart Logo"
-                  className="h-8 sm:h-10 w-auto object-contain"
-                />
-              </Link>
+              {scrolled ? (
+                <div className="relative flex items-center justify-center" style={{ minWidth: 120, minHeight: 40 }}>
+                  <div
+                    className="inline-block"
+                    onMouseEnter={() => setShowCategoriesDropdown(true)}
+                    onMouseLeave={() => setShowCategoriesDropdown(false)}
+                  >
+                    <button
+                      className="flex flex-col space-y-1 p-2 hover:bg-gray-100 rounded-md transition-colors"
+                      aria-label="Open categories menu"
+                    >
+                      <div className="w-6 h-0.5 bg-gray-600"></div>
+                      <div className="w-6 h-0.5 bg-gray-600"></div>
+                      <div className="w-6 h-0.5 bg-gray-600"></div>
+                    </button>
+
+                    {showCategoriesDropdown && (
+                      <div className="absolute top-full left-0 sm:left-1/2 sm:transform sm:-translate-x-1/2 -mt-1 w-72 sm:w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-50 max-w-[calc(100vw-1rem)] sm:max-w-none">
+                        <div className="p-3 max-h-80 sm:max-h-none overflow-y-auto sm:overflow-visible">
+                          <h3 className="text-sm font-semibold text-gray-800 mb-2 flex items-center">
+                            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
+                            </svg>
+                            Categories
+                          </h3>
+
+                          <div className="space-y-0.5">
+                            {categories.map((category, index) => (
+                              <a
+                                key={index}
+                                href="#"
+                                className="flex items-center py-1.5 px-2 text-gray-600 hover:bg-gray-100 hover:text-orange-500 rounded-md transition-colors text-xs"
+                              >
+                                <span className="mr-2 text-base">{category.icon}</span>
+                                <span className="text-xs truncate">{category.name}</span>
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <Link href="/" className="flex items-center bg-white rounded-md px-2 py-1" style={{ minWidth: 120, minHeight: 40 }}>
+                  <img
+                    src="/BonziLogo.png"
+                    alt="BonziCart Logo"
+                    className="h-8 sm:h-10 w-auto object-contain"
+                  />
+                </Link>
+              )}
             </div>
 
             <div className="flex items-center space-x-2 sm:hidden">
@@ -125,6 +171,63 @@ export default function Header({ scrolled = false }) {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </button>
+              {showUserDropdown && (
+                <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 z-50 p-0.5"
+                     onMouseLeave={() => setShowUserDropdown(false)}>
+                  <div className="divide-y divide-gray-200">
+                    <div className="py-2">
+                      <a href="#" className="flex items-center px-4 py-2 text-gray-700 hover:text-orange-500 hover:bg-gray-50 text-sm transition-colors">
+                        <span className="mr-2"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg></span> My Account
+                      </a>
+                      <a href="#" className="flex items-center px-4 py-2 text-gray-700 hover:text-orange-500 hover:bg-gray-50 text-sm transition-colors">
+                        <span className="mr-2"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V7a2 2 0 00-2-2H6a2 2 0 00-2 2v6m16 0v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6m16 0H4" /></svg></span> My Orders
+                      </a>
+                      <a href="#" className="flex items-center px-4 py-2 text-gray-700 hover:text-orange-500 hover:bg-gray-50 text-sm transition-colors">
+                        <span className="mr-2"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2v-8a2 2 0 012-2h2m10-4H7a2 2 0 00-2 2v0a2 2 0 002 2h10a2 2 0 002-2v0a2 2 0 00-2-2z" /></svg></span> My Message
+                      </a>
+                    </div>
+                    <div className="py-2 px-4">
+                      <div className="text-black text-center font-semibold mb-2 text-sm">Buyer Central</div>
+                      <Link href="/register" className="w-full block border border-orange-400 text-orange-600 rounded py-1 mb-2 font-semibold hover:bg-orange-50 text-sm text-center">
+                        Register
+                      </Link>
+                      <Link href="/login" className="w-full block bg-orange-500 text-white rounded py-1 font-semibold hover:bg-orange-600 text-sm text-center">
+                        Login
+                      </Link>
+                    </div>
+                    <div className="py-2 px-4">
+                      <div className="text-gray-700 text-center font-semibold mb-2 text-sm">Seller Central</div>
+                      <Link href="/login" className="w-full block border border-orange-400 text-orange-600 rounded py-1 mb-2 font-semibold hover:bg-orange-50 text-sm text-center">
+                        Login
+                      </Link>
+                      <button className="w-full bg-orange-500 text-white rounded py-1 font-semibold hover:bg-orange-600 text-sm">Create Account</button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Second Row: Quick Links */}
+        <div className="mt-3">
+          <div className="flex justify-between items-center">
+            <div className="flex justify-center flex-1">
+              <div className="hidden sm:flex sm:justify-center sm:space-x-8 text-sm">
+                <a href="https://www.bonzicart.com/sales/deals-special-offers" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-2 py-1.5 rounded transition-colors whitespace-nowrap">Deals & Special Offers</a>
+                <a href="https://www.bonzicart.com/sales/exclusive-sales" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-2 py-1.5 rounded transition-colors whitespace-nowrap">Exclusive Sales</a>
+                <a href="https://www.bonzicart.com/sales/diy" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-2 py-1.5 rounded transition-colors whitespace-nowrap">DIY</a>
+                <a href="https://www.bonzicart.com/sales/smart-home" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-2 py-1.5 rounded transition-colors whitespace-nowrap">SMART HOME</a>
+              </div>
+
+              <div className="sm:hidden overflow-x-auto scrollbar-hide w-full pb-1 -mx-2 px-2">
+                <div className="flex space-x-4 text-sm min-w-max">
+                  <a href="https://www.bonzicart.com/sales/deals-special-offers" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-2 py-1.5 rounded transition-colors whitespace-nowrap">Deals & Special Offers</a>
+                  <a href="https://www.bonzicart.com/sales/exclusive-sales" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-2 py-1.5 rounded transition-colors whitespace-nowrap">Exclusive Sales</a>
+                  <a href="https://www.bonzicart.com/sales/diy" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-2 py-1.5 rounded transition-colors whitespace-nowrap">DIY</a>
+                  <a href="https://www.bonzicart.com/sales/smart-home" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-2 py-1.5 rounded transition-colors whitespace-nowrap">SMART HOME</a>
+                </div>
+              </div>
             </div>
           </div>
         </div>

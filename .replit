@@ -6,7 +6,7 @@ expertMode = true
 channel = "stable-25_05"
 
 [workflows]
-runButton = "Project"
+runButton = "Start App Router"
 
 [[workflows.workflow]]
 name = "Project"
@@ -41,6 +41,15 @@ args = "pkill -f \"next dev\" || true"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "npm run dev -- -p 3000 -H 0.0.0.0"
+
+[[workflows.workflow]]
+name = "Start App Router"
+author = 48282452
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd bonzi-router && npm run dev -- -p 3000 -H 0.0.0.0"
 
 [[ports]]
 localPort = 3000

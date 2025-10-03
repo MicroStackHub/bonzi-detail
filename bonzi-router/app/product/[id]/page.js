@@ -51,7 +51,6 @@ export async function generateMetadata({ params }) {
       title: product.name,
       description: product.description,
       images: product.media && product.media[0]?.url ? [product.media[0].url] : [],
-      type: 'product'
     }
   };
 }
@@ -221,8 +220,56 @@ function ProductTabs({ product, description }) {
 }
 
 async function RelatedProducts({ productId, category }) {
-  // In a real app, you'd fetch related products here
-  // For now, returning empty to keep it simple
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/products?category=${category}&limit=6`, {
+      cache: 'no-store'
+    });
+    const data = await response.json();
+    
+    if (data.success && data.data && data.data.length > 0) {
+      const relatedProducts = data.data.filter(p => p.product_id !== productId).slice(0, 6);
+      
+      return (
+        <div className="mt-8">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Related Products</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
+            {relatedProducts.map((related) => (
+              <div
+                key={related.product_id}
+                className="bg-white border border-gray-200 rounded-lg p-3 text-center hover:shadow-lg transition-shadow duration-200"
+              >
+                <div className="w-full h-24 bg-gray-100 rounded-md mb-3 relative overflow-hidden">
+                  {related.media && related.media[0] && (
+                    <Image
+                      src={related.media[0].url}
+                      alt={related.name}
+                      fill
+                      className="object-cover"
+                    />
+                  )}
+                  {related.discount_percentage > 0 && (
+                    <span className="absolute top-1.5 right-1.5 bg-red-500 text-white text-xs font-semibold px-1.5 py-0.5 rounded-full">
+                      -{related.discount_percentage}%
+                    </span>
+                  )}
+                </div>
+                <h4 className="text-xs font-semibold text-gray-700 mb-1.5 truncate">{related.name}</h4>
+                <div className="flex justify-center items-baseline space-x-1.5">
+                  <span className="text-sm font-bold text-orange-600">₹{related.price}</span>
+                  {related.original_price && related.original_price > related.price && (
+                    <span className="text-xs text-gray-500 line-through">₹{related.original_price}</span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+  } catch (error) {
+    console.error('Error fetching related products:', error);
+  }
+  
   return (
     <div className="mt-8">
       <h2 className="text-xl font-bold text-gray-800 mb-4">Related Products</h2>
