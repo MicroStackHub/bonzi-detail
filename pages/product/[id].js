@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
@@ -8,13 +9,70 @@ import ProductTabs from '../../components/product/ProductTabs';
 import { useCart } from '../../contexts/CartContext';
 import RelatedProducts from '../../components/product/RelatedProducts';
 
-export default function ProductDetail({ product, description }) {
+// Transform API data function
+const transformProductData = (apiData) => {
+  return {
+    id: apiData.product_id,
+    name: apiData.name,
+    seller: apiData.seller_name || 'Unknown Seller',
+    sellerContact: apiData.seller_contact || '',
+    price: apiData.price,
+    originalPrice: apiData.original_price || apiData.price,
+    discount: apiData.discount_percentage || 0,
+    rating: apiData.rating || 4.5,
+    reviewCount: apiData.review_count || 0,
+    inStock: apiData.in_stock !== false,
+    description: apiData.description || '',
+    specifications: apiData.specifications || [],
+    media: apiData.media || [],
+    category: apiData.category || '',
+    subcategory: apiData.subcategory || '',
+    tags: apiData.tags || []
+  };
+};
+
+export default function ProductDetail({ productId, initialProductData, initialDescription }) {
+  const router = useRouter();
+  const { id } = router.query;
   const { addToCart } = useCart();
 
+  const [product, setProduct] = useState(initialProductData ? transformProductData(initialProductData) : null);
+  const [description, setDescription] = useState(initialDescription || '');
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState(null);
+
+  useEffect(() => {
+    if (!initialProductData && id) {
+      const fetchProductData = async () => {
+        try {
+          const [productResponse, descriptionResponse] = await Promise.all([
+            fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/product?product_id=${id}`),
+            fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/product-description/${id}`)
+          ]);
+
+          const [productData, descriptionData] = await Promise.all([
+            productResponse.json(),
+            descriptionResponse.json()
+          ]);
+
+          if (productData.success) {
+            setProduct(transformProductData(productData.data));
+          }
+
+          if (descriptionData.success) {
+            setDescription(descriptionData.data);
+          }
+        } catch (error) {
+          console.error('Error fetching product:', error);
+          toast.error('Failed to load product details');
+        }
+      };
+
+      fetchProductData();
+    }
+  }, [id, initialProductData]);
 
   const handleAddToCart = () => {
     if (product) {
@@ -30,6 +88,16 @@ export default function ProductDetail({ product, description }) {
       toast.success('Added to cart successfully!');
     }
   };
+
+  if (router.isFallback) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        </div>
+      </Layout>
+    );
+  }
 
   if (!product) {
     return (
@@ -47,14 +115,14 @@ export default function ProductDetail({ product, description }) {
   return (
     <>
       <Head>
-        <title>{`${product.name} | BonziCart`}</title>
+        <title>{product.name} | BonziCart</title>
         <meta name="description" content={product.description || `Buy ${product.name} at best price from ${product.seller}`} />
         <meta property="og:title" content={product.name} />
         <meta property="og:description" content={product.description} />
-        <meta property="og:image" content={product.media && Array.isArray(product.media) && product.media.length > 0 ? product.media[0].url : ''} />
+        <meta property="og:image" content={product.media && Array.isArray(product.media) && product.media[0]?.url} />
         <meta property="og:type" content="product" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="canonical" href={`https://bonzicart.com/product/${product.id}`} />
+        <link rel="canonical" href={`https://bonzicart.com/product/${id}`} />
       </Head>
 
       <Layout>
@@ -200,45 +268,22 @@ export async function getStaticProps({ params }) {
       descriptionResponse.json()
     ]);
 
-    if (!productData.success || !productData.data) {
+    if (!productData.success) {
       return {
         notFound: true,
       };
     }
 
-    // Transform the API data with null safety
-    const apiProduct = productData.data;
-    
-    // Ensure all required fields have valid values
-    const transformedProduct = {
-      id: apiProduct.product_id || id,
-      name: apiProduct.name || apiProduct.title || 'Product Name',
-      seller: apiProduct.seller_name || 'Unknown Seller',
-      sellerContact: apiProduct.seller_contact || '',
-      price: apiProduct.price || 0,
-      originalPrice: apiProduct.original_price || apiProduct.price || 0,
-      discount: apiProduct.discount_percentage || 0,
-      rating: apiProduct.rating || 4.5,
-      reviewCount: apiProduct.review_count || 0,
-      inStock: apiProduct.in_stock !== false,
-      description: apiProduct.description || '',
-      specifications: Array.isArray(apiProduct.specifications) ? apiProduct.specifications : [],
-      media: Array.isArray(apiProduct.media) ? apiProduct.media : [],
-      category: apiProduct.category || '',
-      subcategory: apiProduct.subcategory || '',
-      tags: Array.isArray(apiProduct.tags) ? apiProduct.tags : []
-    };
-
     return {
       props: {
-        product: transformedProduct,
-        description: descriptionData.success ? descriptionData.data : '',
+        productId: id,
+        initialProductData: productData.data,
+        initialDescription: descriptionData.success ? descriptionData.data : '',
       },
-      revalidate: 3600, // Revalidate every hour
+      revalidate: 3600,
     };
   } catch (error) {
     console.error('Error in getStaticProps:', error);
-    console.error('Product ID:', id);
     return {
       notFound: true,
     };

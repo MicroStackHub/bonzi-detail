@@ -24,11 +24,19 @@ const languages = [
 export default function LanguageDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
+  const [mounted, setMounted] = useState(false); // Added state to track mounting
   const dropdownRef = useRef(null); // Ref for the dropdown element
   const router = useRouter();
 
+  // Set mounted to true after initial render to handle client-side logic
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Effect to close dropdown when clicking outside
   useEffect(() => {
+    if (!mounted) return;
+
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false);
@@ -37,7 +45,7 @@ export default function LanguageDropdown() {
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, [mounted]);
 
   const handleLanguageChange = (language) => {
     setSelectedLanguage(language);
@@ -63,7 +71,27 @@ export default function LanguageDropdown() {
     }
   };
 
-  // Render the actual dropdown
+  // Prevent hydration mismatch by rendering a placeholder until mounted
+  if (!mounted) {
+    return (
+      <div className="relative">
+        {/* Placeholder button to prevent hydration errors */}
+        <button className="flex items-center space-x-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          <span>English</span> {/* Default text */}
+          <svg 
+            className="w-4 h-4" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+      </div>
+    );
+  }
+
+  // Render the actual dropdown once mounted
   return (
     <div className="relative" ref={dropdownRef}>
       <button
@@ -94,7 +122,7 @@ export default function LanguageDropdown() {
             onClick={() => setIsOpen(false)}
             aria-hidden="true"
           />
-
+          
           {/* Dropdown menu */}
           <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-lg z-20 max-h-64 overflow-y-auto">
             <div className="py-1" role="listbox">
@@ -117,7 +145,7 @@ export default function LanguageDropdown() {
           </div>
         </>
       )}
-
+      
       {/* The hidden Google Translate element and status indicator are removed as per the edited snippet */}
     </div>
   );

@@ -10,18 +10,23 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
   const [showCategoriesDropdown, setShowCategoriesDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState('en');
-  const [mounted, setMounted] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const { cartCount } = useCart();
 
+  // Set client flag after mount
   useEffect(() => {
-    setMounted(true);
+    setIsClient(true);
+  }, []);
+
+  // Check current language on component mount
+  useEffect(() => {
+    if (!isClient) return;
 
     const checkCurrentLanguage = () => {
-      if (typeof window === 'undefined') return;
-      
       const url = window.location.href;
       const cookie = document.cookie;
-
+      
+      // Check URL hash for language
       if (url.includes('#googtrans(')) {
         const match = url.match(/#googtrans\(en\|([^)]+)\)/);
         if (match) {
@@ -29,7 +34,8 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
           return;
         }
       }
-
+      
+      // Check cookie for language
       if (cookie.includes('googtrans=')) {
         const match = cookie.match(/googtrans=\/en\/([^;]+)/);
         if (match) {
@@ -37,19 +43,21 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
           return;
         }
       }
-
+      
+      // Default to English
       setCurrentLanguage('en');
     };
-
+    
     checkCurrentLanguage();
-
+    
+    // Check language on hash change
     const handleHashChange = () => {
       checkCurrentLanguage();
     };
-
+    
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
+  }, [isClient]);
 
   const categories = [
     { name: 'Apparel Accessories', icon: <FaTshirt /> },
@@ -72,7 +80,7 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 bg-white transition-all duration-300 ${
       scrolled ? 'shadow-md' : 'shadow-sm'
-    }`} suppressHydrationWarning>
+    }`}>
       {/* Main Header */}
       <div className="max-w-6xl mx-auto px-2 sm:px-6 lg:px-8 py-4">
         {/* Mobile: Two-row layout, Desktop: Single row */}
@@ -195,12 +203,12 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
                   </svg>
                 </div>
                 <style jsx global>{`
-                select.custom-select-orange option:hover, select.custom-select-orange option:focus {
-                  background-color: #fff7ed !important;
-                  color: #ea580c !important;
-                }
-              `}</style>
-            </div>
+                  select.custom-select-orange option:hover, select.custom-select-orange option:focus {
+                    background-color: #fff7ed !important;
+                    color: #ea580c !important;
+                  }
+                `}</style>
+              </div>
               <label htmlFor="search-input" className="sr-only">Search for products</label>
               <input
                 id="search-input"
@@ -317,52 +325,80 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
             </div>
 
             {/* Language Dropdown */}
-            {mounted && (
-              <div className="flex items-center">
+            <div className="flex items-center">
+              {isClient && (
                 <div className="flex items-center space-x-2">
-                  <select
-                      value={currentLanguage}
-                      className="bg-gray-100 text-gray-700 border border-gray-300 rounded px-2 py-1 text-xs cursor-pointer hover:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
-                      onChange={(e) => {
+                  <select 
+                    value={currentLanguage}
+                    className="bg-gray-100 text-gray-700 border border-gray-300 rounded px-2 py-1 text-xs cursor-pointer hover:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
+                    onChange={(e) => {
                       if (typeof window === 'undefined') return;
 
                       const langCode = e.target.value;
+                      console.log('Language selected:', langCode);
                       setCurrentLanguage(langCode);
-
+                      
+                      // Helper function to translate using the widget
                       const translatePage = (targetLang) => {
+                        console.log('Attempting to translate page to:', targetLang);
+                        
+                        // Update URL hash
                         const baseUrl = window.location.href.split('#')[0];
                         const newUrl = targetLang === 'en' ? baseUrl : `${baseUrl}#googtrans(en|${targetLang})`;
                         window.history.replaceState({}, document.title, newUrl);
-
+                        
+                        // Update cookie
                         if (targetLang === 'en') {
                           document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
                         } else {
                           document.cookie = `googtrans=/en/${targetLang}; path=/; domain=${window.location.hostname}`;
                         }
-
+                        
+                        // Method 1: Use the global widget helper if available
+                        if (window.googleTranslateWidget && window.googleTranslateWidget.translate) {
+                          console.log('Using global widget helper');
+                          const success = window.googleTranslateWidget.translate(targetLang);
+                          if (success) {
+                            console.log('Translation triggered successfully via widget helper');
+                            return;
+                          }
+                        }
+                        
+                        // Method 2: Direct widget interaction
                         const googleSelect = document.querySelector('.goog-te-combo');
                         if (googleSelect) {
+                          console.log('Using direct widget interaction');
                           googleSelect.value = targetLang;
+                          
+                          // Try multiple event types to ensure translation triggers
                           googleSelect.dispatchEvent(new Event('change', { bubbles: true }));
                           googleSelect.dispatchEvent(new Event('input', { bubbles: true }));
-
+                          
+                          // Additional trigger with delay
                           setTimeout(() => {
                             googleSelect.dispatchEvent(new Event('change', { bubbles: true }));
                           }, 100);
+                          
+                          console.log('Translation events dispatched');
                           return;
                         }
-
+                        
+                        // Method 3: Wait for widget and retry
+                        console.log('Widget not ready, waiting and retrying...');
                         let retryCount = 0;
                         const retryTranslation = () => {
                           retryCount++;
                           const googleSelectRetry = document.querySelector('.goog-te-combo');
-
+                          
                           if (googleSelectRetry) {
+                            console.log(`Retry ${retryCount}: Found widget, triggering translation`);
                             googleSelectRetry.value = targetLang;
                             googleSelectRetry.dispatchEvent(new Event('change', { bubbles: true }));
                           } else if (retryCount < 10) {
                             setTimeout(retryTranslation, 500);
                           } else {
+                            console.log('Widget not available after retries, using page reload fallback');
+                            // Fallback to reload method
                             if (targetLang === 'en') {
                               window.location.href = baseUrl;
                             } else {
@@ -371,13 +407,16 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
                             }
                           }
                         };
-
+                        
                         setTimeout(retryTranslation, 500);
                       };
-
+                      
+                      // Execute translation
                       if (langCode === 'en') {
+                        console.log('Switching to English');
                         translatePage('en');
                       } else if (langCode) {
+                        console.log('Switching to language:', langCode);
                         translatePage(langCode);
                       }
                     }}
@@ -397,51 +436,53 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
                   </select>
                   <div id="google_translate_element" style={{ display: 'none' }}></div>
                 </div>
-              </div>
-            )}
+              )}
+              <style jsx global>{`
+                /* Hide the Google Translate banner strip completely */
+                .goog-te-banner-frame {
+                  display: none !important;
+                  visibility: hidden !important;
+                }
+                
+                .goog-te-banner-frame.skiptranslate {
+                  display: none !important;
+                }
+                
+                body {
+                  top: 0px !important;
+                  position: static !important;
+                }
+                
+                iframe.goog-te-banner-frame {
+                  display: none !important;
+                }
+                
+                .goog-te-balloon-frame {
+                  display: none !important;
+                }
+                
+                /* Hide the default Google Translate widget but keep it functional */
+                #google_translate_element {
+                  display: none !important;
+                }
+                
+                .goog-te-gadget {
+                  display: none !important;
+                }
+                
+                /* Remove any top padding/margin that might be added by Google Translate */
+                body.translated-ltr {
+                  top: 0 !important;
+                }
+                
+                body.translated-rtl {
+                  top: 0 !important;
+                }
+              `}</style>
+            </div>
           </div>
         </div>
       </div>
-
-      <style jsx global>{`
-        .goog-te-banner-frame {
-          display: none !important;
-          visibility: hidden !important;
-        }
-
-        .goog-te-banner-frame.skiptranslate {
-          display: none !important;
-        }
-
-        body {
-          top: 0px !important;
-          position: static !important;
-        }
-
-        iframe.goog-te-banner-frame {
-          display: none !important;
-        }
-
-        .goog-te-balloon-frame {
-          display: none !important;
-        }
-
-        #google_translate_element {
-          display: none !important;
-        }
-
-        .goog-te-gadget {
-          display: none !important;
-        }
-
-        body.translated-ltr {
-          top: 0 !important;
-        }
-
-        body.translated-rtl {
-          top: 0 !important;
-        }
-      `}</style>
     </header>
   );
 }

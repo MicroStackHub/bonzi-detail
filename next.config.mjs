@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false, // Disable to prevent hydration issues with Google Translate
+  reactStrictMode: true,
   output: 'standalone',
 
   images: {
@@ -92,12 +92,5 @@ const nextConfig = {
     ];
   },
 };
-
-export async function getStaticPaths() {
-  return {
-    paths: [],
-    fallback: true
-  };
-}
 
 export default nextConfig;
