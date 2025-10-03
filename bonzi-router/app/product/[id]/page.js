@@ -35,11 +35,13 @@ export default function ProductDetailPage({ params }) {
     }
   }, [id]);
 
+  // Only fetch price data on initial load, not on quantity change
+  // This keeps the header price constant while updating total price
   useEffect(() => {
-    if (quantity && id && product) {
-      fetchPriceData(quantity);
+    if (id && product && quantity === 1) {
+      fetchPriceData(1);
     }
-  }, [quantity, id, product]);
+  }, [id, product]);
 
   const fetchProductData = async () => {
     try {
@@ -275,9 +277,34 @@ export default function ProductDetailPage({ params }) {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
-        <div className="text-sm sm:text-lg ml-3">Loading product details...</div>
+      <div className="bg-gray-100 py-1 sm:py-2 md:py-4 pt-16 sm:pt-20 md:pt-24 lg:pt-28 mx-auto">
+        <div className="max-w-6xl mx-auto px-1 sm:px-2 md:px-4 lg:px-8">
+          <div className="bg-white p-1 sm:p-2 md:p-3 lg:p-4 rounded-lg shadow-sm flex flex-col lg:flex-row gap-1 sm:gap-2 md:gap-3 lg:gap-4">
+            {/* Left: Product Gallery Skeleton */}
+            <div className="w-full lg:w-1/2 flex flex-col items-center">
+              <div className="w-full bg-gray-200 rounded-lg overflow-hidden mb-3 sm:mb-4 animate-pulse">
+                <div className="relative pb-[100%]"></div>
+              </div>
+              <div className="flex gap-2 sm:gap-3 w-full">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="w-16 sm:w-20 aspect-square bg-gray-200 rounded-lg animate-pulse"></div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right: Product Info Skeleton */}
+            <div className="w-full lg:w-1/2 flex flex-col gap-3">
+              <div className="h-6 bg-gray-200 rounded w-3/4 animate-pulse"></div>
+              <div className="h-4 bg-gray-200 rounded w-1/2 animate-pulse"></div>
+              <div className="h-24 bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-40 bg-gray-200 rounded animate-pulse"></div>
+              <div className="flex gap-2">
+                <div className="h-10 bg-gray-200 rounded flex-1 animate-pulse"></div>
+                <div className="h-10 bg-gray-200 rounded flex-1 animate-pulse"></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -643,49 +670,54 @@ export default function ProductDetailPage({ params }) {
                   {/* Empty cell for alignment */}
                   <span></span> 
                   <div className="text-[10px] sm:text-[10px] text-orange-600">Want to buy in bulk? <a href="#" className="underline font-semibold">Learn about bulk pricing options</a></div>
+                </div>
 
-                  {/* Shipping */}
-                  <span className="font-medium text-gray-500 text-xs sm:text-[12px]">Shipping</span>
-                  <span className="text-green-600 font-semibold text-xs sm:text-[12px]">Free Shipping</span>
+                {/* Shipping Info Section - Redesigned as key-value pairs */}
+                <div className="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                  <div className="grid grid-cols-[auto,1fr] gap-x-4 gap-y-2 text-sm">
+                    {/* Shipping */}
+                    <span className="font-medium text-gray-700">Shipping:</span>
+                    <span className="text-green-600 font-semibold">Free Shipping</span>
 
-                  {/* COD */}
-                  <span className="font-medium text-gray-500 text-xs sm:text-[12px]">COD</span>
-                  <span className="text-gray-500 font-semibold text-xs sm:text-[12px]">{product.codAvailable ? 'Available' : 'Not Available'}</span>
+                    {/* COD */}
+                    <span className="font-medium text-gray-700">COD:</span>
+                    <span className="text-gray-700 font-semibold">{product.codAvailable ? 'Available' : 'Not Available'}</span>
 
-                  {/* Total Price */}
-                  <span className="font-medium text-gray-500 text-xs sm:text-[12px]">Total Price</span>
-                  <div className="flex flex-col">
-                    {priceData ? (
-                      <div className="flex flex-col">
-                        {(() => {
-                          try {
-                            const unitPriceWithTax = priceData.sale_price_with_tax ? parseFloat(priceData.sale_price_with_tax.replace('INR ', '')) : 0;
-                            const totalPrice = (quantity * unitPriceWithTax).toFixed(2);
-                            return (
-                              <>
-                                <span className="text-green-600 font-bold text-xs sm:text-sm">
-                                  ₹{totalPrice} 
-                                  <span className="text-gray-600 font-normal ml-1 text-[10px] sm:text-xs">(incl. tax)</span>
+                    {/* Total Price */}
+                    <span className="font-medium text-gray-700">Total Price:</span>
+                    <div className="flex flex-col">
+                      {priceLoading ? (
+                        <div className="h-5 bg-gray-200 rounded w-32 animate-pulse"></div>
+                      ) : priceData ? (
+                        <div className="flex flex-col">
+                          {(() => {
+                            try {
+                              const unitPriceWithTax = priceData.sale_price_with_tax ? parseFloat(priceData.sale_price_with_tax.replace('INR ', '')) : 0;
+                              const totalPrice = (quantity * unitPriceWithTax).toFixed(2);
+                              return (
+                                <span className="text-green-600 font-bold text-sm">
+                                  ₹{totalPrice} <span className="text-gray-600 font-normal text-xs">(incl. tax)</span>
                                 </span>
-                              </>
-                            );
-                          } catch (error) {
-                            return (
-                              <span className="text-green-600 font-bold text-xs sm:text-sm">
-                                ₹{(product.priceDetails.finalPrice * quantity).toFixed(2)}
-                                <span className="text-gray-600 font-normal ml-1 text-[10px] sm:text-xs">(Qty: {quantity})</span>
-                              </span>
-                            );
-                          }
-                        })()}
-                      </div>
-                    ) : (
-                      <span className="text-green-600 font-bold text-xs sm:text-sm">
-                        ₹{(product.priceDetails.finalPrice * quantity).toFixed(2)}
-                        <span className="text-gray-600 font-normal ml-1 text-[10px] sm:text-xs">(Qty: {quantity})</span>
-                      </span>
-                    )}
+                              );
+                            } catch (error) {
+                              return (
+                                <span className="text-green-600 font-bold text-sm">
+                                  ₹{(product.priceDetails.finalPrice * quantity).toFixed(2)} <span className="text-gray-600 font-normal text-xs">(incl. tax)</span>
+                                </span>
+                              );
+                            }
+                          })()}
+                        </div>
+                      ) : (
+                        <span className="text-green-600 font-bold text-sm">
+                          ₹{(product.priceDetails.finalPrice * quantity).toFixed(2)} <span className="text-gray-600 font-normal text-xs">(incl. tax)</span>
+                        </span>
+                      )}
+                    </div>
                   </div>
+                </div>
+
+                <div className="grid grid-cols-[auto,1fr] items-center gap-x-3 sm:gap-x-2 gap-y-3 sm:gap-y-2 text-xs sm:text-sm mt-3">
 
                   {/* Action */}
                   <span className="font-medium text-gray-500 text-xs  sm:text-[12px]">Action</span>
