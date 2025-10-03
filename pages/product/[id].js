@@ -115,11 +115,11 @@ export default function ProductDetail({ productId, initialProductData, initialDe
   return (
     <>
       <Head>
-        <title>{product.name} | BonziCart</title>
+        <title>{`${product.name} | BonziCart`}</title>
         <meta name="description" content={product.description || `Buy ${product.name} at best price from ${product.seller}`} />
         <meta property="og:title" content={product.name} />
         <meta property="og:description" content={product.description} />
-        <meta property="og:image" content={product.media && Array.isArray(product.media) && product.media[0]?.url} />
+        <meta property="og:image" content={product.media && Array.isArray(product.media) && product.media.length > 0 ? product.media[0].url : ''} />
         <meta property="og:type" content="product" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="canonical" href={`https://bonzicart.com/product/${id}`} />
