@@ -218,24 +218,27 @@ export async function getStaticProps({ params }) {
       };
     }
 
-    // Transform the API data
+    // Transform the API data with null safety
+    const apiProduct = productData.data;
+    
+    // Ensure all required fields have valid values
     const transformedProduct = {
-      id: productData.data.product_id,
-      name: productData.data.name,
-      seller: productData.data.seller_name || 'Unknown Seller',
-      sellerContact: productData.data.seller_contact || '',
-      price: productData.data.price,
-      originalPrice: productData.data.original_price || productData.data.price,
-      discount: productData.data.discount_percentage || 0,
-      rating: productData.data.rating || 4.5,
-      reviewCount: productData.data.review_count || 0,
-      inStock: productData.data.in_stock !== false,
-      description: productData.data.description || '',
-      specifications: productData.data.specifications || [],
-      media: productData.data.media || [],
-      category: productData.data.category || '',
-      subcategory: productData.data.subcategory || '',
-      tags: productData.data.tags || []
+      id: apiProduct.product_id || id,
+      name: apiProduct.name || apiProduct.title || 'Product Name',
+      seller: apiProduct.seller_name || 'Unknown Seller',
+      sellerContact: apiProduct.seller_contact || '',
+      price: apiProduct.price || 0,
+      originalPrice: apiProduct.original_price || apiProduct.price || 0,
+      discount: apiProduct.discount_percentage || 0,
+      rating: apiProduct.rating || 4.5,
+      reviewCount: apiProduct.review_count || 0,
+      inStock: apiProduct.in_stock !== false,
+      description: apiProduct.description || '',
+      specifications: Array.isArray(apiProduct.specifications) ? apiProduct.specifications : [],
+      media: Array.isArray(apiProduct.media) ? apiProduct.media : [],
+      category: apiProduct.category || '',
+      subcategory: apiProduct.subcategory || '',
+      tags: Array.isArray(apiProduct.tags) ? apiProduct.tags : []
     };
 
     return {
@@ -247,6 +250,7 @@ export async function getStaticProps({ params }) {
     };
   } catch (error) {
     console.error('Error in getStaticProps:', error);
+    console.error('Product ID:', id);
     return {
       notFound: true,
     };
