@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
@@ -9,70 +9,14 @@ import ProductTabs from '../../components/product/ProductTabs';
 import { useCart } from '../../contexts/CartContext';
 import RelatedProducts from '../../components/product/RelatedProducts';
 
-// Transform API data function
-const transformProductData = (apiData) => {
-  return {
-    id: apiData.product_id,
-    name: apiData.name,
-    seller: apiData.seller_name || 'Unknown Seller',
-    sellerContact: apiData.seller_contact || '',
-    price: apiData.price,
-    originalPrice: apiData.original_price || apiData.price,
-    discount: apiData.discount_percentage || 0,
-    rating: apiData.rating || 4.5,
-    reviewCount: apiData.review_count || 0,
-    inStock: apiData.in_stock !== false,
-    description: apiData.description || '',
-    specifications: apiData.specifications || [],
-    media: apiData.media || [],
-    category: apiData.category || '',
-    subcategory: apiData.subcategory || '',
-    tags: apiData.tags || []
-  };
-};
-
-export default function ProductDetail({ productId, initialProductData, initialDescription }) {
+export default function ProductDetail({ product, description }) {
   const router = useRouter();
-  const { id } = router.query;
   const { addToCart } = useCart();
 
-  const [product, setProduct] = useState(initialProductData ? transformProductData(initialProductData) : null);
-  const [description, setDescription] = useState(initialDescription || '');
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState(null);
-
-  useEffect(() => {
-    if (!initialProductData && id) {
-      const fetchProductData = async () => {
-        try {
-          const [productResponse, descriptionResponse] = await Promise.all([
-            fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/product?product_id=${id}`),
-            fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/product-description/${id}`)
-          ]);
-
-          const [productData, descriptionData] = await Promise.all([
-            productResponse.json(),
-            descriptionResponse.json()
-          ]);
-
-          if (productData.success) {
-            setProduct(transformProductData(productData.data));
-          }
-
-          if (descriptionData.success) {
-            setDescription(descriptionData.data);
-          }
-        } catch (error) {
-          console.error('Error fetching product:', error);
-          toast.error('Failed to load product details');
-        }
-      };
-
-      fetchProductData();
-    }
-  }, [id, initialProductData]);
 
   const handleAddToCart = () => {
     if (product) {
@@ -122,7 +66,7 @@ export default function ProductDetail({ productId, initialProductData, initialDe
         <meta property="og:image" content={product.media && Array.isArray(product.media) && product.media.length > 0 ? product.media[0].url : ''} />
         <meta property="og:type" content="product" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="canonical" href={`https://bonzicart.com/product/${id}`} />
+        <link rel="canonical" href={`https://bonzicart.com/product/${product.id}`} />
       </Head>
 
       <Layout>
@@ -268,19 +212,38 @@ export async function getStaticProps({ params }) {
       descriptionResponse.json()
     ]);
 
-    if (!productData.success) {
+    if (!productData.success || !productData.data) {
       return {
         notFound: true,
       };
     }
 
+    // Transform the API data
+    const transformedProduct = {
+      id: productData.data.product_id,
+      name: productData.data.name,
+      seller: productData.data.seller_name || 'Unknown Seller',
+      sellerContact: productData.data.seller_contact || '',
+      price: productData.data.price,
+      originalPrice: productData.data.original_price || productData.data.price,
+      discount: productData.data.discount_percentage || 0,
+      rating: productData.data.rating || 4.5,
+      reviewCount: productData.data.review_count || 0,
+      inStock: productData.data.in_stock !== false,
+      description: productData.data.description || '',
+      specifications: productData.data.specifications || [],
+      media: productData.data.media || [],
+      category: productData.data.category || '',
+      subcategory: productData.data.subcategory || '',
+      tags: productData.data.tags || []
+    };
+
     return {
       props: {
-        productId: id,
-        initialProductData: productData.data,
-        initialDescription: descriptionData.success ? descriptionData.data : '',
+        product: transformedProduct,
+        description: descriptionData.success ? descriptionData.data : '',
       },
-      revalidate: 3600,
+      revalidate: 3600, // Revalidate every hour
     };
   } catch (error) {
     console.error('Error in getStaticProps:', error);
