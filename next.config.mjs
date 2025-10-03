@@ -1,12 +1,10 @@
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   output: 'standalone',
-  
-  // Image optimization for better performance
+
   images: {
-    unoptimized: false, // Enable optimization for better performance
+    unoptimized: false,
     domains: [
       'admin.glst.in',
       'api.glst.in',
@@ -19,24 +17,17 @@ const nextConfig = {
         hostname: '**',
       },
     ],
-    // Add image optimization settings
     formats: ['image/webp', 'image/avif'],
     minimumCacheTTL: 60,
   },
-  
-  // Performance optimizations and Replit proxy support
+
   experimental: {
     scrollRestoration: true,
-    allowedOrigins: ['*'],
   },
-  
-  // Compress responses
+
   compress: true,
-  
-  // Add trailing slashes for consistent URLs
   trailingSlash: true,
-  
-  // Configure redirects for product URLs
+
   async redirects() {
     return [
       {
@@ -46,12 +37,10 @@ const nextConfig = {
       },
     ];
   },
-  
-  // Optimize headers for better performance
+
   async headers() {
     return [
       {
-        // Cache static assets
         source: '/_next/static/:path*',
         headers: [
           {
@@ -61,7 +50,6 @@ const nextConfig = {
         ],
       },
       {
-        // Cache images
         source: '/:path*.{jpg,jpeg,png,gif,webp,avif,ico,svg}',
         headers: [
           {
@@ -71,7 +59,6 @@ const nextConfig = {
         ],
       },
       {
-        // API routes and dynamic content
         source: '/api/:path*',
         headers: [
           {
@@ -81,7 +68,6 @@ const nextConfig = {
         ],
       },
       {
-        // Product pages - cache for a short time
         source: '/product/:path*',
         headers: [
           {
@@ -91,7 +77,6 @@ const nextConfig = {
         ],
       },
       {
-        // General pages
         source: '/(.*)',
         headers: [
           {
