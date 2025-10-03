@@ -6,7 +6,6 @@ import Link from 'next/link';
 import {
   FaTshirt, FaLaptop, FaMobileAlt, FaMicrochip, FaHome, FaBlender, FaTools, FaGem, FaLightbulb, FaSuitcase, FaShoePrints, FaBook, FaShieldAlt, FaFutbol, FaGamepad
 } from 'react-icons/fa';
-import LanguageSelector from './LanguageSelector';
 
 const cartCount = 0;
 
@@ -117,8 +116,10 @@ export default function Header() {
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1">{cartCount}</span>
               </button>
 
-              {/* Mobile Language Selector */}
-              <LanguageSelector isMobile={true} />
+              {/* Mobile Google Translate */}
+              <div className="sm:hidden">
+                <div id="google_translate_element_mobile"></div>
+              </div>
 
               <button
                 className="text-gray-600"
@@ -166,11 +167,6 @@ export default function Header() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="flex-1 px-1 sm:px-2 md:px-3 py-1 sm:py-1.5 border border-gray-300 focus:outline-none focus:border-orange-500 text-xs sm:text-sm text-black"
-                autoComplete="off"
-                spellCheck="false"
-                data-gramm="false"
-                data-gramm_editor="false"
-                data-enable-grammarly="false"
               />
               <button
                 className="px-1.5 sm:px-2.5 md:px-4 py-1 sm:py-1.5 bg-orange-500 text-white hover:bg-orange-600"
@@ -274,9 +270,9 @@ export default function Header() {
               </div>
             </div>
 
-            {/* Language Selector */}
+            {/* Google Translate Widget */}
             <div className="ml-4 hidden sm:block">
-              <LanguageSelector />
+              <div id="google_translate_element"></div>
             </div>
           </div>
         </div>
