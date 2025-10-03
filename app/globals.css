@@ -22,5 +22,65 @@
 body {
   background: var(--background);
   color: var(--foreground);
+
+
+/* Google Translate Widget Styling */
+#google_translate_element,
+#google_translate_element_mobile {
+  display: inline-block;
+}
+
+/* Hide Google Translate banner */
+.goog-te-banner-frame {
+  display: none !important;
+}
+
+body {
+  top: 0 !important;
+}
+
+/* Style the Google Translate dropdown */
+.goog-te-gadget {
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 0 !important;
+}
+
+.goog-te-gadget .goog-te-combo {
+  padding: 4px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: white;
+  color: #374151;
+  cursor: pointer;
+  outline: none;
+}
+
+.goog-te-gadget .goog-te-combo:hover {
+  background-color: #f9fafb;
+  border-color: #f97316;
+}
+
+.goog-te-gadget .goog-te-combo:focus {
+  border-color: #f97316;
+}
+
+/* Hide Google Translate branding text */
+.goog-te-gadget span {
+  display: none !important;
+}
+
+.goog-te-gadget > span > a {
+  display: none !important;
+}
+
+/* Mobile styling */
+@media (max-width: 640px) {
+  .goog-te-gadget .goog-te-combo {
+    padding: 2px 4px;
+    font-size: 12px;
+  }
+}
+
   font-family: Arial, Helvetica, sans-serif;
 }
