@@ -45,12 +45,12 @@ export async function generateMetadata({ params }) {
   const product = data.product;
   
   return {
-    title: `${product.name} | BonziCart`,
-    description: product.description || `Buy ${product.name} at best price from ${product.seller_name || 'BonziCart'}`,
+    title: `${product.product_name || product.product?.ProductName} | BonziCart`,
+    description: product.short_desc || `Buy ${product.product_name || product.product?.ProductName} at best price`,
     openGraph: {
-      title: product.name,
-      description: product.description,
-      images: product.media && product.media[0]?.url ? [product.media[0].url] : [],
+      title: product.product_name || product.product?.ProductName,
+      description: product.short_desc,
+      images: product.display_image ? [product.display_image] : [],
     }
   };
 }
@@ -79,21 +79,21 @@ export default async function ProductDetailPage({ params }) {
       <ProductTabs product={product} description={description} />
 
       {/* Related Products */}
-      <RelatedProducts productId={id} category={product.category} />
+      <RelatedProducts productId={id} category={product.category_id} />
     </div>
   );
 }
 
 function ProductGallery({ product }) {
-  const media = product.media || [];
-  const firstMedia = media[0] || { url: '/placeholder.jpg' };
+  const images = product.product_image || [];
+  const displayImage = product.display_image || (images[0] && images[0].image_path) || '/placeholder.jpg';
 
   return (
     <div className="space-y-4">
       <div className="aspect-square relative bg-gray-100 rounded-lg overflow-hidden">
         <Image
-          src={firstMedia.url}
-          alt={product.name || 'Product image'}
+          src={displayImage}
+          alt={product.product_name || 'Product image'}
           fill
           sizes="(max-width: 768px) 100vw, 50vw"
           className="object-contain"
@@ -101,14 +101,14 @@ function ProductGallery({ product }) {
         />
       </div>
       <div className="grid grid-cols-4 gap-2">
-        {media.slice(0, 4).map((image, index) => (
+        {images.slice(0, 4).map((image, index) => (
           <div
             key={index}
             className="aspect-square relative bg-gray-100 rounded-lg overflow-hidden border-2 border-gray-300"
           >
             <Image
-              src={image.url}
-              alt={`${product.name} ${index + 1}`}
+              src={image.image_path}
+              alt={`${product.product_name} ${index + 1}`}
               fill
               sizes="(max-width: 768px) 25vw, 12vw"
               className="object-cover"
@@ -121,35 +121,35 @@ function ProductGallery({ product }) {
 }
 
 function ProductInfo({ product }) {
-  const price = product.price || 0;
-  const originalPrice = product.original_price || product.price;
-  const discount = product.discount_percentage || 0;
-  const rating = product.rating || 4.5;
-  const reviewCount = product.review_count || 0;
-  const inStock = product.in_stock !== false;
-  const seller = product.seller_name || 'Unknown Seller';
+  const price = parseFloat(product.display_min_price || 0);
+  const originalPrice = parseFloat(product.display_min_mrp || product.display_min_price);
+  const discount = parseInt(product.discount_percentage || 0);
+  const rating = parseFloat(product.feedback_rating?.avg_rate || 4.5);
+  const reviewCount = product.feedback_rating?.total_feedback || 0;
+  const inStock = parseInt(product.stock || 0) > 0;
+  const seller = product.business_detail?.CompanyName || 'Unknown Seller';
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">{product.name}</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">{product.product_name || product.product?.ProductName}</h1>
         <p className="text-gray-600">by {seller}</p>
       </div>
 
       <div className="flex items-center space-x-4">
         <div className="flex items-center">
           <span className="text-yellow-400">★</span>
-          <span className="ml-1 text-gray-700">{rating}</span>
+          <span className="ml-1 text-gray-700">{rating.toFixed(1)}</span>
         </div>
         <span className="text-gray-500">({reviewCount} reviews)</span>
       </div>
 
       <div className="space-y-2">
         <div className="flex items-baseline space-x-2">
-          <span className="text-3xl font-bold text-gray-900">₹{price}</span>
+          <span className="text-3xl font-bold text-gray-900">₹{price.toFixed(2)}</span>
           {originalPrice > price && (
             <>
-              <span className="text-lg text-gray-500 line-through">₹{originalPrice}</span>
+              <span className="text-lg text-gray-500 line-through">₹{originalPrice.toFixed(2)}</span>
               <span className="text-green-600 font-semibold">{discount}% off</span>
             </>
           )}
@@ -158,7 +158,7 @@ function ProductInfo({ product }) {
 
       <div className="flex items-center space-x-4">
         <span className={`font-semibold ${inStock ? 'text-green-600' : 'text-red-600'}`}>
-          {inStock ? 'In Stock' : 'Out of Stock'}
+          {inStock ? `In Stock (${product.stock} available)` : 'Out of Stock'}
         </span>
       </div>
 
@@ -173,12 +173,26 @@ function ProductInfo({ product }) {
           Contact Seller
         </button>
       </div>
+
+      {/* Bulk Pricing */}
+      {product.bulk_price && product.bulk_price.length > 0 && (
+        <div className="border-t pt-4">
+          <h3 className="text-sm font-semibold text-gray-700 mb-2">Bulk Pricing</h3>
+          <div className="space-y-1">
+            {product.bulk_price.map((bulk, index) => (
+              <div key={index} className="text-sm text-gray-600">
+                {bulk.min_quantity} - {bulk.max_quantity || '+'} units: ₹{parseFloat(bulk.price).toFixed(2)} each
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
 function ProductTabs({ product, description }) {
-  const specifications = product.specifications || [];
+  const specifications = product.product_specification || [];
 
   return (
     <div className="mt-12 bg-white p-4 rounded-lg shadow-sm">
@@ -187,21 +201,23 @@ function ProductTabs({ product, description }) {
       </div>
 
       <div className="space-y-8">
-        <div>
-          <h3 className="text-lg font-bold text-orange-500 mb-4">Specifications</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {specifications.map((spec, index) => (
-              <div key={index} className="p-4 bg-gray-50 rounded-lg">
-                <div className="text-sm font-medium text-blue-600 mb-2">
-                  {spec.PropertyName}
+        {specifications.length > 0 && (
+          <div>
+            <h3 className="text-lg font-bold text-orange-500 mb-4">Specifications</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {specifications.map((spec, index) => (
+                <div key={index} className="p-4 bg-gray-50 rounded-lg">
+                  <div className="text-sm font-medium text-blue-600 mb-2">
+                    {spec.PropertyName}
+                  </div>
+                  <div className="text-sm text-gray-800 font-semibold">
+                    {spec.PropertyValue}
+                  </div>
                 </div>
-                <div className="text-sm text-gray-800 font-semibold">
-                  {spec.PropertyValue}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         <div>
           <h3 className="text-base font-bold text-gray-800 mb-3">Description</h3>
@@ -212,9 +228,44 @@ function ProductTabs({ product, description }) {
             />
           ) : (
             <p className="text-gray-600 leading-relaxed text-sm">
-              {product.description}
+              {product.short_desc || product.product?.short_desc}
             </p>
           )}
+        </div>
+
+        {/* Package Included */}
+        {product.shipping_package_included && product.shipping_package_included.length > 0 && (
+          <div>
+            <h3 className="text-base font-bold text-gray-800 mb-3">Package Includes</h3>
+            <ul className="list-disc list-inside text-gray-600 text-sm space-y-1">
+              {product.shipping_package_included.map((item, index) => (
+                <li key={index}>{item.item_name} - Qty: {item.quantity}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Product Details */}
+        <div>
+          <h3 className="text-base font-bold text-gray-800 mb-3">Additional Information</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+            <div className="flex justify-between border-b pb-2">
+              <span className="text-gray-600">Brand:</span>
+              <span className="font-semibold">{product.brand_name}</span>
+            </div>
+            <div className="flex justify-between border-b pb-2">
+              <span className="text-gray-600">Made In:</span>
+              <span className="font-semibold">{product.product?.ProductMadeIn}</span>
+            </div>
+            <div className="flex justify-between border-b pb-2">
+              <span className="text-gray-600">Product Code:</span>
+              <span className="font-semibold">{product.product?.ProductCode}</span>
+            </div>
+            <div className="flex justify-between border-b pb-2">
+              <span className="text-gray-600">Return Period:</span>
+              <span className="font-semibold">{product.product?.product_return_period}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -229,7 +280,7 @@ async function RelatedProducts({ productId, category }) {
     const data = await response.json();
     
     if (data.success && data.data && data.data.length > 0) {
-      const relatedProducts = data.data.filter(p => p.product_id !== productId).slice(0, 6);
+      const relatedProducts = data.data.filter(p => p.product_id !== parseInt(productId)).slice(0, 6);
       
       return (
         <div className="mt-8">
@@ -241,10 +292,10 @@ async function RelatedProducts({ productId, category }) {
                 className="bg-white border border-gray-200 rounded-lg p-3 text-center hover:shadow-lg transition-shadow duration-200"
               >
                 <div className="w-full h-24 bg-gray-100 rounded-md mb-3 relative overflow-hidden">
-                  {related.media && related.media[0] && (
+                  {related.display_image && (
                     <Image
-                      src={related.media[0].url}
-                      alt={related.name}
+                      src={related.display_image}
+                      alt={related.product_name}
                       fill
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
                       className="object-cover"
@@ -256,11 +307,11 @@ async function RelatedProducts({ productId, category }) {
                     </span>
                   )}
                 </div>
-                <h4 className="text-xs font-semibold text-gray-700 mb-1.5 truncate">{related.name}</h4>
+                <h4 className="text-xs font-semibold text-gray-700 mb-1.5 truncate">{related.product_name}</h4>
                 <div className="flex justify-center items-baseline space-x-1.5">
-                  <span className="text-sm font-bold text-orange-600">₹{related.price}</span>
-                  {related.original_price && related.original_price > related.price && (
-                    <span className="text-xs text-gray-500 line-through">₹{related.original_price}</span>
+                  <span className="text-sm font-bold text-orange-600">₹{parseFloat(related.display_min_price).toFixed(2)}</span>
+                  {related.display_min_mrp && parseFloat(related.display_min_mrp) > parseFloat(related.display_min_price) && (
+                    <span className="text-xs text-gray-500 line-through">₹{parseFloat(related.display_min_mrp).toFixed(2)}</span>
                   )}
                 </div>
               </div>
