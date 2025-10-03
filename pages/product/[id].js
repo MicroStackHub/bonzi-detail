@@ -57,7 +57,7 @@ export default function ProductDetail({ product, description }) {
   }
 
   return (
-    <div suppressHydrationWarning>
+    <>
       <Head>
         <title>{`${product.name} | BonziCart`}</title>
         <meta name="description" content={product.description || `Buy ${product.name} at best price from ${product.seller}`} />
@@ -187,7 +187,7 @@ export default function ProductDetail({ product, description }) {
           productName={product.name}
         />
       </Layout>
-    </div>
+    </>
   );
 }
 

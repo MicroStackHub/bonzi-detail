@@ -10,17 +10,11 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
   const [showCategoriesDropdown, setShowCategoriesDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState('en');
-  const [isClient, setIsClient] = useState(false);
   const { cartCount } = useCart();
 
-  // Set client flag after mount
+  // Effect to handle language selection and translation
   useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  // Effect to handle language selection and translation, now client-side only
-  useEffect(() => {
-    if (!isClient) return;
+    if (typeof window === 'undefined') return;
 
     const checkCurrentLanguage = () => {
       const url = window.location.href;
@@ -56,7 +50,7 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
 
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, [isClient]);
+  }, []);
 
   const categories = [
     { name: 'Apparel Accessories', icon: <FaTshirt /> },
@@ -325,9 +319,8 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
 
             {/* Language Dropdown */}
             <div className="flex items-center">
-              {isClient && (
-                <div className="flex items-center space-x-2">
-                  <select
+              <div className="flex items-center space-x-2" suppressHydrationWarning>
+                <select
                     value={currentLanguage}
                     className="bg-gray-100 text-gray-700 border border-gray-300 rounded px-2 py-1 text-xs cursor-pointer hover:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
                     onChange={(e) => {
@@ -402,9 +395,8 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
                     <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
                     <option value="ur">اردو (Urdu)</option>
                   </select>
-                  <div id="google_translate_element" style={{ display: 'none' }}></div>
-                </div>
-              )}
+                <div id="google_translate_element" style={{ display: 'none' }}></div>
+              </div>
               <style jsx global>{`
                 .goog-te-banner-frame {
                   display: none !important;
