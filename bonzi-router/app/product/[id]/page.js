@@ -1,12 +1,16 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { use, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import toast from 'react-hot-toast';
 
 export default function ProductDetailPage({ params }) {
+  // Properly unwrap params using React.use()
+  const resolvedParams = use(params);
+  const id = resolvedParams?.id;
+
   const [product, setProduct] = useState(null);
   const [productDescription, setProductDescription] = useState('');
   const [loading, setLoading] = useState(true);
@@ -25,8 +29,6 @@ export default function ProductDetailPage({ params }) {
   const [selectedSize, setSelectedSize] = useState(null);
   const [showSpecifications, setShowSpecifications] = useState(false);
 
-  const id = params?.id;
-
   useEffect(() => {
     if (id) {
       fetchProductData();
@@ -34,20 +36,25 @@ export default function ProductDetailPage({ params }) {
   }, [id]);
 
   useEffect(() => {
-    if (quantity && id) {
+    if (quantity && id && product) {
       fetchPriceData(quantity);
     }
-  }, [quantity, id]);
+  }, [quantity, id, product]);
 
   const fetchProductData = async () => {
     try {
       setLoading(true);
+      setError(null);
       
       const [productResponse, descriptionResponse] = await Promise.all([
         fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/product?product_id=${id}`),
         fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/product-description/${id}`)
       ]);
       
+      if (!productResponse.ok) {
+        throw new Error(`HTTP error! status: ${productResponse.status}`);
+      }
+
       const [productData, descriptionData] = await Promise.all([
         productResponse.json(),
         descriptionResponse.json()
@@ -68,11 +75,13 @@ export default function ProductDetailPage({ params }) {
         setSelectedMedia(transformedProduct.media[0]);
       }
 
+      // Fetch initial price data
       await fetchPriceData(1);
 
     } catch (err) {
       setError(err.message);
       console.error('Error fetching product data:', err);
+      toast.error('Failed to load product details');
     } finally {
       setLoading(false);
     }
@@ -84,15 +93,25 @@ export default function ProductDetailPage({ params }) {
     try {
       setPriceLoading(true);
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/get-product-price?product_id=${id}&product_qty=${qty}`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data = await response.json();
       
       if (data.success) {
         setPriceData(data.data);
       } else {
         console.error('Price API Error:', data.message);
+        // Don't show error toast for stock limit exceeded, just use fallback data
+        if (data.message !== 'Stock limit exceeded.') {
+          toast.error(`Price update failed: ${data.message}`);
+        }
       }
     } catch (error) {
       console.error('Price fetch error:', error);
+      // Silently fail and use product default prices
     } finally {
       setPriceLoading(false);
     }
@@ -215,6 +234,7 @@ export default function ProductDetailPage({ params }) {
       
       if (data.success) {
         setIsFollowing(!isFollowing);
+        toast.success(`Successfully ${!isFollowing ? 'followed' : 'unfollowed'} seller`);
       } else {
         toast.error(`Failed to ${!isFollowing ? 'follow' : 'unfollow'} seller: ${data.message}`);
       }
@@ -227,6 +247,9 @@ export default function ProductDetailPage({ params }) {
   };
 
   const getSavePercentage = () => {
+    if (priceData && priceData.save_percentage) {
+      return Math.round(priceData.save_percentage);
+    }
     const { mrp, finalPrice } = product.priceDetails;
     if (mrp && finalPrice) {
       return Math.round(((mrp - finalPrice) / mrp) * 100);
@@ -261,8 +284,14 @@ export default function ProductDetailPage({ params }) {
 
   if (error || !product) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="text-sm sm:text-lg text-red-600">Error: {error || 'Product not found'}</div>
+      <div className="flex flex-col justify-center items-center min-h-screen p-4">
+        <div className="text-lg sm:text-xl text-red-600 mb-4">Error: {error || 'Product not found'}</div>
+        <button 
+          onClick={() => window.location.href = '/'} 
+          className="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600"
+        >
+          Go Back Home
+        </button>
       </div>
     );
   }
@@ -362,6 +391,7 @@ export default function ProductDetailPage({ params }) {
                             alt="Video thumbnail"
                             fill
                             className="object-cover"
+                            sizes="80px"
                           />
                           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -433,7 +463,7 @@ export default function ProductDetailPage({ params }) {
                   <div>
                     <div className="flex flex-wrap items-center gap-2 mb-1.5 sm:mb-2">
                       <span className="line-through text-gray-500 text-xs sm:text-sm">MRP: ₹{priceData.mrp}</span>
-                      <span className="text-green-600 font-semibold text-[10px] sm:text-xs">Save {priceData.save_percentage}%</span>
+                      <span className="text-green-600 font-semibold text-[10px] sm:text-xs">Save {Math.round(priceData.save_percentage)}%</span>
                     </div>
                     <div className="flex flex-wrap items-center gap-2 mb-1.5">
                       <span className="text-base sm:text-lg md:text-xl font-bold text-orange-600">Price: ₹{priceData.sale_price ? parseFloat(priceData.sale_price.replace('INR ', '')).toFixed(2) : 'N/A'}</span>
@@ -758,6 +788,32 @@ export default function ProductDetailPage({ params }) {
         />
 
       </div>
+
+      {/* Contact Seller Modal */}
+      {showContactModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-bold">Contact Seller</h3>
+              <button 
+                onClick={() => setShowContactModal(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                ✕
+              </button>
+            </div>
+            <p className="text-gray-600 mb-4">
+              Contact details and messaging feature coming soon!
+            </p>
+            <button 
+              onClick={() => setShowContactModal(false)}
+              className="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -889,7 +945,7 @@ function ProductTabs({ product, productDescription, activeTab, setActiveTab, fee
               <h3 className="text-base font-bold text-gray-800 mb-3">Description</h3>
               {productDescription ? (
                 <div 
-                  className="text-gray-600 leading-relaxed text-sm"
+                  className="text-gray-600 leading-relaxed text-sm prose prose-sm max-w-none"
                   dangerouslySetInnerHTML={{ __html: productDescription }}
                 />
               ) : (
