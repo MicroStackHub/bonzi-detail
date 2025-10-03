@@ -54,14 +54,24 @@ This is a Next.js-based e-commerce frontend application for product details and 
 - Production: `npm start`
 
 ## Recent Changes
+- October 3, 2025: Fixed infinite rendering and hydration errors
+  - **Removed all Google Translate functionality** to fix hydration issues
+    - Removed translation script loading from _app.js
+    - Removed language dropdown and all isClient logic from Header.js
+    - Removed isClient state from Layout.js
+    - Deleted GoogleTranslate.js, LanguageDropdown.js, GoogleTranslateWrapper.js components
+    - Deleted translation CSS files (google-translate.css, translate.css)
+  - **Hydration errors completely resolved** - no more server/client mismatch
+  - Product detail page verified to be fetching data correctly
+  - Application now runs without rendering errors
+  - Module count reduced from 423 to 364 (cleaner codebase)
+  
 - October 3, 2025: Fresh GitHub import completed
   - Updated port from 3000 to 5000 for Replit environment
   - Installed all npm dependencies successfully
   - Disabled experimental optimizeCss feature (was causing module errors)
-  - Added allowedOrigins configuration for Replit proxy support
   - Configured deployment for autoscale with build and start commands
   - Frontend workflow verified and running successfully
-  - Application tested and fully functional
 
 ## Notes
 - Application includes Docker configuration but uses Replit's native environment

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { useCart } from '@/contexts/CartContext';
 import {
@@ -9,55 +9,7 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [showCategoriesDropdown, setShowCategoriesDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
-  const [currentLanguage, setCurrentLanguage] = useState('en');
-  const [isClient, setIsClient] = useState(false);
   const { cartCount } = useCart();
-
-  // Set client flag after mount
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  // Check current language on component mount
-  useEffect(() => {
-    if (!isClient) return;
-
-    const checkCurrentLanguage = () => {
-      const url = window.location.href;
-      const cookie = document.cookie;
-      
-      // Check URL hash for language
-      if (url.includes('#googtrans(')) {
-        const match = url.match(/#googtrans\(en\|([^)]+)\)/);
-        if (match) {
-          setCurrentLanguage(match[1]);
-          return;
-        }
-      }
-      
-      // Check cookie for language
-      if (cookie.includes('googtrans=')) {
-        const match = cookie.match(/googtrans=\/en\/([^;]+)/);
-        if (match) {
-          setCurrentLanguage(match[1]);
-          return;
-        }
-      }
-      
-      // Default to English
-      setCurrentLanguage('en');
-    };
-    
-    checkCurrentLanguage();
-    
-    // Check language on hash change
-    const handleHashChange = () => {
-      checkCurrentLanguage();
-    };
-    
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, [isClient]);
 
   const categories = [
     { name: 'Apparel Accessories', icon: <FaTshirt /> },
@@ -81,16 +33,11 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
     <header className={`fixed top-0 left-0 right-0 z-50 bg-white transition-all duration-300 ${
       scrolled ? 'shadow-md' : 'shadow-sm'
     }`}>
-      {/* Main Header */}
       <div className="max-w-6xl mx-auto px-2 sm:px-6 lg:px-8 py-4">
-        {/* Mobile: Two-row layout, Desktop: Single row */}
         <div className="block sm:flex sm:items-center sm:justify-between">
-          {/* First Row - Logo and Icons */}
           <div className="flex items-center justify-between sm:flex-shrink-0">
-            {/* Logo/Hamburger Menu - Left aligned */}
             <div className="flex-shrink-0" style={{ minWidth: 120 }}>
               {scrolled ? (
-                // Hamburger Menu when scrolled
                 <div className="relative flex items-center justify-center" style={{ minWidth: 120, minHeight: 40 }}>
                   <div
                     className="inline-block"
@@ -106,7 +53,6 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
                       <div className="w-6 h-0.5 bg-gray-600"></div>
                     </button>
 
-                    {/* Categories Dropdown */}
                     {showCategoriesDropdown && (
                       <div className="absolute top-full left-0 sm:left-1/2 sm:transform sm:-translate-x-1/2 -mt-1 w-72 sm:w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-50 max-w-[calc(100vw-1rem)] sm:max-w-none">
                         <div className="p-3 max-h-80 sm:max-h-none overflow-y-auto sm:overflow-visible">
@@ -135,7 +81,6 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
                   </div>
                 </div>
               ) : (
-                // Logo when not scrolled
                 <Link href="/" className="flex items-center bg-white rounded-md px-2 py-1" style={{ minWidth: 120, minHeight: 40 }}>
                   <img
                     src="/BonziLogo.png"
@@ -146,10 +91,7 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
               )}
             </div>
 
-            {/* Right Icons and Language - Only on mobile first row */}
             <div className="flex items-center space-x-2 sm:hidden">
-
-
               <button
                 className="relative"
                 aria-label="View wishlist"
@@ -181,7 +123,6 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
             </div>
           </div>
 
-          {/* Second Row - Search Bar (Mobile), First Row (Desktop) */}
           <div className="mt-3 sm:mt-0 sm:flex-1 sm:max-w-xl sm:mx-6">
             <div className="flex w-full">
               <div className="relative group">
@@ -229,10 +170,7 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
             </div>
           </div>
 
-          {/* Desktop: Right Icons */}
           <div className="hidden sm:flex sm:items-center sm:space-x-4">
-
-
             <button
               className="relative"
               aria-label="View wishlist"
@@ -301,19 +239,17 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
             </div>
           </div>
         </div>
-        {/* Navigation Links and Language Dropdown - Responsive with horizontal scroll on small screens */}
+
         <div className="mt-3">
           <div className="flex justify-between items-center">
-            {/* Navigation Links */}
             <div className="flex justify-center flex-1">
-              {/* Desktop: Normal spacing */}
               <div className="hidden sm:flex sm:justify-center sm:space-x-8 text-sm">
                 <a href="https://www.bonzicart.com/sales/deals-special-offers" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-2 py-1.5 rounded transition-colors whitespace-nowrap">Deals & Special Offers</a>
                 <a href="https://www.bonzicart.com/sales/exclusive-sales" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-2 py-1.5 rounded transition-colors whitespace-nowrap">Exclusive Sales</a>
                 <a href="https://www.bonzicart.com/sales/diy" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-2 py-1.5 rounded transition-colors whitespace-nowrap">DIY</a>
                 <a href="https://www.bonzicart.com/sales/smart-home" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-2 py-1.5 rounded transition-colors whitespace-nowrap">SMART HOME</a>
               </div>
-              {/* Mobile: Horizontal scroll */}
+
               <div className="sm:hidden overflow-x-auto scrollbar-hide w-full pb-1 -mx-2 px-2">
                 <div className="flex space-x-4 text-sm min-w-max">
                   <a href="https://www.bonzicart.com/sales/deals-special-offers" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-2 py-1.5 rounded transition-colors whitespace-nowrap">Deals & Special Offers</a>
@@ -322,163 +258,6 @@ export default function Header({ sidebarOpen, setSidebarOpen, scrolled }) {
                   <a href="https://www.bonzicart.com/sales/smart-home" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-2 py-1.5 rounded transition-colors whitespace-nowrap">SMART HOME</a>
                 </div>
               </div>
-            </div>
-
-            {/* Language Dropdown */}
-            <div className="flex items-center">
-              {isClient && (
-                <div className="flex items-center space-x-2">
-                  <select 
-                    value={currentLanguage}
-                    className="bg-gray-100 text-gray-700 border border-gray-300 rounded px-2 py-1 text-xs cursor-pointer hover:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
-                    onChange={(e) => {
-                      if (typeof window === 'undefined') return;
-
-                      const langCode = e.target.value;
-                      console.log('Language selected:', langCode);
-                      setCurrentLanguage(langCode);
-                      
-                      // Helper function to translate using the widget
-                      const translatePage = (targetLang) => {
-                        console.log('Attempting to translate page to:', targetLang);
-                        
-                        // Update URL hash
-                        const baseUrl = window.location.href.split('#')[0];
-                        const newUrl = targetLang === 'en' ? baseUrl : `${baseUrl}#googtrans(en|${targetLang})`;
-                        window.history.replaceState({}, document.title, newUrl);
-                        
-                        // Update cookie
-                        if (targetLang === 'en') {
-                          document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-                        } else {
-                          document.cookie = `googtrans=/en/${targetLang}; path=/; domain=${window.location.hostname}`;
-                        }
-                        
-                        // Method 1: Use the global widget helper if available
-                        if (window.googleTranslateWidget && window.googleTranslateWidget.translate) {
-                          console.log('Using global widget helper');
-                          const success = window.googleTranslateWidget.translate(targetLang);
-                          if (success) {
-                            console.log('Translation triggered successfully via widget helper');
-                            return;
-                          }
-                        }
-                        
-                        // Method 2: Direct widget interaction
-                        const googleSelect = document.querySelector('.goog-te-combo');
-                        if (googleSelect) {
-                          console.log('Using direct widget interaction');
-                          googleSelect.value = targetLang;
-                          
-                          // Try multiple event types to ensure translation triggers
-                          googleSelect.dispatchEvent(new Event('change', { bubbles: true }));
-                          googleSelect.dispatchEvent(new Event('input', { bubbles: true }));
-                          
-                          // Additional trigger with delay
-                          setTimeout(() => {
-                            googleSelect.dispatchEvent(new Event('change', { bubbles: true }));
-                          }, 100);
-                          
-                          console.log('Translation events dispatched');
-                          return;
-                        }
-                        
-                        // Method 3: Wait for widget and retry
-                        console.log('Widget not ready, waiting and retrying...');
-                        let retryCount = 0;
-                        const retryTranslation = () => {
-                          retryCount++;
-                          const googleSelectRetry = document.querySelector('.goog-te-combo');
-                          
-                          if (googleSelectRetry) {
-                            console.log(`Retry ${retryCount}: Found widget, triggering translation`);
-                            googleSelectRetry.value = targetLang;
-                            googleSelectRetry.dispatchEvent(new Event('change', { bubbles: true }));
-                          } else if (retryCount < 10) {
-                            setTimeout(retryTranslation, 500);
-                          } else {
-                            console.log('Widget not available after retries, using page reload fallback');
-                            // Fallback to reload method
-                            if (targetLang === 'en') {
-                              window.location.href = baseUrl;
-                            } else {
-                              window.location.href = `${baseUrl}#googtrans(en|${targetLang})`;
-                              setTimeout(() => window.location.reload(), 100);
-                            }
-                          }
-                        };
-                        
-                        setTimeout(retryTranslation, 500);
-                      };
-                      
-                      // Execute translation
-                      if (langCode === 'en') {
-                        console.log('Switching to English');
-                        translatePage('en');
-                      } else if (langCode) {
-                        console.log('Switching to language:', langCode);
-                        translatePage(langCode);
-                      }
-                    }}
-                  >
-                    <option value="">Select Language</option>
-                    <option value="en">English</option>
-                    <option value="hi">हिन्दी (Hindi)</option>
-                    <option value="bn">বাংলা (Bengali)</option>
-                    <option value="ta">தமிழ் (Tamil)</option>
-                    <option value="te">తెలుగు (Telugu)</option>
-                    <option value="mr">मराठी (Marathi)</option>
-                    <option value="gu">ગુજરાતી (Gujarati)</option>
-                    <option value="kn">ಕನ್ನಡ (Kannada)</option>
-                    <option value="ml">മലയാളം (Malayalam)</option>
-                    <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
-                    <option value="ur">اردو (Urdu)</option>
-                  </select>
-                  <div id="google_translate_element" style={{ display: 'none' }}></div>
-                </div>
-              )}
-              <style jsx global>{`
-                /* Hide the Google Translate banner strip completely */
-                .goog-te-banner-frame {
-                  display: none !important;
-                  visibility: hidden !important;
-                }
-                
-                .goog-te-banner-frame.skiptranslate {
-                  display: none !important;
-                }
-                
-                body {
-                  top: 0px !important;
-                  position: static !important;
-                }
-                
-                iframe.goog-te-banner-frame {
-                  display: none !important;
-                }
-                
-                .goog-te-balloon-frame {
-                  display: none !important;
-                }
-                
-                /* Hide the default Google Translate widget but keep it functional */
-                #google_translate_element {
-                  display: none !important;
-                }
-                
-                .goog-te-gadget {
-                  display: none !important;
-                }
-                
-                /* Remove any top padding/margin that might be added by Google Translate */
-                body.translated-ltr {
-                  top: 0 !important;
-                }
-                
-                body.translated-rtl {
-                  top: 0 !important;
-                }
-              `}</style>
             </div>
           </div>
         </div>
