@@ -3,6 +3,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    volumes:
+      - .:/app               # Mount project folder for live reload
+      - /app/node_modules    # Prevent overwriting container node_modules      
     ports:
       - "5000:5000"
     environment:
