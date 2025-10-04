@@ -1,11 +1,11 @@
-
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import {
   FaTshirt, FaLaptop, FaMobileAlt, FaMicrochip, FaHome, FaBlender, FaTools, FaGem, FaLightbulb, FaSuitcase, FaShoePrints, FaBook, FaShieldAlt, FaFutbol, FaGamepad
 } from 'react-icons/fa';
+import LanguageSelector from './LanguageSelector';
 
 const cartCount = 0;
 
@@ -116,10 +116,9 @@ export default function Header() {
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1">{cartCount}</span>
               </button>
 
-              {/* Mobile Google Translate */}
-              <div className="sm:hidden">
-                <div id="google_translate_element_mobile"></div>
-              </div>
+              {/* <div className="sm:hidden">
+                <LanguageSelector />
+              </div> */}
 
               <button
                 className="text-gray-600"
@@ -270,9 +269,8 @@ export default function Header() {
               </div>
             </div>
 
-            {/* Google Translate Widget */}
             <div className="ml-4 hidden sm:block">
-              <div id="google_translate_element"></div>
+              <LanguageSelector />
             </div>
           </div>
         </div>
