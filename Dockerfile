@@ -1,4 +1,4 @@
-# Use Node.js 18 Alpine as base image for smaller size
+# Use Node.js 18 Alpine for smaller image size
 FROM node:18-alpine AS base
 
 # Install dependencies only when needed
@@ -9,10 +9,7 @@ WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 COPY package.json package-lock.json* ./
-RUN \
-  if [ -f package-lock.json ]; then npm ci --omit=dev; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
+RUN npm ci --only=production
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -27,30 +24,26 @@ RUN npm run build
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 
-# Create nextjs user and group
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy necessary files
+# Copy the standalone build
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
 
 # Set the correct permission for prerender cache
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
 USER nextjs
 
 EXPOSE 5000
 
-ENV PORT 5000
-ENV HOSTNAME "0.0.0.0"
+ENV PORT=5000
+ENV HOSTNAME="0.0.0.0"
 
 CMD ["node", "server.js"]
