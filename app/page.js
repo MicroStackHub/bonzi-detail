@@ -10,8 +10,6 @@ export default function Home() {
             Your trusted e-commerce platform for quality products
           </p>
         </div>
-
-      
       </div>
     </div>
   );
