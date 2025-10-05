@@ -8,20 +8,20 @@ export default function LanguageSelector() {
   const [isGoogleTranslateReady, setIsGoogleTranslateReady] = useState(false);
   const dropdownRef = useRef(null);
 
-  // Language options
+  // Language options - all names in English for consistency
   const languages = [
-    { code: 'en', name: 'English' },
-    { code: 'hi', name: 'हिंदी' },
-    { code: 'mr', name: 'मराठी' },
-    { code: 'gu', name: 'ગુજરાતી' },
-    { code: 'ta', name: 'தமிழ்' },
-    { code: 'te', name: 'తెలుగు' },
-    { code: 'kn', name: 'ಕನ್ನಡ' },
-    { code: 'ml', name: 'മലയാളം' },
-    { code: 'pa', name: 'ਪੰਜਾਬੀ' },
-    { code: 'bn', name: 'বাংলা' },
-    { code: 'or', name: 'ଓଡ଼ିଆ' },
-    { code: 'as', name: 'অসমীয়া' }
+    { code: 'en', name: 'English', nativeName: 'English' },
+    { code: 'hi', name: 'Hindi', nativeName: 'हिंदी' },
+    { code: 'mr', name: 'Marathi', nativeName: 'मराठी' },
+    { code: 'gu', name: 'Gujarati', nativeName: 'ગુજરાતી' },
+    { code: 'ta', name: 'Tamil', nativeName: 'தமிழ்' },
+    { code: 'te', name: 'Telugu', nativeName: 'తెలుగు' },
+    { code: 'kn', name: 'Kannada', nativeName: 'ಕನ್ನಡ' },
+    { code: 'ml', name: 'Malayalam', nativeName: 'മലയാളം' },
+    { code: 'pa', name: 'Punjabi', nativeName: 'ਪੰਜਾਬੀ' },
+    { code: 'bn', name: 'Bengali', nativeName: 'বাংলা' },
+    { code: 'or', name: 'Odia', nativeName: 'ଓଡ଼ିଆ' },
+    { code: 'as', name: 'Assamese', nativeName: 'অসমীয়া' }
   ];
 
   // Load Google Translate script
@@ -197,7 +197,7 @@ export default function LanguageSelector() {
     };
   }, [isGoogleTranslateReady]);
 
-  // Detect current language from URL
+  // Detect current language from URL and ensure English is default
   useEffect(() => {
     const detectCurrentLanguage = () => {
       const hash = window.location.hash;
@@ -205,9 +205,11 @@ export default function LanguageSelector() {
         const match = hash.match(/#googtrans\(en\|([a-z]{2})\)/);
         if (match && match[1]) {
           setCurrentLanguage(match[1]);
+        } else {
+          setCurrentLanguage('en'); // Default to English
         }
       } else {
-        setCurrentLanguage('en');
+        setCurrentLanguage('en'); // Default to English
       }
     };
 
@@ -231,7 +233,7 @@ export default function LanguageSelector() {
     };
   }, []);
 
-  // Handle language change
+  // Handle language change with improved English reset
   const handleLanguageChange = (langCode) => {
     setCurrentLanguage(langCode);
     setIsOpen(false);
@@ -253,12 +255,19 @@ export default function LanguageSelector() {
 
     // Method 2: Use URL parameter method as fallback
     if (langCode === 'en') {
-      // For English, reload the original page
-      if (window.location.href.includes('#googtrans(')) {
-        window.location.href = window.location.href.split('#googtrans(')[0];
+      // Clear Google Translate cookie and hash
+      document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie = "googtrans=/en/en; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      
+      // Remove the hash and reload to return to original English
+      const currentUrl = window.location.href.split('#googtrans(')[0];
+      if (window.location.href !== currentUrl || window.location.hash) {
+        window.location.replace(currentUrl);
+      } else {
+        window.location.reload();
       }
     } else {
-      // For other languages, use hash method
+      // For other languages, set the Google Translate hash
       const currentUrl = window.location.href.split('#googtrans(')[0];
       window.location.href = currentUrl + '#googtrans(en|' + langCode + ')';
       window.location.reload();
@@ -267,7 +276,7 @@ export default function LanguageSelector() {
 
   const getCurrentLanguageName = () => {
     const lang = languages.find(l => l.code === currentLanguage);
-    return lang ? lang.name : 'Select Language';
+    return lang ? lang.name : 'English'; // Default to English if not found
   };
 
   return (
@@ -346,14 +355,14 @@ export default function LanguageSelector() {
       {/* Custom Language Selector */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-1 px-2 py-1 text-sm text-gray-600 hover:text-orange-500 transition-colors focus:outline-none"
+        className="flex items-center space-x-1 px-3 py-1.5 text-sm text-gray-600 hover:text-orange-500 transition-colors focus:outline-none border border-gray-300 rounded-md hover:border-orange-500"
         aria-label="Select language"
         aria-expanded={isOpen}
       >
         <svg className="w-3 h-3 text-gray-600 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
         </svg>
-        <span className="text-xs">{getCurrentLanguageName()}</span>
+        <span className="text-xs font-medium">{getCurrentLanguageName()}</span>
         <svg className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
@@ -361,8 +370,11 @@ export default function LanguageSelector() {
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-50 max-h-64 overflow-y-auto">
+        <div className="absolute right-0 mt-1 w-52 bg-white rounded-md shadow-lg border border-gray-200 z-50 max-h-64 overflow-y-auto">
           <div className="py-1">
+            <div className="px-3 py-2 text-xs font-semibold text-gray-500 border-b border-gray-200">
+              Select Language
+            </div>
             {languages.map((lang) => (
               <button
                 key={lang.code}
@@ -371,7 +383,12 @@ export default function LanguageSelector() {
                   currentLanguage === lang.code ? 'text-orange-500 bg-orange-50' : 'text-gray-700'
                 }`}
               >
-                <span className="flex-1 text-left">{lang.name}</span>
+                <div className="flex-1 text-left">
+                  <div className="font-medium">{lang.name}</div>
+                  {lang.code !== 'en' && (
+                    <div className="text-xs text-gray-500">{lang.nativeName}</div>
+                  )}
+                </div>
                 {currentLanguage === lang.code && (
                   <svg className="w-4 h-4 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
