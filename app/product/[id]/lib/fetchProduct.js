@@ -33,7 +33,8 @@ async function fetchProductData(productId) {
 
 async function fetchPriceData(productId) {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/get-product-price?product_id=${productId}&product_qty=1`);
+    // Use GET method for server-side initial load
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/get-product-price?product_id=${productId}&product_qty=1&bulk_price=true`);
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -45,6 +46,11 @@ async function fetchPriceData(productId) {
       return data.data;
     } else {
       console.error('Price API Error:', data.message);
+      // Don't fail completely for stock limit exceeded, just return null
+      if (data.message && data.message.toLowerCase().includes('stock limit exceeded')) {
+        console.log('Stock limit exceeded for initial load, will use product default pricing');
+        return null;
+      }
       return null;
     }
   } catch (error) {
@@ -56,6 +62,16 @@ async function fetchPriceData(productId) {
 function transformApiData(apiData) {
   const media = [];
 
+  // Add video first if available
+  if (apiData.has_video) {
+    media.push({
+      type: 'video',
+      url: apiData.has_video,
+      thumbnail: apiData.display_image || (apiData.product_image && apiData.product_image[0]?.ImageLink)
+    });
+  }
+
+  // Then add images
   if (apiData.product_image && apiData.product_image.length > 0) {
     apiData.product_image.forEach((img) => {
       media.push({
@@ -63,14 +79,6 @@ function transformApiData(apiData) {
         url: img.ImageLink,
         thumbnail: img.ImageLink
       });
-    });
-  }
-
-  if (apiData.has_video) {
-    media.push({
-      type: 'video',
-      url: apiData.has_video,
-      thumbnail: apiData.display_image || (apiData.product_image && apiData.product_image[0]?.ImageLink)
     });
   }
 

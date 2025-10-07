@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import ProductGallery from './ProductGallery';
 import ProductInteractive from './ProductInteractive';
 import SellerInfo from './SellerInfo';
@@ -8,6 +11,11 @@ import { GoBackButton, ShareButton } from './ErrorHandlers';
 import { getSavePercentage } from '../lib/fetchProduct';
 
 export default function ProductDetail({ product, productDescription, priceData, productId, error }) {
+  const [selectedColorImage, setSelectedColorImage] = useState(null);
+
+  const handleColorChange = (colorImage) => {
+    setSelectedColorImage(colorImage);
+  };
   if (error) {
     return (
       <div className="flex flex-col justify-center items-center min-h-screen p-4">
@@ -27,16 +35,16 @@ export default function ProductDetail({ product, productDescription, priceData, 
   }
 
   return (
-    <div className="bg-gray-100 py-1 sm:py-2 md:py-4 pt-16 sm:pt-20 md:pt-24 lg:pt-28 mx-auto">
-      <div className="max-w-6xl mx-auto px-2 sm:px-3 md:px-4 lg:px-8">
+    <div className="bg-gray-100 py-0 sm:py-4 md:py-6 pt-16 sm:pt-24 md:pt-28 lg:pt-32 mx-auto">
+      <div className="w-full sm:max-w-7xl sm:mx-auto px-0 sm:px-4 md:px-6 lg:px-10">
 
         {/* Main Product Section */}
-        <div className="bg-white p-2 sm:p-3 md:p-4 lg:p-5 rounded-lg shadow-sm flex flex-col lg:flex-row gap-2 sm:gap-3 md:gap-4 lg:gap-5">
+        <div className="bg-white p-2 sm:p-5 md:p-6 lg:p-8 rounded-none sm:rounded-xl shadow-none sm:shadow-md flex flex-col lg:flex-row gap-3 sm:gap-5 md:gap-6 lg:gap-8">
           {/* Left: Product Gallery */}
-          <ProductGallery product={product} />
+          <ProductGallery product={product} selectedColorImage={selectedColorImage} />
 
           {/* Right: Product Info */}
-          <div className="w-full lg:w-1/2 flex flex-col gap-2 sm:gap-3 md:gap-3 lg:gap-3 mt-1 sm:mt-2">
+          <div className="w-full lg:w-1/2 flex flex-col gap-2 sm:gap-4 md:gap-4 lg:gap-5 mt-1 sm:mt-3">
             <div className="flex items-start justify-between">
               <h1 className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-gray-800 leading-tight flex-1 pr-1 sm:pr-2">{product.name}</h1>
               <ShareButton />
@@ -52,8 +60,8 @@ export default function ProductDetail({ product, productDescription, priceData, 
               <span className="text-[10px] sm:text-xs">{product.orders} orders</span>
             </div>
 
-            <div className="flex flex-col sm:flex-row justify-between items-start gap-2.5">
-              <div className="bg-gray-50 p-3 sm:p-4 rounded-md flex-1 w-full">
+            <div className="flex flex-col sm:flex-row justify-between items-start gap-3 sm:gap-4">
+              <div className="bg-gray-50 p-3 sm:p-5 rounded-md sm:rounded-lg flex-1 w-full">
                 {priceData ? (
                   <div>
                     <div className="flex flex-wrap items-center gap-2 mb-1.5 sm:mb-2">
@@ -90,7 +98,7 @@ export default function ProductDetail({ product, productDescription, priceData, 
               <BulkPriceButton product={product} priceData={priceData} />
             </div>
 
-            <div className="flex gap-2 sm:gap-3 text-center text-xs sm:text-sm border-y py-2.5 sm:py-3 overflow-x-auto scrollbar-hide md:grid md:grid-cols-5 md:gap-1">
+            <div className="flex gap-2 sm:gap-4 text-center text-xs sm:text-sm border-y py-3 sm:py-5 overflow-x-auto scrollbar-hide md:grid md:grid-cols-5 md:gap-2">
               {[{
                 icon: "M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0011.664 0l3.181-3.183m-4.991-2.696a8.25 8.25 0 00-11.664 0l-3.181 3.183",
                 title: "Replacement",
@@ -129,10 +137,15 @@ export default function ProductDetail({ product, productDescription, priceData, 
             </div>
 
             {/* Two-column layout starts here */}
-            <div className="flex flex-col xl:flex-row gap-4 sm:gap-5">
+            <div className="flex flex-col xl:flex-row gap-3 sm:gap-6">
               {/* Left Column */}
               <div className="w-full">
-                <ProductInteractive product={product} initialPriceData={priceData} productId={productId} />
+                <ProductInteractive 
+                  product={product} 
+                  initialPriceData={priceData} 
+                  productId={productId} 
+                  onColorChange={handleColorChange}
+                />
               </div>
 
               <SellerInfo product={product} />

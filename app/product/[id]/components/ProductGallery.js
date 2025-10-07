@@ -1,12 +1,39 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
-export default function ProductGallery({ product }) {
+export default function ProductGallery({ product, selectedColorImage }) {
   const [selectedMedia, setSelectedMedia] = useState(
     product.media && product.media.length > 0 ? product.media[0] : null
   );
+
+  // Update selected media when color image changes
+  useEffect(() => {
+    if (selectedColorImage) {
+      setSelectedMedia({
+        type: 'image',
+        url: selectedColorImage,
+        thumbnail: selectedColorImage
+      });
+    }
+  }, [selectedColorImage]);
+
+  const getColorCode = (colorName) => {
+    const colorMap = {
+      'red': '#FF0000', 'blue': '#0000FF', 'green': '#008000', 'yellow': '#FFFF00',
+      'black': '#000000', 'white': '#FFFFFF', 'gray': '#808080', 'grey': '#808080',
+      'purple': '#800080', 'pink': '#FFC0CB', 'orange': '#FFA500', 'brown': '#A52A2A',
+      'navy': '#000080', 'silver': '#C0C0C0', 'gold': '#FFD700', 'maroon': '#800000',
+      'beige': '#F5F5DC', 'cream': '#FFFDD0', 'olive': '#808000', 'lightblue': '#ADD8E6',
+      'darkblue': '#00008B', 'lightgreen': '#90EE90', 'darkgreen': '#006400',
+      'violet': '#EE82EE', 'magenta': '#FF00FF', 'cyan': '#00FFFF', 'teal': '#008080',
+      'indigo': '#4B0082', 'coral': '#FF7F50', 'default': '#FFFFFF'
+    };
+    
+    const normalizedColor = colorName.toLowerCase().trim();
+    return colorMap[normalizedColor] || colorMap['default'];
+  };
 
   return (
     <div className="w-full lg:w-1/2 flex flex-col items-center">
@@ -78,9 +105,10 @@ export default function ProductGallery({ product }) {
       {/* Thumbnails */}
       <div className="relative w-full">
         <div className="flex gap-2 sm:gap-3 justify-start items-center overflow-x-auto w-full py-2 px-1 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+          {/* Regular media thumbnails */}
           {product.media && product.media.length > 0 && product.media.map((media, idx) => (
             <button
-              key={idx}
+              key={`media-${idx}`}
               className={`relative flex-shrink-0 rounded-lg overflow-hidden transition-all duration-200 ${
                 selectedMedia && selectedMedia.url === media.url 
                   ? 'ring-2 ring-orange-500 scale-105' 
@@ -117,6 +145,36 @@ export default function ProductGallery({ product }) {
                 )}
               </div>
             </button>
+          ))}
+          
+          {/* Color image thumbnails */}
+          {product.colors && product.colors.length > 0 && product.colors.map((color, idx) => (
+            color.image && (
+              <button
+                key={`color-${color.id}`}
+                className={`relative flex-shrink-0 rounded-lg overflow-hidden transition-all duration-200 ${
+                  selectedMedia && selectedMedia.url === color.image 
+                    ? 'ring-2 ring-orange-500 scale-105' 
+                    : 'ring-1 ring-gray-200 hover:ring-orange-300'
+                }`}
+                onClick={() => setSelectedMedia({
+                  type: 'image',
+                  url: color.image,
+                  thumbnail: color.image
+                })}
+                aria-label={`View ${color.name} color variant`}
+              >
+                <div className="relative w-16 sm:w-20 aspect-square">
+                  <Image 
+                    src={color.image} 
+                    alt={`${color.name} color variant`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 64px, 80px"
+                  />
+                </div>
+              </button>
+            )
           ))}
         </div>
       </div>

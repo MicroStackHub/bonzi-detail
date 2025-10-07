@@ -137,7 +137,7 @@ export default function Header() {
                 <label htmlFor="category-select" className="sr-only">Select category</label>
                 <select
                   id="category-select"
-                  className="px-1 sm:px-2 py-1 sm:py-1.5 pr-5 sm:pr-7 border border-r-0 border-gray-300 bg-gray-50 text-gray-800 text-xs sm:text-sm min-w-0 focus:outline-none focus:bg-white focus:border-orange-500 w-10 sm:w-14 md:w-20 appearance-none custom-select-orange"
+                  className="px-1 sm:px-2 py-1 sm:py-1.5 pr-5 sm:pr-7 border border-r-0 border-orange-200 bg-orange-50 text-gray-800 text-xs min-w-0 focus:outline-none focus:bg-white focus:border-orange-500 focus:ring-1 focus:ring-orange-500 w-24 appearance-none custom-select-orange transition-colors duration-200"
                 >
                   <option value="">All</option>
                   {categories.map((category, index) => (
@@ -147,14 +147,61 @@ export default function Header() {
                   ))}
                 </select>
                 <div className="absolute inset-y-0 right-1 sm:right-1.5 flex items-center pointer-events-none">
-                  <svg className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3 h-3 sm:w-4 sm:h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
                 <style jsx global>{`
-                  select.custom-select-orange option:hover, select.custom-select-orange option:focus {
+                  select.custom-select-orange {
+                    background-image: none !important;
+                    background-color: #fff7ed;
+                  }
+                  select.custom-select-orange:focus {
+                    background-color: white !important;
+                  }
+                  select.custom-select-orange option {
+                    background-color: white !important;
+                    color: #374151 !important;
+                    padding: 10px 12px !important;
+                    border: none !important;
+                  }
+                  select.custom-select-orange option:hover, 
+                  select.custom-select-orange option:focus,
+                  select.custom-select-orange option:checked,
+                  select.custom-select-orange option:active {
                     background-color: #fff7ed !important;
+                    background: #fff7ed !important;
                     color: #ea580c !important;
+                  }
+                  select.custom-select-orange option:selected {
+                    background-color: #fff7ed !important;
+                    background: #fff7ed !important;
+                    color: #ea580c !important;
+                  }
+                  /* Remove browser default blue highlighting */
+                  select.custom-select-orange option:checked {
+                    background: linear-gradient(#fff7ed, #fff7ed) !important;
+                    background-color: #fff7ed !important;
+                  }
+                  /* For Firefox */
+                  @-moz-document url-prefix() {
+                    select.custom-select-orange option:hover,
+                    select.custom-select-orange option:focus,
+                    select.custom-select-orange option:checked {
+                      background-color: #fff7ed !important;
+                      color: #ea580c !important;
+                    }
+                  }
+                  /* For WebKit browsers */
+                  select.custom-select-orange::-webkit-scrollbar {
+                    width: 8px;
+                  }
+                  select.custom-select-orange::-webkit-scrollbar-track {
+                    background: #f1f1f1;
+                  }
+                  select.custom-select-orange::-webkit-scrollbar-thumb {
+                    background: #ea580c;
+                    border-radius: 4px;
                   }
                 `}</style>
               </div>
@@ -165,10 +212,10 @@ export default function Header() {
                 placeholder="Search for products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 px-1 sm:px-2 md:px-3 py-1 sm:py-1.5 border border-gray-300 focus:outline-none focus:border-orange-500 text-xs sm:text-sm text-black"
+                className="flex-1 px-1 sm:px-2 md:px-3 py-1 sm:py-1.5 border border-orange-200 bg-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 text-xs sm:text-sm text-black placeholder-gray-400 transition-colors duration-200"
               />
               <button
-                className="px-1.5 sm:px-2.5 md:px-4 py-1 sm:py-1.5 bg-orange-500 text-white hover:bg-orange-600"
+                className="px-1.5 sm:px-2.5 md:px-4 py-1 sm:py-1.5 bg-orange-500 text-white hover:bg-orange-600 focus:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-1 transition-colors duration-200"
                 aria-label="Search"
               >
                 <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

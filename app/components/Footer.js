@@ -1,5 +1,5 @@
-
-import { FaFacebookF, FaInstagram, FaTwitter, FaLinkedinIn, FaYoutube, FaPinterest, FaCcVisa, FaCcAmex, FaCcMastercard } from 'react-icons/fa';
+import { FaFacebookF, FaInstagram, FaTwitter, FaLinkedinIn, FaYoutube, FaPinterest, FaCcVisa, FaCcAmex, FaCcMastercard, FaGooglePlay } from 'react-icons/fa';
+import Image from 'next/image';
 
 export default function Footer() {
   return (
@@ -10,11 +10,31 @@ export default function Footer() {
             <div className="col-span-2 xs:col-span-2 sm:col-span-1">
               <h3 className="text-sm md:text-base lg:text-lg font-semibold text-gray-800 mb-2 md:mb-4">Download Our App</h3>
               <p className="text-xs md:text-sm text-gray-600 mb-2 md:mb-4">Fancy Shopping on the go</p>
+              <div className="flex flex-col gap-2 mt-2">
+                <a href="#" className="block rounded-lg p-2 mb-2 bg-orange-500 text-white flex items-center gap-2">
+                  <FaGooglePlay className="w-8 h-8 text-white" />
+                  <span className="text-xs text-white">Get it on <span className="font-semibold">Google Play</span></span>
+                </a>
+                <a href="#" className="block border rounded-lg p-2 bg-white shadow flex items-center gap-2">
+                  <Image src="/BonziLogo.png" alt="Bonzi Logo" width={32} height={32} />
+                  <span className="text-xs text-gray-400">Download on the <span className="font-semibold">App Store</span></span>
+                </a>
+              </div>
             </div>
 
             <div className="col-span-2 xs:col-span-2 sm:col-span-1">
               <h3 className="text-sm md:text-base lg:text-lg font-semibold text-gray-800 mb-2 md:mb-4">Stay Updated</h3>
               <p className="text-xs md:text-sm text-gray-600 mb-2 md:mb-4">Subscribe to get the latest deals</p>
+              <div className="mt-2 flex w-40">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="w-24 border border-gray-300 rounded-l px-1 py-1 text-xs focus:outline-none"
+                />
+                <button className="bg-orange-500 text-white px-2 py-1 rounded-r text-xs font-semibold">
+                  Subscribe
+                </button>
+              </div>
             </div>
 
             <div className="col-span-1">

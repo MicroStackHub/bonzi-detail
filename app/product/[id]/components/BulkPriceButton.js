@@ -33,7 +33,7 @@ export default function BulkPriceButton({ product, priceData }) {
                 </tr>
               </thead>
               <tbody>
-                {(priceData?.bulk_price || product.bulkPricing).map((tier, index) => (
+                {(priceData?.bulk_price && priceData.bulk_price.length > 0 ? priceData.bulk_price : product.bulkPricing).map((tier, index) => (
                   <tr key={index} className="border-b">
                     <td className="p-1.5 sm:p-2 text-black text-[10px] sm:text-xs">{tier.bulk_price_from || tier.from}</td>
                     <td className="p-1.5 sm:p-2 text-black text-[10px] sm:text-xs">{tier.bulk_price_to || tier.to}</td>

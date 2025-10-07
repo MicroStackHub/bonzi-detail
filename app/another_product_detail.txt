@@ -1,0 +1,304 @@
+https://api.glst.in/api/v2/product?product_id=1
+
+
+{
+    "response_code": 200,
+    "success": true,
+    "message": "product data successfully",
+    "data": {
+        "display_product_id": 1,
+        "product_id": 1,
+        "slug": "high-quality-men-s-fashion-retro-wool-newsboy-golf-beret-flat-ivy-herringbone-duckbill-hat/9f2e9035-ca2a-4848-be92-eff59f0d7832",
+        "short_link": "https://link.glst.in/eeHm2X",
+        "short_desc": "This stylish men's wool newsboy hat offers a classic retro look with a herringbone pattern. Perfect for golf enthusiasts, it features a duckbill design, offering a comfortable fit and timeless appeal. Ideal for any casual or smart-casual occasion, combining fashion with function.",
+        "store_id": 3,
+        "category_id": 2,
+        "sub_category_id": 7,
+        "sub_sub_category_id": null,
+        "product_name": "High Quality Men's Fashion Retro Wool Newsboy Golf Beret Flat Ivy Herringbone Duckbill Hat",
+        "display_min_price": "2000.00",
+        "display_max_price": null,
+        "display_image": "https://admin.glst.in/media-storage/1/1/2025061810392765198.jpg",
+        "display_min_mrp": "4999.00",
+        "display_max_mrp": null,
+        "brand_name": "Generic",
+        "product_keywords": [
+            "Hat",
+            "cap",
+            "head wear"
+        ],
+        "has_video": null,
+        "product_status": 1,
+        "prodcut_approved": 0,
+        "searchCount": 0,
+        "feedback_rating": {
+            "total_feedback": 0,
+            "avg_rate": 0,
+            "rate1": 0,
+            "rate1avg_count": 0,
+            "rate2": 0,
+            "rate2avg_count": 0,
+            "rate3": 0,
+            "rate3avg_count": 0,
+            "rate4": 0,
+            "rate4avg_count": 0,
+            "rate5": 0,
+            "rate5avg_count": 0
+        },
+        "saleCount": 0,
+        "isCOD": 0,
+        "created_at": "2025-06-18T05:09:27.000000Z",
+        "updated_at": "2025-08-18T14:17:30.000000Z",
+        "discount_percentage": "60",
+        "display_min_tax": 180,
+        "display_min_price_with_tax": 2180,
+        "display_max_tax": 0,
+        "display_max_price_with_tax": 0,
+        "coupon_and_discount": [],
+        "stock": 0,
+        "isWishlist": false,
+        "product": {
+            "product_id": 1,
+            "uuid": "9f2e9035-ca2a-4848-be92-eff59f0d7832",
+            "slug": "high-quality-men-s-fashion-retro-wool-newsboy-golf-beret-flat-ivy-herringbone-duckbill-hat/9f2e9035-ca2a-4848-be92-eff59f0d7832",
+            "sort_code": "1jsca50",
+            "store_id": 3,
+            "CatID": 2,
+            "SubCatID": 7,
+            "SubSubCatID": null,
+            "ProductName": "High Quality Men's Fashion Retro Wool Newsboy Golf Beret Flat Ivy Herringbone Duckbill Hat",
+            "short_desc": "This stylish men's wool newsboy hat offers a classic retro look with a herringbone pattern. Perfect for golf enthusiasts, it features a duckbill design, offering a comfortable fit and timeless appeal. Ideal for any casual or smart-casual occasion, combining fashion with function.",
+            "ProductCode": "5949998840448",
+            "BrandName": "Generic",
+            "sellersku": null,
+            "sellersku_id": null,
+            "HSNCode": "71179090",
+            "ProductMadeIn": "China",
+            "HasWarranty": "No",
+            "WarrantyType": "0",
+            "WarrantyPeriodTime": null,
+            "WarrantyPeriod": "0",
+            "ProductCondition": "1",
+            "ProductConditionComment": "Its brand new ready to use",
+            "productKeywords": "[\"Hat\",\"cap\",\"head wear\"]",
+            "UnitType": "Number",
+            "Soldin": "Units",
+            "SoldinNoOfUnitsInLot": null,
+            "ProcessingTimeInDays": "15",
+            "BulkProcessingTimeInDays": 0,
+            "VideoFileName": null,
+            "ProductDescFile": "https://admin.glst.in/media-storage/1/1/2025061810392741776.txt",
+            "HasVariation": "1",
+            "is_bulk_price": "0",
+            "HasBulkPriceForNoVariation": null,
+            "SellingPrice": null,
+            "InitialStock": null,
+            "CurrentStock": null,
+            "tax_template_id": 1,
+            "package_weight": "0.10",
+            "package_length": "10",
+            "package_width": "10",
+            "package_height": "18",
+            "shipping_template_id": 1,
+            "isCOD": 0,
+            "refund_policy_template": "The buyer covers the cost of return shipping",
+            "salestype": "Immediate Sales",
+            "start_date": null,
+            "end_date": "2027-06-09 00:00:00",
+            "launch_date": null,
+            "product_group_id": null,
+            "product_sub_group_id": null,
+            "product_return_period": "7 Days",
+            "legal_disclaimer": null,
+            "term_and_condition_consent": "1",
+            "product_status": "1",
+            "prodcut_approved": 0,
+            "created_at": "2025-06-18T05:09:27.000000Z",
+            "updated_at": "2025-06-21T01:10:49.000000Z",
+            "deleted_at": null,
+            "shipping_template": {
+                "id": 1,
+                "type": "Free",
+                "shipping_days": 4,
+                "product_origin": "Bangalore",
+                "shipping_city": []
+            },
+            "tax_template": {
+                "id": 1,
+                "store_id": 1,
+                "name": "General",
+                "help_text": "tax-template/685249e57f131.txt",
+                "tax_template_rate": [
+                    {
+                        "id": 1,
+                        "tax_template_id": 1,
+                        "name": "IGST",
+                        "value": "9.00"
+                    },
+                    {
+                        "id": 2,
+                        "tax_template_id": 1,
+                        "name": "CGST",
+                        "value": "9.00"
+                    },
+                    {
+                        "id": 3,
+                        "tax_template_id": 1,
+                        "name": "SGST",
+                        "value": "18.00"
+                    },
+                    {
+                        "id": 4,
+                        "tax_template_id": 1,
+                        "name": "CESS",
+                        "value": "0.00"
+                    }
+                ]
+            }
+        },
+        "product_image": [
+            {
+                "product_image_id": 1,
+                "product_id": 1,
+                "store_id": null,
+                "ImageLink": "https://admin.glst.in/media-storage/1/1/2025061810392765198.jpg",
+                "DefaultImageStatus": "1",
+                "index": 0,
+                "created_at": "2025-06-18T05:09:27.000000Z",
+                "updated_at": "2025-06-18T05:09:27.000000Z"
+            },
+            {
+                "product_image_id": 2,
+                "product_id": 1,
+                "store_id": null,
+                "ImageLink": "https://admin.glst.in/media-storage/1/1/2025061810392735508.jpg",
+                "DefaultImageStatus": "1",
+                "index": 1,
+                "created_at": "2025-06-18T05:09:27.000000Z",
+                "updated_at": "2025-06-18T05:09:27.000000Z"
+            },
+            {
+                "product_image_id": 3,
+                "product_id": 1,
+                "store_id": null,
+                "ImageLink": "https://admin.glst.in/media-storage/1/1/2025061810392774721.jpg",
+                "DefaultImageStatus": "1",
+                "index": 2,
+                "created_at": "2025-06-18T05:09:27.000000Z",
+                "updated_at": "2025-06-18T05:09:27.000000Z"
+            },
+            {
+                "product_image_id": 4,
+                "product_id": 1,
+                "store_id": null,
+                "ImageLink": "https://admin.glst.in/media-storage/1/1/2025061810392789631.jpg",
+                "DefaultImageStatus": "1",
+                "index": 3,
+                "created_at": "2025-06-18T05:09:27.000000Z",
+                "updated_at": "2025-06-18T05:09:27.000000Z"
+            },
+            {
+                "product_image_id": 5,
+                "product_id": 1,
+                "store_id": null,
+                "ImageLink": "https://admin.glst.in/media-storage/1/1/2025061810392755868.jpg",
+                "DefaultImageStatus": "1",
+                "index": 4,
+                "created_at": "2025-06-18T05:09:27.000000Z",
+                "updated_at": "2025-06-18T05:09:27.000000Z"
+            },
+            {
+                "product_image_id": 6,
+                "product_id": 1,
+                "store_id": null,
+                "ImageLink": "https://admin.glst.in/media-storage/1/1/2025061810392779813.jpg",
+                "DefaultImageStatus": "1",
+                "index": 5,
+                "created_at": "2025-06-18T05:09:27.000000Z",
+                "updated_at": "2025-06-18T05:09:27.000000Z"
+            }
+        ],
+        "product_size": [],
+        "product_color": [
+            {
+                "product_variation_colorid": 9,
+                "product_id": 1,
+                "color": "Black",
+                "image": "https://admin.glst.in/media-storage/3/1/2025061913061121606.jpg",
+                "created_at": "2025-06-19T02:06:11.000000Z",
+                "updated_at": "2025-06-19T02:06:11.000000Z"
+            }
+        ],
+        "shipping_package_included": [
+            {
+                "shipping_detail_id": 14,
+                "product_id": 1,
+                "quantity": 1,
+                "content": "Cap",
+                "created_at": "2025-06-19T07:36:11.000000Z",
+                "updated_at": "2025-06-19T07:36:11.000000Z"
+            }
+        ],
+        "bulk_price": [],
+        "product_specification": [
+            {
+                "PropertyName": "Color",
+                "PropertyValue": "Available",
+                "product_id": 1,
+                "image": "https://admin.glst.in/media-storage/product_specification/Unknown.png"
+            },
+            {
+                "PropertyName": "Design",
+                "PropertyValue": "Herringbone",
+                "product_id": 1,
+                "image": "https://admin.glst.in/media-storage/product_specification/Unknown.png"
+            },
+            {
+                "PropertyName": "Material",
+                "PropertyValue": "Wool",
+                "product_id": 1,
+                "image": "https://admin.glst.in/media-storage/product_specification/Unknown.png"
+            },
+            {
+                "PropertyName": "Pattern",
+                "PropertyValue": "Retro",
+                "product_id": 1,
+                "image": "https://admin.glst.in/media-storage/product_specification/Unknown.png"
+            },
+            {
+                "PropertyName": "Season",
+                "PropertyValue": "All Season",
+                "product_id": 1,
+                "image": "https://admin.glst.in/media-storage/product_specification/Unknown.png"
+            },
+            {
+                "PropertyName": "Shape",
+                "PropertyValue": "Flat cap",
+                "product_id": 1,
+                "image": "https://admin.glst.in/media-storage/product_specification/Unknown.png"
+            },
+            {
+                "PropertyName": "Style",
+                "PropertyValue": "Newsboy",
+                "product_id": 1,
+                "image": "https://admin.glst.in/media-storage/product_specification/Unknown.png"
+            },
+            {
+                "PropertyName": "Type",
+                "PropertyValue": "Beret",
+                "product_id": 1,
+                "image": "https://admin.glst.in/media-storage/product_specification/Unknown.png"
+            }
+        ],
+        "business_detail": {
+            "store_id": 3,
+            "CompanyName": "STORE INDIA",
+            "State": 19,
+            "state_detail": {
+                "name": "Karnataka",
+                "id": 19
+            }
+        },
+        "whishlist_post": null
+    }
+}

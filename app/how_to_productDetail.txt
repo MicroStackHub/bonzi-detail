@@ -1,0 +1,63 @@
+https://api.glst.in/api/v2/get-product-price 
+
+the above is the api 
+the below is the body that we are passing 
+
+{
+    "product_id":2,
+    "color_id":"",
+    "product_qty":1,
+    "bulk_price":true
+}
+
+
+the below is the response 
+what i want is that in the product detail page that increase and decrease quantity 
+i want to call this api 
+and just update the Total price according to this api okay 
+and also remember to keep everything server side also 
+
+
+
+
+
+{
+    "response_code": "success",
+    "success": true,
+    "message": "Price update",
+    "data": {
+        "mrp": 999,
+        "sale_price": "INR 287.00",
+        "stock": 54,
+        "bulk_price": [
+            {
+                "bulk_price_from": 10,
+                "bulk_price_to": 49,
+                "bulk_price_amount": 280
+            },
+            {
+                "bulk_price_from": 50,
+                "bulk_price_to": 99,
+                "bulk_price_amount": 265
+            }
+        ],
+        "stock_invalid": false,
+        "applied_tax_on_billing": {
+            "IGST": "9.00"
+        },
+        "billing_tax_percentage": 9,
+        "shipping_amount": 0,
+        "shipping_invalid": false,
+        "tax_amount": 25.83,
+        "sale_price_with_tax": "INR 312.83",
+        "quantity": 1,
+        "total_mrp": 999,
+        "total_sale_price": 287,
+        "total_sale_price_with_tax": "INR 312.83",
+        "total_tax_amount": 25.83,
+        "total_shipping_amount": 0,
+        "sub_total": "INR 312.83",
+        "saved_amount": 712,
+        "save_percentage": 68.69
+    }
+}

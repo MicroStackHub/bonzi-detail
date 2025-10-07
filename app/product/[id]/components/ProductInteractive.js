@@ -3,16 +3,87 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 
-export default function ProductInteractive({ product, initialPriceData, productId }) {
+export default function ProductInteractive({ product, initialPriceData, productId, onColorChange }) {
   const [quantity, setQuantity] = useState(1);
   const [showBulkPrice, setShowBulkPrice] = useState(false);
   const [selectedColor, setSelectedColor] = useState(null);
   const [priceData, setPriceData] = useState(initialPriceData);
   const [priceLoading, setPriceLoading] = useState(false);
 
+  // Fetch price data when quantity changes
+  const fetchPriceData = async (qty) => {
+    if (!productId) return;
+    
+    try {
+      setPriceLoading(true);
+      
+      // Prepare request body, only include color_id if it's actually selected
+      const requestBody = {
+        product_id: parseInt(productId),
+        product_qty: qty,
+        bulk_price: true
+      };
+
+      // Only add color_id if a color is actually selected
+      if (selectedColor && selectedColor !== "") {
+        requestBody.color_id = selectedColor;
+      }
+      
+      // Try POST method first (as per API documentation)
+      let response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/get-product-price`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody)
+      });
+
+      // If POST fails with 405, fallback to GET method
+      if (!response.ok && response.status === 405) {
+        console.log('POST method not supported, falling back to GET');
+        const colorParam = selectedColor && selectedColor !== "" ? `&color_id=${selectedColor}` : "";
+        response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/get-product-price?product_id=${productId}&product_qty=${qty}${colorParam}&bulk_price=true`);
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        setPriceData(data.data);
+        // Update the maximum quantity based on stock from API response
+        if (data.data.stock && qty > data.data.stock) {
+          setQuantity(Math.min(qty, data.data.stock));
+          toast.warning(`Maximum available quantity is ${data.data.stock}`);
+        }
+      } else {
+        console.error('Price API Error:', data.message);
+        // Don't show toast for stock limit exceeded as it's expected behavior
+        if (!data.message.toLowerCase().includes('stock limit exceeded')) {
+          toast.error(data.message || 'Failed to update price');
+        }
+      }
+    } catch (error) {
+      console.error('Price fetch error:', error);
+      toast.error('Failed to update price');
+    } finally {
+      setPriceLoading(false);
+    }
+  };
+
   const handleQuantityChange = (amount) => {
-    const newQuantity = Math.max(1, Math.min(product.stock || 999, quantity + amount));
-    setQuantity(newQuantity);
+    const currentStock = priceData?.stock || product.stock || 999;
+    const newQuantity = Math.max(1, Math.min(currentStock, quantity + amount));
+    
+    if (newQuantity !== quantity) {
+      setQuantity(newQuantity);
+      // Fetch updated price data for new quantity
+      fetchPriceData(newQuantity);
+    } else if (quantity + amount > currentStock) {
+      toast.warning(`Maximum available quantity is ${currentStock}`);
+    }
   };
 
   const handleAddToCart = async () => {
@@ -72,22 +143,38 @@ export default function ProductInteractive({ product, initialPriceData, productI
             {product.colors.map((color) => (
               <button 
                 key={color.id} 
-                className={`w-6 h-6 rounded-full border-2 flex items-center justify-center relative ${
+                className={`w-12 h-12 rounded-lg border-2 flex items-center justify-center relative overflow-hidden ${
                   selectedColor === color.id ? 'border-orange-500 ring-2 ring-orange-200' : 'border-gray-300 hover:border-orange-300'
                 }`}
-                style={{
-                  backgroundColor: getColorCode(color.name),
-                  cursor: 'pointer'
-                }}
                 onClick={() => {
                   setSelectedColor(color.id);
+                  // Fetch updated price data for selected color
+                  fetchPriceData(quantity);
+                  // Notify parent component about color change
+                  if (onColorChange && color.image) {
+                    onColorChange(color.image);
+                  }
                 }}
                 aria-label={`Select ${color.name} color`}
                 title={color.name}
               >
+                {color.image ? (
+                  <img 
+                    src={color.image} 
+                    alt={color.name}
+                    className="w-full h-full object-cover rounded-md"
+                  />
+                ) : (
+                  <div 
+                    className="w-full h-full rounded-md"
+                    style={{
+                      backgroundColor: getColorCode(color.name)
+                    }}
+                  />
+                )}
                 {selectedColor === color.id && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-white" viewBox="0 0 20 20" fill="currentColor">
+                  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 rounded-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                   </div>
@@ -122,7 +209,12 @@ export default function ProductInteractive({ product, initialPriceData, productI
             </svg>
           </button>
         </div>
-        <span className="text-green-600 text-[10px] sm:text-xs mt-1">({priceData?.stock || product.stock} pieces available)</span>
+        <span className="text-green-600 text-[10px] sm:text-xs mt-1">
+          ({priceData?.stock || product.stock} pieces available)
+          {priceData?.stock_invalid && (
+            <span className="text-red-500 ml-1">⚠️ Stock limit exceeded</span>
+          )}
+        </span>
       </div>
 
       {/* COD */}
@@ -135,28 +227,26 @@ export default function ProductInteractive({ product, initialPriceData, productI
       <span className="font-medium text-gray-500">Total Price</span>
       <div>
         {priceLoading ? (
-          <div className="h-6 bg-gray-200 rounded w-32 animate-pulse"></div>
+          <div className="flex flex-col gap-1">
+            <div className="h-5 bg-gray-200 rounded w-32 animate-pulse"></div>
+            <div className="h-4 bg-gray-200 rounded w-24 animate-pulse"></div>
+          </div>
         ) : priceData ? (
-          (() => {
-            try {
-              const unitPriceWithTax = priceData.sale_price_with_tax ? parseFloat(priceData.sale_price_with_tax.replace('INR ', '')) : 0;
-              const totalPrice = (quantity * unitPriceWithTax).toFixed(2);
-              return (
-                <div className="text-green-600 font-bold text-sm">
-                  ₹{totalPrice} <span className="text-gray-600 font-normal text-xs">(incl. tax)</span>
-                </div>
-              );
-            } catch (error) {
-              return (
-                <div className="text-green-600 font-bold text-sm">
-                  ₹{(product.priceDetails.finalPrice * quantity).toFixed(2)} <span className="text-gray-600 font-normal text-xs">(incl. tax)</span>
-                </div>
-              );
-            }
-          })()
+          <div className="flex flex-col gap-1">
+            <div className="text-green-600 font-bold text-sm">
+              ₹{priceData.total_sale_price_with_tax ? priceData.total_sale_price_with_tax.replace('INR ', '') : (priceData.total_sale_price || 0).toFixed(2)} 
+              <span className="text-gray-600 font-normal text-xs ml-1">(incl. tax)</span>
+            </div>
+            {priceData.bulk_price && priceData.bulk_price.length > 0 && quantity >= priceData.bulk_price[0].bulk_price_from && (
+              <div className="text-xs text-orange-600 font-medium">
+                🎉 Bulk pricing applied!
+              </div>
+            )}
+          </div>
         ) : (
           <div className="text-green-600 font-bold text-sm">
-            ₹{(product.priceDetails.finalPrice * quantity).toFixed(2)} <span className="text-gray-600 font-normal text-xs">(incl. tax)</span>
+            ₹{(product.priceDetails.finalPrice * quantity).toFixed(2)} 
+            <span className="text-gray-600 font-normal text-xs ml-1">(incl. tax)</span>
           </div>
         )}
       </div>
@@ -171,7 +261,7 @@ export default function ProductInteractive({ product, initialPriceData, productI
           Buy Now
         </button>
         <button 
-          className="flex-1 bg-white border border-orange-500 text-orange-500 px-2 py-1 sm:px-3 sm:py-1.5 rounded font-semibold shadow hover:bg-orange-50 text-xs text-center min-w-[80px]"
+          className="flex-1 bg-white border border-orange-500 text-orange-500 px-1.5 py-1 sm:px-2 sm:py-1 rounded font-semibold shadow hover:bg-orange-50 text-xs text-center min-w-[70px]"
           onClick={handleAddToCart}
           aria-label="Add this product to cart"
         >
