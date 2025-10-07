@@ -9,6 +9,7 @@ export default function ProductInteractive({ product, initialPriceData, productI
   const [selectedColor, setSelectedColor] = useState(null);
   const [priceData, setPriceData] = useState(initialPriceData);
   const [priceLoading, setPriceLoading] = useState(false);
+  const stock = priceData?.stock ?? product.stock ?? 0;
 
   // Fetch price data when quantity changes
   const fetchPriceData = async (qty) => {
@@ -86,6 +87,46 @@ export default function ProductInteractive({ product, initialPriceData, productI
     }
   };
 
+  const handleQuantityInputChange = (e) => {
+    const value = e.target.value;
+    
+    // Allow empty string during typing
+    if (value === '') {
+      setQuantity('');
+      return;
+    }
+    
+    const numValue = parseInt(value);
+    
+    // If it's not a valid number, don't update
+    if (isNaN(numValue)) {
+      return;
+    }
+    
+    const currentStock = priceData?.stock || product.stock || 999;
+    
+    // Allow typing but validate on blur or when complete
+    if (numValue >= 1 && numValue <= currentStock) {
+      setQuantity(numValue);
+      fetchPriceData(numValue);
+    } else if (numValue > currentStock) {
+      setQuantity(currentStock);
+      fetchPriceData(currentStock);
+      toast.warning(`Maximum available quantity is ${currentStock}`);
+    } else if (numValue < 1) {
+      setQuantity(1);
+      fetchPriceData(1);
+    }
+  };
+
+  const handleQuantityBlur = (e) => {
+    // Ensure we have a valid number when user finishes typing
+    if (quantity === '' || quantity < 1) {
+      setQuantity(1);
+      fetchPriceData(1);
+    }
+  };
+
   const handleAddToCart = async () => {
     try {
       const payload = {
@@ -134,18 +175,18 @@ export default function ProductInteractive({ product, initialPriceData, productI
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-[auto,1fr] items-start gap-x-3 sm:gap-x-2 gap-y-3 sm:gap-y-2 text-xs sm:text-sm">
+    <div className="space-y-3 text-xs sm:text-sm">
       {/* Color */}
       {product.colors && Array.isArray(product.colors) && product.colors.length > 0 && (
-        <>
-          <span className="font-medium text-gray-500">Color</span>
-          <div className="flex flex-wrap gap-2 sm:gap-2.5 overflow-x-auto">
+        <div className="flex items-start gap-3">
+          <span className="font-medium text-gray-500 w-20 flex-shrink-0">Color:</span>
+          <div className="flex flex-wrap gap-2 sm:gap-2 overflow-x-auto">
             {product.colors.map((color) => (
               <button 
                 key={color.id} 
-                className={`w-12 h-12 rounded-lg border-2 flex items-center justify-center relative overflow-hidden ${
+                className={`w-10 h-10 rounded border-2 flex items-center justify-center relative overflow-hidden ${
                   selectedColor === color.id ? 'border-orange-500 ring-2 ring-orange-200' : 'border-gray-300 hover:border-orange-300'
-                }`}
+                }`}                
                 onClick={() => {
                   setSelectedColor(color.id);
                   // Fetch updated price data for selected color
@@ -182,93 +223,111 @@ export default function ProductInteractive({ product, initialPriceData, productI
               </button>
             ))}
           </div>
-        </>
+        </div>
       )}
 
       {/* Quantity */}
-      <span className="font-medium text-gray-500">Quantity</span>
-      <div className="flex flex-col items-start">
-        <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
-          <button 
-            className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold transition-colors duration-200 flex items-center justify-center" 
-            onClick={() => handleQuantityChange(-1)}
-            aria-label="Decrease quantity"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
-            </svg>
-          </button>
-          <span className="px-4 py-2 border-l border-r border-gray-300 text-center min-w-[50px] font-semibold">{quantity}</span>
-          <button 
-            className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold transition-colors duration-200 flex items-center justify-center" 
-            onClick={() => handleQuantityChange(1)}
-            aria-label="Increase quantity"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-            </svg>
-          </button>
+      {stock > 0 ? (
+      <div className="flex items-start gap-4">
+        <span className="font-medium text-gray-500 w-20 flex-shrink-0">Quantity:</span>
+        <div className="flex flex-col items-start">
+          <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+            <button 
+              className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold transition-colors duration-200 flex items-center justify-center" 
+              onClick={() => handleQuantityChange(-1)}
+              aria-label="Decrease quantity"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
+              </svg>
+            </button>
+            <input
+              type="number"
+              value={quantity}
+              onChange={handleQuantityInputChange}
+              onBlur={handleQuantityBlur}
+              min="1"
+              max={stock}
+              className="px-4 py-2 border-l border-r border-gray-300 text-center min-w-[50px] font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500"
+            />
+            <button 
+              className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold transition-colors duration-200 flex items-center justify-center" 
+              onClick={() => handleQuantityChange(1)}
+              aria-label="Increase quantity"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
+            </button>
+          </div>
+          <span className="text-green-600 text-[10px] sm:text-xs mt-1">
+            ({stock} pieces available)
+            {priceData?.stock_invalid && (
+              <span className="text-red-500 ml-1">⚠️ Stock limit exceeded</span>
+            )}
+          </span>
         </div>
-        <span className="text-green-600 text-[10px] sm:text-xs mt-1">
-          ({priceData?.stock || product.stock} pieces available)
-          {priceData?.stock_invalid && (
-            <span className="text-red-500 ml-1">⚠️ Stock limit exceeded</span>
-          )}
+      </div>
+      ) : (
+      <div className="flex items-center gap-4">
+        <span className="font-medium text-gray-500 w-20 flex-shrink-0">Quantity:</span>
+        <span className="text-red-500 font-semibold">Out of Stock</span>
+      </div>
+      )}
+
+      {/* COD */}
+      <div className="flex items-center gap-4">
+        <span className="font-medium text-gray-500 w-20 flex-shrink-0">COD:</span>
+        <span className={`font-bold text-xs ${product.codAvailable ? 'text-green-600' : 'text-gray-700'}`}>
+          {product.codAvailable ? 'Available' : 'Not Available'}
         </span>
       </div>
 
-      {/* COD */}
-      <span className="font-medium text-gray-500">COD</span>
-      <span className={`font-bold text-xs ${product.codAvailable ? 'text-green-600' : 'text-gray-700'}`}>
-        {product.codAvailable ? 'Available' : 'Not Available'}
-      </span>
-
       {/* Total Price */}
-      <span className="font-medium text-gray-500">Total Price</span>
-      <div>
-        {priceLoading ? (
-          <div className="flex flex-col gap-1">
-            <div className="h-5 bg-gray-200 rounded w-32 animate-pulse"></div>
-            <div className="h-4 bg-gray-200 rounded w-24 animate-pulse"></div>
-          </div>
-        ) : priceData ? (
-          <div className="flex flex-col gap-1">
-            <div className="text-green-600 font-bold text-sm">
-              ₹{priceData.total_sale_price_with_tax ? priceData.total_sale_price_with_tax.replace('INR ', '') : (priceData.total_sale_price || 0).toFixed(2)} 
+      <div className="flex items-start gap-4">
+        <span className="font-medium text-gray-500 w-20 flex-shrink-0">Total Price:</span>
+        <div>
+          {priceLoading ? (
+            <div className="h-8 bg-gray-200 rounded w-40 animate-pulse"></div>
+          ) : priceData ? (
+            <div className="flex flex-col gap-1">
+              <div className="text-green-600 font-bold text-xl">
+                ₹{priceData.total_sale_price_with_tax ? priceData.total_sale_price_with_tax.replace('INR ', '') : (priceData.total_sale_price || 0).toFixed(2)} 
+                <span className="text-gray-600 font-normal text-xs ml-1">(incl. tax)</span>
+              </div>
+              {priceData.bulk_price && priceData.bulk_price.length > 0 && quantity >= priceData.bulk_price[0].bulk_price_from && (
+                <div className="text-xs text-orange-600 font-medium">
+                  🎉 Bulk pricing applied!
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="text-green-600 font-extrabold text-xl">
+              ₹{(product.priceDetails.finalPrice * quantity).toFixed(2)} 
               <span className="text-gray-600 font-normal text-xs ml-1">(incl. tax)</span>
             </div>
-            {priceData.bulk_price && priceData.bulk_price.length > 0 && quantity >= priceData.bulk_price[0].bulk_price_from && (
-              <div className="text-xs text-orange-600 font-medium">
-                🎉 Bulk pricing applied!
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className="text-green-600 font-bold text-sm">
-            ₹{(product.priceDetails.finalPrice * quantity).toFixed(2)} 
-            <span className="text-gray-600 font-normal text-xs ml-1">(incl. tax)</span>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* Action */}
-      <span className="font-medium text-gray-500">Action</span>
-      <div className="flex flex-row flex-wrap gap-2.5 items-center">
+      <div className="flex items-center gap-3">
+        <span className="font-medium text-gray-500 w-20 flex-shrink-0">Action:</span>
         <button 
-          className="flex-1 bg-orange-500 text-white px-2 py-1 sm:px-3 sm:py-1.5 rounded font-semibold shadow hover:bg-orange-600 text-xs text-center min-w-[80px]"
+          className="w-24 h-10 bg-orange-500 text-white rounded-lg font-semibold shadow text-sm flex items-center justify-center transition hover:bg-orange-600"
           aria-label="Buy this product now"
         >
           Buy Now
         </button>
         <button 
-          className="flex-1 bg-white border border-orange-500 text-orange-500 px-1.5 py-1 sm:px-2 sm:py-1 rounded font-semibold shadow hover:bg-orange-50 text-xs text-center min-w-[70px]"
+          className="w-24 h-10 bg-white border border-orange-500 text-orange-500 rounded-lg font-semibold shadow text-sm flex items-center justify-center transition hover:bg-orange-50"
           onClick={handleAddToCart}
           aria-label="Add this product to cart"
         >
           Add To Cart
         </button>
         <button 
-          className="text-orange-500 text-base sm:text-lg hover:text-orange-600 p-1.5"
+          className="text-orange-500 hover:text-orange-600 p-2 text-xl flex items-center justify-center"
           aria-label="Add to wishlist"
         >
           ♡
@@ -276,20 +335,23 @@ export default function ProductInteractive({ product, initialPriceData, productI
       </div>
 
       {/* Promotions */}
-      <span className="font-medium text-gray-500">Promotions</span>
-      <button 
-        className="bg-gray-100 border border-gray-300 text-gray-700 px-3 py-1.5 sm:px-2 sm:py-2 rounded-lg shadow-sm flex items-center gap-1.5 sm:gap-2 text-xs hover:bg-gray-200 w-fit"
-        aria-label="View available seller coupons"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
-        </svg>
-        Get Seller Coupons
-      </button>
+      <div className="flex items-center gap-4">
+        <span className="font-medium text-gray-500 w-20 flex-shrink-0">Promotions:</span>
+        <button 
+          className="bg-gray-100 border border-gray-300 text-gray-700 px-3 py-1.5 sm:px-2 sm:py-2 rounded-lg shadow-sm flex items-center gap-1.5 sm:gap-2 text-xs hover:bg-gray-200 w-fit"
+          aria-label="View available seller coupons"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+          </svg>
+          Get Seller Coupons
+        </button>
+      </div>
 
       {/* Bulk pricing info */}
-      <span></span>
-      <div className="text-[10px] sm:text-[10px] text-orange-600 col-span-2">Want to buy in bulk? <a href="#" className="underline font-semibold">Learn about bulk pricing options</a></div>
+      <div className="text-[10px] sm:text-[10px] text-orange-600">
+        Want to buy in bulk? <a href="#" className="underline font-semibold">Learn about bulk pricing options</a>
+      </div>
     </div>
   );
 }

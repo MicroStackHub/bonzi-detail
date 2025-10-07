@@ -49,17 +49,17 @@ export default function SellerInfo({ product }) {
 
   return (
     <>
-      <div className="w-full xl:w-64 flex flex-col gap-1 sm:gap-1">
-        <div className="p-3 md:p-4 bg-gray-50 rounded-lg flex flex-col gap-2" style={{ height: 'auto' }}>
-          <div className="sm:text-[12px] sm:text-sm text-gray-600">Sold By</div>
-          <div className="font-bold text-[14px] text-orange-600 text-sm md:text-base">{product.seller}</div>
-          <div className="flex flex-col text-xs sm:text-sm text-gray-700 gap-1">
-            <span className='text-[10px]'>{product.positiveSentiment}% Positive Sentiment</span>
-            <span className='text-[10px]'>{product.followers} Followers</span>
+      <div className="w-full flex flex-col gap-2">
+        <div className="p-3 bg-gray-50 rounded-lg flex flex-col gap-2">
+          <div className="text-sm text-gray-600">Sold By</div>
+          <div className="font-bold text-orange-600 text-sm">{product.seller}</div>
+          <div className="flex flex-col text-gray-700 gap-1">
+            <span className='text-xs'>{product.positiveSentiment}% Positive Sentiment</span>
+            <span className='text-xs'>{product.followers} Followers</span>
           </div>
           <div className="flex flex-col gap-2 mt-1">
             <button 
-              className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-2 py-1 sm:px-1 sm:py-2 rounded-lg font-semibold shadow text-xs sm:text-sm"
+              className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-3 py-1 rounded font-semibold shadow text-sm"
               onClick={() => setShowContactModal(true)}
               aria-label="Contact the seller"
             >
@@ -67,11 +67,11 @@ export default function SellerInfo({ product }) {
             </button>
             <div className="flex flex-row gap-2">
               <button 
-                className={`flex-1 px-1 py-1 sm:px-1 sm:py-1 rounded shadow text-xs sm:text-[10px] transition-colors ${
-                  isFollowing 
-                    ? 'bg-red-500 text-white border border-red-500 hover:bg-red-600' 
-                    : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-                } ${isFollowLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`px-3 py-1 rounded shadow text-sm transition-colors ${
+                  isFollowing
+                    ? 'bg-red-500 text-white border border-red-500 hover:bg-red-600'
+                    : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'}
+                `}
                 onClick={handleFollowToggle}
                 disabled={isFollowLoading}
                 aria-label={isFollowing ? "Unfollow this seller" : "Follow this seller"}
@@ -79,7 +79,7 @@ export default function SellerInfo({ product }) {
                 {isFollowLoading ? '...' : (isFollowing ? 'Unfollow' : '+ Follow')}
               </button>
               <button 
-                className="flex-1 bg-white border border-gray-300 text-gray-700 px-1 py-1 sm:px-1 sm:py-1 rounded shadow text-xs sm:text-[10px]" 
+                className="bg-white border border-gray-300 text-gray-700 px-3 py-1 rounded shadow text-sm"
                 onClick={handleVisitStore}
                 aria-label="Visit seller's store"
               >

@@ -133,11 +133,11 @@ export default function Header() {
 
           <div className="mt-3 sm:mt-0 sm:flex-1 sm:max-w-xl sm:mx-6">
             <div className="flex w-full">
-              <div className="relative group">
+              <div className="relative group w-24 sm:w-32">
                 <label htmlFor="category-select" className="sr-only">Select category</label>
                 <select
                   id="category-select"
-                  className="px-1 sm:px-2 py-1 sm:py-1.5 pr-5 sm:pr-7 border border-r-0 border-orange-200 bg-orange-50 text-gray-800 text-xs min-w-0 focus:outline-none focus:bg-white focus:border-orange-500 focus:ring-1 focus:ring-orange-500 w-24 appearance-none custom-select-orange transition-colors duration-200"
+                  className="px-1.5 py-1.5 pr-6 border border-r-0 border-orange-200 bg-orange-50 text-gray-800 text-xs min-w-0 focus:outline-none focus:bg-white focus:border-orange-500 focus:ring-1 focus:ring-orange-500 w-24 sm:w-32 appearance-none custom-select-orange transition-colors duration-200 h-8 sm:h-9"
                 >
                   <option value="">All</option>
                   {categories.map((category, index) => (
@@ -146,8 +146,8 @@ export default function Header() {
                     </option>
                   ))}
                 </select>
-                <div className="absolute inset-y-0 right-1 sm:right-1.5 flex items-center pointer-events-none">
-                  <svg className="w-3 h-3 sm:w-4 sm:h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="absolute inset-y-0 right-2 flex items-center pointer-events-none">
+                  <svg className="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
@@ -212,13 +212,13 @@ export default function Header() {
                 placeholder="Search for products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 px-1 sm:px-2 md:px-3 py-1 sm:py-1.5 border border-orange-200 bg-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 text-xs sm:text-sm text-black placeholder-gray-400 transition-colors duration-200"
+                className="flex-1 px-2 py-1.5 border border-orange-200 bg-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 text-xs sm:text-sm text-black placeholder-gray-400 transition-colors duration-200 h-8 sm:h-9 w-24 sm:w-auto"
               />
               <button
-                className="px-1.5 sm:px-2.5 md:px-4 py-1 sm:py-1.5 bg-orange-500 text-white hover:bg-orange-600 focus:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-1 transition-colors duration-200"
+                className="px-2 py-1.5 bg-orange-500 text-white hover:bg-orange-600 focus:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-1 transition-colors duration-200 h-8 sm:h-9 flex items-center justify-center w-8 sm:w-auto"
                 aria-label="Search"
               >
-                <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </button>
