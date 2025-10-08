@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function ProductPolicies({ product }) {
   const [showRefundModal, setShowRefundModal] = useState(false);
@@ -14,7 +15,14 @@ export default function ProductPolicies({ product }) {
         >
           Seller Return Policy
         </button>
-        <span className="text-blue-600 font-semibold text-xs sm:text-sm">Buyer Protection</span>
+        <Link
+          href="https://www.bonzicart.com/buyer/protection/index.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 font-semibold text-xs sm:text-sm hover:underline"
+        >
+          Buyer Protection
+        </Link>
       </div>
 
       {/* Refund Policy Modal */}

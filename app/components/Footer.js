@@ -3,8 +3,8 @@ import Image from 'next/image';
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-white border-t border-gray-200 mt-2">
-      <div className="w-full py-6 px-4">
+    <footer className="w-full bg-white border-t border-gray-200">
+      <div className="w-full py-3 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
             <div className="col-span-2 sm:col-span-1">
@@ -80,7 +80,7 @@ export default function Footer() {
                 <FaCcAmex size={20} className="text-blue-500" />
               </div>
             </div>
-            <div className="mt-3 text-center text-xs text-gray-500">
+            <div className="mt-1 text-center text-xs text-gray-500">
               © {new Date().getFullYear()} Bonzi Cart. All rights reserved.
             </div>
           </div>

@@ -34,9 +34,7 @@ export default function Header() {
   ];
 
   return (
-    <header className={`w-full z-50 bg-white transition-all duration-300 sticky top-0 ${
-      scrolled ? 'shadow-md' : 'shadow-sm'
-    }`}>
+    <header className={`w-full z-50 bg-white transition-all duration-300 sticky top-0`}>
       <div className="w-full py-2 sm:py-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center justify-between sm:flex-shrink-0">
@@ -137,7 +135,7 @@ export default function Header() {
                 <label htmlFor="category-select" className="sr-only">Select category</label>
                 <select
                   id="category-select"
-                  className="px-2 py-2 border-0 bg-orange-50 text-gray-800 text-xs focus:outline-none focus:ring-1 focus:ring-orange-500 appearance-none transition-colors duration-200 h-9"
+                  className="px-2 py-2 border-0 bg-white text-gray-800 text-xs focus:outline-none focus:ring-1 focus:ring-orange-500 appearance-none transition-colors duration-200 h-9 hover:bg-orange-50"
                   style={{ minWidth: 'auto', maxWidth: '150px' }}
                 >
                   <option value="">All Categories</option>

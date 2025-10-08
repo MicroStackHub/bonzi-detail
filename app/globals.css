@@ -163,3 +163,16 @@ html body iframe[src*="translate"] {
 .skiptranslate {
   display: inline-block !important;
 }
+
+/* Custom select option colors */
+#category-select option {
+  background-color: #ffffff;
+  color: #374151; /* gray-700 */
+}
+#category-select option:hover {
+  background-color: #ffedd5; /* orange-100 */
+}
+#category-select option:checked, #category-select option:focus {
+  background-color: #f97316; /* orange-500 */
+  color: #ffffff;
+}

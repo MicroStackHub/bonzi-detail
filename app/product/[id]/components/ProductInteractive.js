@@ -286,27 +286,30 @@ export default function ProductInteractive({ product, initialPriceData, productI
       {/* Total Price */}
       <div className="flex items-start gap-4">
         <span className="font-medium text-gray-500 w-20 flex-shrink-0">Total Price:</span>
-        <div>
-          {priceLoading ? (
-            <div className="h-8 bg-gray-200 rounded w-40 animate-pulse"></div>
-          ) : priceData ? (
-            <div className="flex flex-col gap-1">
+        {/* Keep price visible while fetching to avoid layout shift */}
+        <div className="relative">
+          {priceLoading && (
+            <div className="absolute inset-0 bg-gray-200/60 animate-pulse rounded"></div>
+          )}
+          <div className={`flex flex-col gap-1 ${priceLoading ? 'opacity-50' : ''}`}>
+            {priceData ? (
               <div className="text-green-600 font-bold text-xl">
-                ₹{priceData.total_sale_price_with_tax ? priceData.total_sale_price_with_tax.replace('INR ', '') : (priceData.total_sale_price || 0).toFixed(2)} 
+                ₹{priceData.total_sale_price_with_tax ? priceData.total_sale_price_with_tax.replace('INR ', '') : (priceData.total_sale_price || 0).toFixed(2)}
                 <span className="text-gray-600 font-normal text-xs ml-1">(incl. tax)</span>
               </div>
-              {priceData.bulk_price && priceData.bulk_price.length > 0 && quantity >= priceData.bulk_price[0].bulk_price_from && (
-                <div className="text-xs text-orange-600 font-medium">
-                  🎉 Bulk pricing applied!
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="text-green-600 font-extrabold text-xl">
-              ₹{(product.priceDetails.finalPrice * quantity).toFixed(2)} 
-              <span className="text-gray-600 font-normal text-xs ml-1">(incl. tax)</span>
-            </div>
-          )}
+            ) : (
+              <div className="text-green-600 font-extrabold text-xl">
+                ₹{(product.priceDetails.finalPrice * quantity).toFixed(2)}
+                <span className="text-gray-600 font-normal text-xs ml-1">(incl. tax)</span>
+              </div>
+            )}
+            {/* Bulk pricing notice */}
+            {priceData?.bulk_price && priceData.bulk_price.length > 0 && quantity >= priceData.bulk_price[0].bulk_price_from && (
+              <div className="text-xs text-orange-600 font-medium">
+                🎉 Bulk pricing applied!
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

@@ -35,8 +35,8 @@ export default function ProductDetail({ product, productDescription, priceData, 
   }
 
   return (
-    <div className="bg-gray-100 py-0 sm:py-3 md:py-4 pt-14 sm:pt-20 md:pt-24 lg:pt-28 mx-auto">
-      <div className="w-full sm:max-w-7xl sm:mx-auto px-0 sm:px-3 md:px-4 lg:px-6">
+    <div className="bg-gray-100 py-2 mx-auto">
+      <div className="w-full sm:max-w-7xl sm:mx-auto px-0 ">
 
         {/* Main Product Section */}
         <div className="bg-white p-2 sm:p-4 md:p-5 rounded-none sm:rounded-lg shadow-none sm:shadow-sm flex flex-col lg:flex-row gap-2 sm:gap-4 lg:gap-6">
