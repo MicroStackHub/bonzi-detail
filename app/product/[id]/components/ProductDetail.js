@@ -35,61 +35,61 @@ export default function ProductDetail({ product, productDescription, priceData, 
   }
 
   return (
-    <div className="bg-gray-100 py-0 sm:py-4 md:py-6 pt-16 sm:pt-24 md:pt-28 lg:pt-32 mx-auto">
-      <div className="w-full sm:max-w-7xl sm:mx-auto px-0 sm:px-4 md:px-6 lg:px-10">
+    <div className="bg-gray-100 py-0 sm:py-3 md:py-4 pt-14 sm:pt-20 md:pt-24 lg:pt-28 mx-auto">
+      <div className="w-full sm:max-w-7xl sm:mx-auto px-0 sm:px-3 md:px-4 lg:px-6">
 
         {/* Main Product Section */}
-        <div className="bg-white p-2 sm:p-5 md:p-6 lg:p-8 rounded-none sm:rounded-xl shadow-none sm:shadow-md flex flex-col lg:flex-row gap-3 sm:gap-5 md:gap-6 lg:gap-8">
+        <div className="bg-white p-2 sm:p-4 md:p-5 rounded-none sm:rounded-lg shadow-none sm:shadow-sm flex flex-col lg:flex-row gap-2 sm:gap-4 lg:gap-6">
           {/* Left: Product Gallery */}
           <ProductGallery product={product} selectedColorImage={selectedColorImage} />
 
           {/* Right: Product Info */}
-          <div className="w-full lg:w-1/2 flex flex-col gap-2 sm:gap-4 md:gap-4 lg:gap-5 mt-1 sm:mt-3">
+          <div className="w-full lg:w-1/2 flex flex-col gap-2 sm:gap-3 mt-0">
             <div className="flex items-start justify-between">
-              <h1 className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-gray-800 leading-tight flex-1 pr-1 sm:pr-2">{product.name}</h1>
+              <h1 className="text-xs sm:text-sm md:text-base font-semibold text-gray-800 leading-tight flex-1 pr-1">{product.name}</h1>
               <ShareButton />
             </div>
 
-            <div className="flex items-center flex-wrap gap-x-2 sm:gap-x-3 gap-y-0.5 sm:gap-y-1 text-gray-600">
+            <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 text-gray-600">
               <span className="flex items-center">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} className={`text-[8px] sm:text-[10px] md:text-xs ${i < Math.floor(product.rating) ? 'text-yellow-400' : 'text-gray-300'}`}>⭐</span>
+                  <span key={i} className={`text-[8px] sm:text-[10px] ${i < Math.floor(product.rating) ? 'text-yellow-400' : 'text-gray-300'}`}>⭐</span>
                 ))}
               </span>
               <span className="text-[10px] sm:text-xs">{product.rating} ({product.reviews} feedbacks)</span>
               <span className="text-[10px] sm:text-xs">{product.orders} orders</span>
             </div>
 
-            <div className="flex flex-col sm:flex-row justify-between items-start gap-3 sm:gap-4">
-              <div className="bg-gray-50 p-3 sm:p-5 rounded-md sm:rounded-lg flex-1 w-full">
+            <div className="flex flex-col sm:flex-row justify-between items-start gap-2 sm:gap-3">
+              <div className="bg-gray-50 p-2.5 sm:p-3 rounded-md flex-1 w-full">
                 {priceData ? (
                   <div>
-                    <div className="flex flex-wrap items-center gap-2 mb-1.5 sm:mb-2">
-                      <span className="line-through text-gray-500 text-xs sm:text-sm">MRP: ₹{priceData.mrp}</span>
-                      <span className="text-green-600 font-semibold text-[10px] sm:text-xs">Save {Math.round(priceData.save_percentage)}%</span>
+                    <div className="flex flex-wrap items-center gap-1.5 mb-1">
+                      <span className="line-through text-gray-500 text-xs">MRP: ₹{priceData.mrp}</span>
+                      <span className="text-green-600 font-semibold text-[10px]">Save {Math.round(priceData.save_percentage)}%</span>
                     </div>
-                    <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                      <span className="text-sm sm:text-lg md:text-xl font-bold text-orange-600">Price: ₹{priceData.sale_price ? parseFloat(priceData.sale_price.replace('INR ', '')).toFixed(2) : 'N/A'}</span>
-                      <span className="text-[10px] sm:text-xs text-gray-500">(Exclusive of all taxes)</span>
+                    <div className="flex flex-wrap items-center gap-1.5 mb-1">
+                      <span className="text-sm sm:text-base font-bold text-orange-600">Price: ₹{priceData.sale_price ? parseFloat(priceData.sale_price.replace('INR ', '')).toFixed(2) : 'N/A'}</span>
+                      <span className="text-[10px] text-gray-500">(Exclusive of all taxes)</span>
                     </div>
-                    <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                      <span className="text-xs sm:text-sm font-bold text-red-600">₹{priceData.sale_price_with_tax ? parseFloat(priceData.sale_price_with_tax.replace('INR ', '')).toFixed(2) : 'N/A'} / Piece</span>
-                      <span className="text-[10px] sm:text-xs text-gray-500">(Inclusive of all taxes)</span>
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="text-xs font-bold text-red-600">₹{priceData.sale_price_with_tax ? parseFloat(priceData.sale_price_with_tax.replace('INR ', '')).toFixed(2) : 'N/A'} / Piece</span>
+                      <span className="text-[10px] text-gray-500">(Inclusive of all taxes)</span>
                     </div>
                   </div>
                 ) : (
                   <div>
-                    <div className="flex flex-wrap items-center gap-2 mb-1.5 sm:mb-2">
-                      <span className="line-through text-gray-500 text-xs sm:text-sm">MRP: ₹{product.priceDetails.mrp.toFixed(2)}</span>
-                      <span className="text-green-600 font-semibold text-[10px] sm:text-xs">Save {getSavePercentage(priceData, product)}%</span>
+                    <div className="flex flex-wrap items-center gap-1.5 mb-1">
+                      <span className="line-through text-gray-500 text-xs">MRP: ₹{product.priceDetails.mrp.toFixed(2)}</span>
+                      <span className="text-green-600 font-semibold text-[10px]">Save {getSavePercentage(priceData, product)}%</span>
                     </div>
-                    <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                      <span className="text-sm sm:text-lg md:text-xl font-bold text-orange-600">Price: ₹{product.priceDetails.price.toFixed(2)}</span>
-                      <span className="text-[10px] sm:text-xs text-gray-500">(Exclusive of all taxes)</span>
+                    <div className="flex flex-wrap items-center gap-1.5 mb-1">
+                      <span className="text-sm sm:text-base font-bold text-orange-600">Price: ₹{product.priceDetails.price.toFixed(2)}</span>
+                      <span className="text-[10px] text-gray-500">(Exclusive of all taxes)</span>
                     </div>
-                    <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                      <span className="text-xs sm:text-sm font-bold text-red-600">₹{product.priceDetails.finalPrice.toFixed(2)} / Piece</span>
-                      <span className="text-[10px] sm:text-xs text-gray-500">(Inclusive of all taxes)</span>
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="text-xs font-bold text-red-600">₹{product.priceDetails.finalPrice.toFixed(2)} / Piece</span>
+                      <span className="text-[10px] text-gray-500">(Inclusive of all taxes)</span>
                     </div>
                   </div>
                 )}
@@ -98,7 +98,7 @@ export default function ProductDetail({ product, productDescription, priceData, 
               <BulkPriceButton product={product} priceData={priceData} />
             </div>
 
-            <div className="flex gap-2 sm:gap-4 text-center text-xs sm:text-sm border-y py-3 sm:py-5 overflow-x-auto scrollbar-hide md:grid md:grid-cols-5 md:gap-2">
+            <div className="flex gap-1.5 text-center text-[10px] sm:text-xs border-y py-2 sm:py-3 overflow-x-auto scrollbar-hide md:grid md:grid-cols-5 md:gap-1">
               {[{
                 icon: "M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0011.664 0l3.181-3.183m-4.991-2.696a8.25 8.25 0 00-11.664 0l-3.181 3.183",
                 title: "Replacement",
@@ -126,18 +126,18 @@ export default function ProductDetail({ product, productDescription, priceData, 
                 color: "green"
               }
               ].map((item, index) => (
-                <div key={index} className="flex-shrink-0 w-20 sm:w-24 md:w-auto">
-                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 sm:h-5 sm:w-5 mx-auto text-${item.color}-500`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <div key={index} className="flex-shrink-0 w-16 sm:w-20 md:w-auto">
+                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-3.5 w-3.5 sm:h-4 sm:w-4 mx-auto text-${item.color}-500`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d={item.icon} />
                   </svg>
-                  <div className={`font-semibold text-${item.color}-500 mt-1 text-[10px] sm:text-xs`}>{item.title}</div>
-                  <div className="text-gray-600 text-[10px] sm:text-xs">{item.value}</div>
+                  <div className={`font-semibold text-${item.color}-500 mt-0.5 text-[9px] sm:text-[10px]`}>{item.title}</div>
+                  <div className="text-gray-600 text-[9px] sm:text-[10px]">{item.value}</div>
                 </div>
               ))}
             </div>
 
             {/* Two-column layout starts here */}
-            <div className="flex flex-col xl:flex-row gap-3 sm:gap-6">
+            <div className="flex flex-col xl:flex-row gap-2 sm:gap-4">
               {/* Left Column */}
               <div className="w-full">
                 <ProductInteractive 

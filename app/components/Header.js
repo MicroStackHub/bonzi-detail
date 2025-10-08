@@ -34,11 +34,11 @@ export default function Header() {
   ];
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 bg-white transition-all duration-300 ${
+    <header className={`w-full z-50 bg-white transition-all duration-300 sticky top-0 ${
       scrolled ? 'shadow-md' : 'shadow-sm'
     }`}>
-      <div className="max-w-6xl mx-auto px-2 sm:px-6 lg:px-8 py-4">
-        <div className="block sm:flex sm:items-center sm:justify-between">
+      <div className="w-full py-2 sm:py-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center justify-between sm:flex-shrink-0">
             <div className="flex-shrink-0" style={{ minWidth: 120 }}>
               {scrolled ? (
@@ -58,8 +58,8 @@ export default function Header() {
                     </button>
 
                     {showCategoriesDropdown && (
-                      <div className="absolute top-full left-0 sm:left-1/2 sm:transform sm:-translate-x-1/2 -mt-1 w-72 sm:w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-50 max-w-[calc(100vw-1rem)] sm:max-w-none">
-                        <div className="p-3 max-h-80 sm:max-h-none overflow-y-auto sm:overflow-visible">
+                      <div className="absolute top-full left-0 sm:left-0 -mt-1 bg-white rounded-lg shadow-lg border border-gray-200 z-50 min-w-[200px] w-auto">
+                        <div className="p-3 max-h-[70vh] overflow-y-auto">
                           <h3 className="text-sm font-semibold text-gray-800 mb-2 flex items-center">
                             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
@@ -67,15 +67,15 @@ export default function Header() {
                             Categories
                           </h3>
 
-                          <div className="space-y-0.5">
+                          <div className="grid grid-cols-1 gap-1">
                             {categories.map((category, index) => (
                               <a
                                 key={index}
                                 href="#"
-                                className="flex items-center py-1.5 px-2 text-gray-600 hover:bg-gray-100 hover:text-orange-500 rounded-md transition-colors text-xs"
+                                className="flex items-center py-1.5 px-2 text-gray-600 hover:bg-gray-100 hover:text-orange-500 rounded-md transition-colors text-xs whitespace-nowrap"
                               >
-                                <span className="mr-2 text-base">{category.icon}</span>
-                                <span className="text-xs truncate">{category.name}</span>
+                                <span className="mr-2 text-base flex-shrink-0">{category.icon}</span>
+                                <span className="text-xs">{category.name}</span>
                               </a>
                             ))}
                           </div>
@@ -132,96 +132,44 @@ export default function Header() {
           </div>
 
           <div className="mt-3 sm:mt-0 sm:flex-1 sm:max-w-xl sm:mx-6">
-            <div className="flex w-full">
-              <div className="relative group w-24 sm:w-32">
+            <div className="flex w-full rounded-md overflow-hidden shadow-sm border border-gray-200">
+              <div className="relative group">
                 <label htmlFor="category-select" className="sr-only">Select category</label>
                 <select
                   id="category-select"
-                  className="px-1.5 py-1.5 pr-6 border border-r-0 border-orange-200 bg-orange-50 text-gray-800 text-xs min-w-0 focus:outline-none focus:bg-white focus:border-orange-500 focus:ring-1 focus:ring-orange-500 w-24 sm:w-32 appearance-none custom-select-orange transition-colors duration-200 h-8 sm:h-9"
+                  className="px-2 py-2 border-0 bg-orange-50 text-gray-800 text-xs focus:outline-none focus:ring-1 focus:ring-orange-500 appearance-none transition-colors duration-200 h-9"
+                  style={{ minWidth: 'auto', maxWidth: '150px' }}
                 >
-                  <option value="">All</option>
+                  <option value="">All Categories</option>
                   {categories.map((category, index) => (
                     <option key={index} value={category.name}>
                       {category.name}
                     </option>
                   ))}
                 </select>
-                <div className="absolute inset-y-0 right-2 flex items-center pointer-events-none">
-                  <svg className="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
-                <style jsx global>{`
-                  select.custom-select-orange {
-                    background-image: none !important;
-                    background-color: #fff7ed;
-                  }
-                  select.custom-select-orange:focus {
-                    background-color: white !important;
-                  }
-                  select.custom-select-orange option {
-                    background-color: white !important;
-                    color: #374151 !important;
-                    padding: 10px 12px !important;
-                    border: none !important;
-                  }
-                  select.custom-select-orange option:hover, 
-                  select.custom-select-orange option:focus,
-                  select.custom-select-orange option:checked,
-                  select.custom-select-orange option:active {
-                    background-color: #fff7ed !important;
-                    background: #fff7ed !important;
-                    color: #ea580c !important;
-                  }
-                  select.custom-select-orange option:selected {
-                    background-color: #fff7ed !important;
-                    background: #fff7ed !important;
-                    color: #ea580c !important;
-                  }
-                  /* Remove browser default blue highlighting */
-                  select.custom-select-orange option:checked {
-                    background: linear-gradient(#fff7ed, #fff7ed) !important;
-                    background-color: #fff7ed !important;
-                  }
-                  /* For Firefox */
-                  @-moz-document url-prefix() {
-                    select.custom-select-orange option:hover,
-                    select.custom-select-orange option:focus,
-                    select.custom-select-orange option:checked {
-                      background-color: #fff7ed !important;
-                      color: #ea580c !important;
-                    }
-                  }
-                  /* For WebKit browsers */
-                  select.custom-select-orange::-webkit-scrollbar {
-                    width: 8px;
-                  }
-                  select.custom-select-orange::-webkit-scrollbar-track {
-                    background: #f1f1f1;
-                  }
-                  select.custom-select-orange::-webkit-scrollbar-thumb {
-                    background: #ea580c;
-                    border-radius: 4px;
-                  }
-                `}</style>
+
               </div>
-              <label htmlFor="search-input" className="sr-only">Search for products</label>
-              <input
-                id="search-input"
-                type="text"
-                placeholder="Search for products..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 px-2 py-1.5 border border-orange-200 bg-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 text-xs sm:text-sm text-black placeholder-gray-400 transition-colors duration-200 h-8 sm:h-9 w-24 sm:w-auto"
-              />
-              <button
-                className="px-2 py-1.5 bg-orange-500 text-white hover:bg-orange-600 focus:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-1 transition-colors duration-200 h-8 sm:h-9 flex items-center justify-center w-8 sm:w-auto"
-                aria-label="Search"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </button>
+
+              <div className="relative flex-1 flex">
+                <label htmlFor="search-input" className="sr-only">Search</label>
+                <input
+                  id="search-input"
+                  type="text"
+                  placeholder="Search for products..."
+                  className="pl-3 pr-10 py-2 border-0 border-l border-gray-200 focus:outline-none focus:ring-1 focus:ring-orange-500 block w-full text-sm text-gray-700 h-9"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 flex items-center px-3 bg-orange-500 text-white hover:bg-orange-600 transition-colors"
+                  aria-label="Search"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
 

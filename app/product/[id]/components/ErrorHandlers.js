@@ -25,16 +25,17 @@ export function ShareButton() {
     } else {
       // Fallback to copying URL to clipboard
       navigator.clipboard.writeText(window.location.href);
+      // Optional: Show a toast notification that URL was copied
     }
   };
 
   return (
     <button
       onClick={handleShare}
-      className="p-1.5 sm:p-2 rounded hover:bg-gray-100 text-orange-500 border border-gray-200 flex-shrink-0"
+      className="p-2 sm:p-2.5 rounded hover:bg-gray-100 text-orange-500 border border-gray-200 flex-shrink-0 transition-all hover:shadow-sm"
       aria-label="Share product"
     >
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 sm:h-4 md:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <circle cx="18" cy="5" r="2" fill="currentColor" />
         <circle cx="6" cy="12" r="2" fill="currentColor" />
         <circle cx="18" cy="19" r="2" fill="currentColor" />
