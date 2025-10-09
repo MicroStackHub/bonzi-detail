@@ -1,0 +1,65 @@
+3:1 [Intervention] Images loaded lazily and replaced with placeholders. Load events are deferred. See https://go.microsoft.com/fwlink/?linkid=2048113
+main-app.js?v=1760023293939:1181 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+intercept-console-error.js:62  A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <RedirectBoundary>
+      <RedirectErrorBoundary router={{...}}>
+        <Head>
+        <__next_root_layout_boundary__>
+          <SegmentViewNode type="layout" pagePath="layout.js">
+            <SegmentTrieNode>
+            <link>
+            <RootLayout>
+              <html lang="en">
+                <body className="__variable...">
+                  <div className="sm:max-w-7...">
+                    <Header>
+                      <header className="w-full z-5...">
+                        <div className="w-full py-...">
+                          <div className="flex flex-...">
+                            <div>
+                            <div className="mt-3 sm:mt...">
+                              <div className="flex w-ful...">
+                                <div>
+                                <div className="relative f...">
+                                  <label>
+                                  <input
+                                    id="search-input"
+                                    type="text"
+                                    placeholder="Search for products..."
+                                    className="pl-3 pr-10 max-[360px]:pr-9 py-2.5 max-[360px]:py-2 border-0 border-l b..."
+                                    value=""
+                                    onChange={function onChange}
+-                                   spellcheck="false"
+-                                   data-ms-editor="true"
+                                  >
+                                  ...
+                            ...
+                          ...
+                    ...
+        ...
+
+error @ intercept-console-error.js:62
+eval @ react-dom-client.development.js:4706
+runWithFiberInDEV @ react-dom-client.development.js:871
+emitPendingHydrationWarnings @ react-dom-client.development.js:4705
+completeWork @ react-dom-client.development.js:11540
+runWithFiberInDEV @ react-dom-client.development.js:874
+completeUnitOfWork @ react-dom-client.development.js:15862
+performUnitOfWork @ react-dom-client.development.js:15743
+workLoopConcurrentByScheduler @ react-dom-client.development.js:15720
+renderRootConcurrent @ react-dom-client.development.js:15695
+performWorkOnRoot @ react-dom-client.development.js:14989
+performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:16815
+performWorkUntilDeadline @ scheduler.development.js:45
