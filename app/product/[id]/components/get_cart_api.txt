@@ -1,0 +1,275 @@
+thhis is the bearer token we need to store in local storage 
+
+eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5MjBjMTIwZS0zY2IwLTQ3OG
+MtOTY0Yi1hM2ZhZmFjMDFhNGIiLCJqdGkiOiJhNGQzOWM5NjEyZjNkMjBiNDMwOThiNmZjNmMwZ
+GY4ZWU5ZGQ2OTk0ZWFiMjVjOGQ2Y2Y3YWViYWE5MmY5NzY4ZjZhZDI0MzNlZmQ5M2FmOSIsImlhdCI
+6MTc2MDAxODg4OS45MDI2NDEsIm5iZiI6MTc2MDAxODg4OS45MDI2NDQsImV4cCI6MTc5MTU1NDg4OS
+44NjYwNTgsInN1YiI6IjUiLCJzY29wZXMiOlsiKiJdfQ.Jz0-usKv6r92872cz71UvFbU75Ah0GZEo
+8RqCts6JmVdnAn5FXU-kWePf8ldB9hMqHvQJfgAFzRjKUDEMqBOo684ISIGVmhdO5b51r4oWLMrHWdp
+JnPB9MX4UJzVyfgRl0CfgitJcCgsqIVgwl1FdIhVfcKkCptaSEzITgdyhLqCMIys_CaU6CXcGPbO2us
+SEVGJTDAVCc_1KGXKvnyHTj29ZPcM09EHJR-9hD8OtCUmBuU3CYnhEgHCzkfSuost-5ropuSJ51QmKd
+VYHMQFINRCIZILzuk-hBXaCCvdsh0dFc7ELZ4K_qFE2SYX9AuZVrlR9qgItMkLxaSI6m_ZC3nRKGqLD
+RDv5Lf85u1liLoEoWMl6VlUz5hSVfyHBikoXMKZja81Zv1AJZ67Xb5cOQUDyc4ozHim2rmoEKAd0YBa
+PdfgxbLicD6uS5c0Je9GSc9wc381Zy6hOTNFArneU3ydZ4C2SKIyatqMjRxUETpgDL1qeeDtS15ZbXR
+aHBZqGzBXaub2EHMnVQV81akgiR054XPUViHcf-sbVdzUI-gZF_5JeKIyKuS1fWwxfbNONPTGQFo1FF
+JyeKsnBG-LHAitAfxBvikkXf0kyUwC2q6XkKie31mUDS46IvU0XrNtrpKn7drV6WEFCpeMuh7OIX1WV
+sM6KuxeF4WdLF8s6B8
+
+
+
+https://api.glst.in/api/v3/cart
+
+the below is the response 
+
+{
+    "response_code": "success",
+    "success": true,
+    "message": "Get Cart Items.",
+    "data": {
+        "sub_total": 5808.61,
+        "cart_items": [
+            {
+                "id": 56,
+                "quantity": 9,
+                "status": "true",
+                "product_id": 2,
+                "color_id": null,
+                "size_id": null,
+                "isWishlist": false,
+                "display_product_id": 2,
+                "slug": "wireless-mouse-2-4ghz-usb-1200-dpi-basic-office-mouse-for-pc-laptop-and-notebook-use-comfortable-and-portable/9f2e9299-85dc-4243-a250-472c994a2ee2",
+                "short_link": "https://link.glst.in/3y1kNg",
+                "short_desc": "WIRELESS FREEDOM: Enjoy up to a 10-meter wireless connection thanks to the tiny plug-and-forget wireless receiver. No hassle, no software needed. The Mouse automatically connects to your computer system, so it is always ready to go when you are. CARRY IT ANYWHERE, EVERYWHERE: Portronics Wireless Optical Mouse is the perfect accessory for those who travel for work, executives who give presentations, or anyone who wants greater control and freedom. With its compact design, it easily fits in pockets. CONTOURED DESIGN: Designed to keep either hand comfortable. Soft side grips and a relaxed shape - ideal for long hours of usage.",
+                "store_id": 4,
+                "category_id": 1,
+                "sub_category_id": 6,
+                "sub_sub_category_id": null,
+                "product_name": "Wireless Mouse 2.4GHz USB, 1200 DPI, Basic Office Mouse for PC, Laptop, and Notebook Use Comfortable and Portable",
+                "display_min_price": "287.00",
+                "display_max_price": null,
+                "display_image": "https://admin.glst.in/image/media-storage/1/2/2025061810460843058.png?size=m",
+                "display_min_mrp": "999.00",
+                "display_max_mrp": null,
+                "brand_name": "Generic",
+                "product_keywords": [
+                    "Wireless Mouse",
+                    "2.4GHz USB mouse",
+                    "Portable design"
+                ],
+                "has_video": "media-storage/1/2/2025061810460897163.mp4",
+                "product_status": 1,
+                "prodcut_approved": 0,
+                "searchCount": 0,
+                "feedback_rating": {
+                    "total_feedback": 0,
+                    "avg_rate": 0,
+                    "rate1": 0,
+                    "rate1avg_count": 0,
+                    "rate2": 0,
+                    "rate2avg_count": 0,
+                    "rate3": 0,
+                    "rate3avg_count": 0,
+                    "rate4": 0,
+                    "rate4avg_count": 0,
+                    "rate5": 0,
+                    "rate5avg_count": 0
+                },
+                "saleCount": 0,
+                "isCOD": 0,
+                "created_at": "2025-06-18T05:16:08.000000Z",
+                "updated_at": "2025-08-18T14:17:30.000000Z",
+                "whishlist_post": null,
+                "product_amount": "INR 287.00",
+                "total_product_amount": "INR 2,583.00",
+                "product_mrp": "INR 999.00",
+                "total_product_mrp": "INR 8,991.00",
+                "tax": "INR 232.47",
+                "stock_invalid": false,
+                "sub_total": 2815.47
+            },
+            {
+                "id": 57,
+                "quantity": 1,
+                "status": "true",
+                "product_id": 10,
+                "color_id": null,
+                "size_id": null,
+                "isWishlist": false,
+                "display_product_id": 10,
+                "slug": "bluetooth-wireless-earbuds-with-charging-case/9f32f40e-6d7d-4283-85da-4d11b532fb5b",
+                "short_link": "https://link.glst.in/DWMolk",
+                "short_desc": "Wireless Bluetooth Earbuds with stereo sound, touch controls, and long battery life. Comes with a compact charging case, perfect for calls, music, and workouts.",
+                "store_id": 6,
+                "category_id": 3,
+                "sub_category_id": null,
+                "sub_sub_category_id": null,
+                "product_name": "Bluetooth Wireless Earbuds with Charging Case",
+                "display_min_price": "1299.00",
+                "display_max_price": null,
+                "display_image": "https://admin.glst.in/image/media-storage/6/10/2025062015015771748.jpg?size=m",
+                "display_min_mrp": "1599.00",
+                "display_max_mrp": null,
+                "brand_name": "Generic",
+                "product_keywords": null,
+                "has_video": "media-storage/6/10/2025062015015761734.mp4",
+                "product_status": 1,
+                "prodcut_approved": 0,
+                "searchCount": 0,
+                "feedback_rating": {
+                    "total_feedback": 0,
+                    "avg_rate": 0,
+                    "rate1": 0,
+                    "rate1avg_count": 0,
+                    "rate2": 0,
+                    "rate2avg_count": 0,
+                    "rate3": 0,
+                    "rate3avg_count": 0,
+                    "rate4": 0,
+                    "rate4avg_count": 0,
+                    "rate5": 0,
+                    "rate5avg_count": 0
+                },
+                "saleCount": 0,
+                "isCOD": 0,
+                "created_at": "2025-06-20T09:31:57.000000Z",
+                "updated_at": "2025-08-18T14:17:31.000000Z",
+                "whishlist_post": null,
+                "product_amount": "INR 1,299.00",
+                "total_product_amount": "INR 1,299.00",
+                "product_mrp": "INR 1,599.00",
+                "total_product_mrp": "INR 1,599.00",
+                "tax": "INR 116.91",
+                "stock_invalid": false,
+                "sub_total": 1415.91
+            },
+            {
+                "id": 58,
+                "quantity": 1,
+                "status": "true",
+                "product_id": 4,
+                "color_id": null,
+                "size_id": null,
+                "isWishlist": false,
+                "display_product_id": 4,
+                "slug": "compact-wireless-folding-bluetooth-keyboard-for-notebook-phone-and-tablet-portable-lightweight-mini-keyboard-for-office-travel/9f2e99c1-6233-486c-b495-3402d0e75683",
+                "short_link": "https://link.glst.in/hqGIfy",
+                "short_desc": "The Compact Wireless Folding Bluetooth Keyboard is a portable, lightweight mini keyboard designed for notebooks, phones, and tablets. Perfect for office work, travel, or on-the-go use, it offers a foldable design for easy storage and effortless typing anywhere.",
+                "store_id": 1,
+                "category_id": 1,
+                "sub_category_id": 5,
+                "sub_sub_category_id": null,
+                "product_name": "Compact Wireless Folding Bluetooth Keyboard for Notebook Phone and Tablet Portable Lightweight Mini Keyboard for Office Travel.",
+                "display_min_price": "250.00",
+                "display_max_price": null,
+                "display_image": "https://admin.glst.in/image/media-storage/1/4/2025061811060850875.png?size=m",
+                "display_min_mrp": "999.00",
+                "display_max_mrp": null,
+                "brand_name": "Generic",
+                "product_keywords": [
+                    "Wireless Bluetooth Keyboard",
+                    "Compact Folding Keyboard",
+                    "Mini Keyboard"
+                ],
+                "has_video": "media-storage/1/4/2025061811060889957.mp4",
+                "product_status": 1,
+                "prodcut_approved": 0,
+                "searchCount": 0,
+                "feedback_rating": {
+                    "total_feedback": 1,
+                    "avg_rate": "5",
+                    "rate1": "0",
+                    "rate2": "0",
+                    "rate3": "0",
+                    "rate4": "0",
+                    "rate5": "1",
+                    "rate1avg_count": "0",
+                    "rate2avg_count": "0",
+                    "rate3avg_count": "0",
+                    "rate4avg_count": "0",
+                    "rate5avg_count": "100"
+                },
+                "saleCount": 0,
+                "isCOD": 1,
+                "created_at": "2025-06-18T05:36:09.000000Z",
+                "updated_at": "2025-08-18T14:17:31.000000Z",
+                "whishlist_post": null,
+                "product_amount": "INR 250.00",
+                "total_product_amount": "INR 250.00",
+                "product_mrp": "INR 999.00",
+                "total_product_mrp": "INR 999.00",
+                "tax": "INR 22.50",
+                "stock_invalid": false,
+                "sub_total": 272.5
+            },
+            {
+                "id": 59,
+                "quantity": 3,
+                "status": "true",
+                "product_id": 3,
+                "color_id": null,
+                "size_id": null,
+                "isWishlist": false,
+                "display_product_id": 3,
+                "slug": "winter-beanie-scarf-and-hat-set-gloves-3-in-1-knitting-hats-gifts-adult-and-children-size-multiple-color-beanie/9f2e956b-3f5b-4190-baa4-7b951d560dfd",
+                "short_link": "https://link.glst.in/MNB0p7",
+                "short_desc": "The Winter Beanie, Scarf, and Gloves Set is a versatile 3-in-1 knitted accessory set perfect for both adults and children. Available in multiple colors, it makes a great gift and keeps you warm in cold weather.",
+                "store_id": 1,
+                "category_id": 2,
+                "sub_category_id": 7,
+                "sub_sub_category_id": null,
+                "product_name": "Winter Beanie Scarf And Hat Set Gloves 3 In 1 Knitting Hats Gifts Adult and Children Size Multiple Color Beanie",
+                "display_min_price": "399.00",
+                "display_max_price": null,
+                "display_image": "https://admin.glst.in/image/media-storage/1/3/202506181054019555.jpg?size=m",
+                "display_min_mrp": "1499.00",
+                "display_max_mrp": null,
+                "brand_name": "Generic",
+                "product_keywords": [
+                    "Winter Beanie Set",
+                    "3 in 1 Hat Scarf Gloves"
+                ],
+                "has_video": "media-storage/1/3/2025061810540198603.mp4",
+                "product_status": 1,
+                "prodcut_approved": 0,
+                "searchCount": 0,
+                "feedback_rating": {
+                    "total_feedback": 2,
+                    "avg_rate": "5",
+                    "rate1": "0",
+                    "rate2": "0",
+                    "rate3": "0",
+                    "rate4": "0",
+                    "rate5": "2",
+                    "rate1avg_count": "0",
+                    "rate2avg_count": "0",
+                    "rate3avg_count": "0",
+                    "rate4avg_count": "0",
+                    "rate5avg_count": "100"
+                },
+                "saleCount": 0,
+                "isCOD": 0,
+                "created_at": "2025-06-18T05:24:01.000000Z",
+                "updated_at": "2025-08-18T14:17:30.000000Z",
+                "whishlist_post": null,
+                "product_amount": "INR 399.00",
+                "total_product_amount": "INR 1,197.00",
+                "product_mrp": "INR 1,499.00",
+                "total_product_mrp": "INR 4,497.00",
+                "tax": "INR 107.73",
+                "stock_invalid": false,
+                "sub_total": 1304.73
+            }
+        ],
+        "cart_count": 4
+    }
+}
+
+//the belwo is teh error  if we not pass the token
+{
+    "message": "401 Unauthorized",
+    "status_code": 401
+}
+
+
+so in the header i want you to integrate this api in the cart so that we can see the cart items count in the header okay 
+so that on increasing the quantity and all we can get this integrated okay 
