@@ -16,7 +16,7 @@ export default function SellerInfo({ product }) {
 
   const handleFollowToggle = async () => {
     if (!product || !product.store_id) return;
-    
+
     setIsFollowLoading(true);
     try {
       const response = await fetch('https://api.glst.in/api/v1/store/follow-unfollow', {
@@ -32,7 +32,7 @@ export default function SellerInfo({ product }) {
       });
 
       const data = await response.json();
-      
+
       if (data.success) {
         setIsFollowing(!isFollowing);
         toast.success(`Successfully ${!isFollowing ? 'followed' : 'unfollowed'} seller`);
@@ -59,7 +59,7 @@ export default function SellerInfo({ product }) {
           </div>
           <div className="flex flex-col gap-2 mt-1">
             <button 
-              className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-3 py-1 max-[360px]:px-2.5 max-[360px]:py-1 rounded font-semibold shadow text-sm max-[360px]:text-xs"
+              className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-3 py-1 max-[360px]:px-2.5 max-[360px]:py-1 rounded font-semibold shadow text-sm max-[360px]:text-xs cursor-pointer"
               onClick={() => setShowContactModal(true)}
               aria-label="Contact the seller"
             >
@@ -67,11 +67,12 @@ export default function SellerInfo({ product }) {
             </button>
             <div className="flex flex-row gap-2">
               <button 
-                className={`px-3 py-1 max-[360px]:px-2.5 max-[360px]:py-1 rounded shadow text-sm max-[360px]:text-xs transition-colors ${
-                  isFollowing
-                    ? 'bg-red-500 text-white border border-red-500 hover:bg-red-600'
-                    : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'}
-                `}
+                className={`px-3 py-1 max-[360px]:px-2.5 max-[360px]:py-1 rounded shadow text-sm max-[360px]:text-xs transition-colors cursor-pointer
+                  ${
+                    isFollowing
+                      ? 'bg-red-500 text-white border border-red-500 hover:bg-red-600'
+                      : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'}
+                  `}
                 onClick={handleFollowToggle}
                 disabled={isFollowLoading}
                 aria-label={isFollowing ? "Unfollow this seller" : "Follow this seller"}
@@ -79,8 +80,8 @@ export default function SellerInfo({ product }) {
                 {isFollowLoading ? '...' : (isFollowing ? 'Unfollow' : '+ Follow')}
               </button>
               <button 
-                className="bg-white border border-gray-300 text-gray-700 px-3 py-1 max-[360px]:px-2.5 max-[360px]:py-1 rounded shadow text-sm max-[360px]:text-xs"
                 onClick={handleVisitStore}
+                className="bg-white border border-gray-300 text-gray-700 px-2.5 py-1.5 max-[360px]:px-2 max-[360px]:py-1 rounded shadow text-[11px] max-[360px]:text-[10px] hover:bg-gray-50 transition-colors cursor-pointer"
                 aria-label="Visit seller's store"
               >
                 Visit Store
@@ -108,7 +109,7 @@ export default function SellerInfo({ product }) {
             </p>
             <button 
               onClick={() => setShowContactModal(false)}
-              className="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600"
+              className="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600 cursor-pointer"
             >
               Close
             </button>
