@@ -25,6 +25,19 @@ export default function ProductDetail({ product, productDescription, priceData, 
     setSelectedColorImage(colorImage);
   };
 
+  // Helper: strip HTML tags and collapse whitespace to avoid malformed titles causing layout shifts
+  const cleanText = (s) => {
+    if (!s) return '';
+    try {
+      // Remove HTML tags
+      const noTags = String(s).replace(/<[^>]*>/g, '');
+      // Collapse multiple whitespace and newlines into single space
+      return noTags.replace(/\s+/g, ' ').trim();
+    } catch (e) {
+      return String(s);
+    }
+  };
+
   // Show server-side price warnings (e.g., stock limit exceeded) on client mount
   useEffect(() => {
     if (priceWarning) {
@@ -61,7 +74,9 @@ export default function ProductDetail({ product, productDescription, priceData, 
           {/* Right: Product Info */}
           <div className="w-full lg:w-1/2 flex flex-col gap-2 sm:gap-3 mt-0">
             <div className="flex items-start justify-between">
-              <h1 className="text-xs sm:text-sm md:text-base font-semibold text-gray-800 leading-tight flex-1 pr-1">{product?.name || ''}</h1>
+              <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-gray-800 leading-tight flex-1 pr-1 break-words overflow-hidden" title={cleanText(product?.name)}>
+                {cleanText(product?.name) || ''}
+              </h1>
               <ShareButton />
             </div>
 
