@@ -13,8 +13,20 @@ export default function BulkPriceButton({ product, priceData }) {
       onMouseEnter={() => !disabled && setShowBulkPrice(true)}
       onMouseLeave={() => !disabled && setShowBulkPrice(false)}
     >
+      <style>{`
+        @keyframes gradientShift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        .animated-gradient {
+          background: linear-gradient(90deg, #ff8a00 0%, #ff5a00 25%, #ae11c0ff 50%, #ae11cbff 75%, #ff8a00 100%);
+          background-size: 300% 300%;
+          animation: gradientShift 3s ease infinite;
+        }
+      `}</style>
       <button 
-        className={`bg-orange-500 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-md font-semibold flex items-center justify-center gap-1.5 sm:gap-2 transition-colors duration-200 text-xs sm:text-sm w-full ${disabled ? 'bg-gray-300 text-gray-600 cursor-not-allowed' : 'hover:bg-orange-600'}`}
+        className={`text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-md font-semibold flex items-center justify-center gap-1.5 sm:gap-2 transition-colors duration-200 text-xs sm:text-sm w-full ${disabled ? 'bg-gray-300 text-gray-600 cursor-not-allowed' : 'animated-gradient'}`}
         aria-label="View bulk pricing options"
         disabled={disabled}
       >

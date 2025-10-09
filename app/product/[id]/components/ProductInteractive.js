@@ -13,8 +13,8 @@ export default function ProductInteractive({ product, initialPriceData, productI
   const [selectedColor, setSelectedColor] = useState(null);
   const [priceData, setPriceData] = useState(initialPriceData);
   const [priceLoading, setPriceLoading] = useState(false);
-  const stock = priceData?.stock ?? product.stock ?? 0;
-  const hasColors = product.colors && Array.isArray(product.colors) && product.colors.length > 0;
+  const stock = priceData?.stock ?? (typeof product?.stock === 'number' ? product.stock : 0);
+  const hasColors = Array.isArray(product?.colors) && product.colors.length > 0;
 
   // Fetch price data when quantity changes
   const fetchPriceData = async (qty) => {
@@ -355,12 +355,12 @@ export default function ProductInteractive({ product, initialPriceData, productI
             ) : (
               priceData ? (
                 <div className="text-green-600 font-bold text-xl">
-                  ₹{priceData.total_sale_price_with_tax ? priceData.total_sale_price_with_tax.replace('INR ', '') : (priceData.total_sale_price || 0).toFixed(2)}
+                  ₹{priceData?.total_sale_price_with_tax ? String(priceData.total_sale_price_with_tax).replace('INR ', '') : (typeof priceData?.total_sale_price === 'number' ? priceData.total_sale_price.toFixed(2) : (priceData?.total_sale_price ? String(priceData.total_sale_price) : '0.00'))}
                   <span className="text-gray-600 font-normal text-xs ml-1">(incl. tax)</span>
                 </div>
               ) : (
-                <div className="text-green-600 font-extrabold text-xl">
-                  ₹{(safeNum(product.priceDetails.finalPrice) * quantity).toFixed(2)}
+                  <div className="text-green-600 font-extrabold text-xl">
+                  ₹{(safeNum(product?.priceDetails?.finalPrice) * quantity).toFixed(2)}
                   <span className="text-gray-600 font-normal text-xs ml-1">(incl. tax)</span>
                 </div>
               )

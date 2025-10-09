@@ -49,6 +49,14 @@ export default function SellerInfo({ product }) {
 
   return (
     <>
+      <style>{`
+        @keyframes contactTextPulse {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.06); }
+          100% { transform: scale(1); }
+        }
+        .contact-text { display: inline-block; transform-origin: center; animation: contactTextPulse 1.2s ease-in-out infinite; }
+      `}</style>
   <div className="w-full flex flex-col gap-2 max-w-[260px]">
         <div className="p-2 max-[360px]:p-1.5 bg-gray-50 rounded-lg flex flex-col gap-1.5">
           <div className="text-[11px] text-gray-600">Sold By</div>
@@ -63,7 +71,7 @@ export default function SellerInfo({ product }) {
               onClick={() => setShowContactModal(true)}
               aria-label="Contact the seller"
             >
-              Contact Seller
+              <span className="contact-text">Contact Seller</span>
             </button>
             <div className="flex flex-row gap-1.5">
               <button 
@@ -93,26 +101,59 @@ export default function SellerInfo({ product }) {
 
       {/* Contact Seller Modal */}
       {showContactModal && (
-  <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full">
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4" role="dialog" aria-modal="true" aria-labelledby="contact-seller-title">
+          <div className="bg-white rounded-lg p-6 max-w-2xl w-full shadow-lg">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-bold">Contact Seller</h3>
+              <h3 id="contact-seller-title" className="text-lg font-bold">Contact Seller</h3>
               <button 
                 onClick={() => setShowContactModal(false)}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-gray-400 hover:text-gray-700 text-xl leading-none"
+                aria-label="Close contact seller dialog"
               >
                 ✕
               </button>
             </div>
-            <p className="text-gray-600 mb-4">
-              Contact details and messaging feature coming soon!
-            </p>
-            <button 
-              onClick={() => setShowContactModal(false)}
-              className="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600 cursor-pointer"
-            >
-              Close
-            </button>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
+              {/* Phone Call card */}
+              <div className="flex flex-col items-center text-center p-4 border border-gray-100 rounded">
+                <div className="w-28 h-28 flex items-center justify-center mb-3 bg-white rounded">
+                  {/* phone svg */}
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M22 16.92V20a2 2 0 0 1-2.18 2A19.86 19.86 0 0 1 3 5.18 2 2 0 0 1 5 3h3.09a1 1 0 0 1 1 .75c.12.74.4 1.94.95 3.2a1 1 0 0 1-.24 1.02L8.7 9.7a16 16 0 0 0 6.6 6.6l1.72-1.09a1 1 0 0 1 1.02-.24c1.26.55 2.46.83 3.2.95a1 1 0 0 1 .75 1V20z" />
+                  </svg>
+                </div>
+                <button className="mt-2 px-4 py-2 bg-orange-500 text-white rounded shadow font-medium hover:bg-orange-600 transition" onClick={() => { /* TODO: implement phone call action */ }}>
+                  Phone Call to Seller
+                </button>
+              </div>
+
+              {/* Message card */}
+              <div className="flex flex-col items-center text-center p-4 border border-gray-100 rounded">
+                <div className="w-28 h-28 flex items-center justify-center mb-3 bg-white rounded">
+                  {/* message svg */}
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 0 1-4-.86L3 20l1.86-4.14A7.987 7.987 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                </div>
+                <button className="mt-2 px-4 py-2 bg-orange-500 text-white rounded shadow font-medium hover:bg-orange-600 transition" onClick={() => { /* TODO: implement messaging action */ }}>
+                  Message to Seller
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-4 text-sm text-red-500">
+              <strong>Note:</strong> Call Seller only if you have any enquiry for Stock, Bulk Buy, Discount for Bulk Buy. If you call for any other matter apart from the above mentioned, your number will be listed under spam and you will be not able to call any sellers.
+            </div>
+
+            <div className="mt-6 flex justify-end">
+              <button 
+                onClick={() => setShowContactModal(false)}
+                className="px-3 py-2 bg-white border border-gray-200 rounded text-gray-700 hover:bg-gray-50"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}

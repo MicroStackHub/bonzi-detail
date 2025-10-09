@@ -19,7 +19,7 @@ export default function ProductDetail({ product, productDescription, priceData, 
   };
   // Derive stock from API-like shape (priceData.stock or product.stock per product_detail.txt)
   const stock = (priceData && typeof priceData.stock === 'number') ? priceData.stock : (typeof product?.stock === 'number' ? product.stock : 0);
-  const hasBulkTiers = (priceData?.bulk_price && priceData.bulk_price.length > 0) || (product?.bulkPricing && product.bulkPricing.length > 0);
+  const hasBulkTiers = (priceData?.bulk_price && priceData.bulk_price.length > 0) || ((product?.bulkPricing && product.bulkPricing.length > 0) ?? false);
 
   const handleColorChange = (colorImage) => {
     setSelectedColorImage(colorImage);
@@ -61,7 +61,7 @@ export default function ProductDetail({ product, productDescription, priceData, 
           {/* Right: Product Info */}
           <div className="w-full lg:w-1/2 flex flex-col gap-2 sm:gap-3 mt-0">
             <div className="flex items-start justify-between">
-              <h1 className="text-xs sm:text-sm md:text-base font-semibold text-gray-800 leading-tight flex-1 pr-1">{product.name}</h1>
+              <h1 className="text-xs sm:text-sm md:text-base font-semibold text-gray-800 leading-tight flex-1 pr-1">{product?.name || ''}</h1>
               <ShareButton />
             </div>
 
@@ -72,8 +72,8 @@ export default function ProductDetail({ product, productDescription, priceData, 
                   <span key={i} className={`text-[8px] sm:text-[10px] ${i < Math.floor(product.rating) ? 'text-yellow-400' : 'text-gray-300'}`}>⭐</span>
                 ))}
               </span>
-              <span className="text-[10px] sm:text-xs">{product.rating} ({product.reviews} feedbacks)</span>
-              <span className="text-[10px] sm:text-xs">{product.orders} orders</span>
+              <span className="text-[10px] sm:text-xs">{(product?.rating ?? 0)} ({product?.reviews ?? 0} feedbacks)</span>
+              <span className="text-[10px] sm:text-xs">{product?.orders ?? 0} orders</span>
               {stock <= 0 && (
                 <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-semibold bg-red-100 text-red-700">
                   Out of Stock
@@ -86,30 +86,30 @@ export default function ProductDetail({ product, productDescription, priceData, 
                 {priceData ? (
                   <div>
                     <div className="flex flex-wrap items-center gap-1.5 mb-1">
-                      <span className="line-through text-gray-500 text-xs">MRP: ₹{priceData.mrp}</span>
-                      <span className="text-green-600 font-semibold text-[10px]">Save {Math.round(priceData.save_percentage)}%</span>
+                      <span className="line-through text-gray-500 text-xs">MRP: {priceData?.mrp ?? ''}</span>
+                      <span className="text-green-600 font-semibold text-[10px]">Save {Math.round(priceData?.save_percentage ?? 0)}%</span>
                     </div>
                     <div className="flex flex-wrap items-center gap-1.5 mb-1">
-                      <span className="text-base sm:text-lg font-bold text-orange-600">Price: ₹{priceData.sale_price ? parseFloat(priceData.sale_price.replace('INR ', '')).toFixed(2) : 'N/A'}</span>
+                      <span className="text-base sm:text-lg font-bold text-orange-600">Price: {priceData?.sale_price ? parseFloat(String(priceData.sale_price).replace('INR ', '')).toFixed(2) : 'N/A'}</span>
                       <span className="text-[10px] text-gray-500">(Exclusive of all taxes)</span>
                     </div>
                     <div className="flex flex-wrap items-center gap-1.5">
-                      <span className="text-xs font-bold text-red-600">₹{priceData.sale_price_with_tax ? parseFloat(priceData.sale_price_with_tax.replace('INR ', '')).toFixed(2) : 'N/A'} / Piece</span>
+                      <span className="text-xs font-bold text-red-600">{priceData?.sale_price_with_tax ? parseFloat(String(priceData.sale_price_with_tax).replace('INR ', '')).toFixed(2) : 'N/A'} / Piece</span>
                       <span className="text-[10px] text-gray-500">(Inclusive of all taxes)</span>
                     </div>
                   </div>
                 ) : (
                   <div>
                     <div className="flex flex-wrap items-center gap-1.5 mb-1">
-                      <span className="line-through text-gray-500 text-xs">MRP: ₹{safeNum(product.priceDetails.mrp).toFixed(2)}</span>
-                      <span className="text-green-600 font-semibold text-[10px]">Save {getSavePercentage(priceData, product)}%</span>
+                      <span className="line-through text-gray-500 text-xs">MRP: {safeNum(product?.priceDetails?.mrp).toFixed(2)}</span>
+                      <span className="text-green-600 font-semibold text-[10px]">Save {getSavePercentage(priceData, product)}</span>
                     </div>
                     <div className="flex flex-wrap items-center gap-1.5 mb-1">
-                      <span className="text-base sm:text-lg font-bold text-orange-600">Price: ₹{safeNum(product.priceDetails.price).toFixed(2)}</span>
+                      <span className="text-base sm:text-lg font-bold text-orange-600">Price: {safeNum(product?.priceDetails?.price).toFixed(2)}</span>
                       <span className="text-[10px] text-gray-500">(Exclusive of all taxes)</span>
                     </div>
                     <div className="flex flex-wrap items-center gap-1.5">
-                      <span className="text-xs font-bold text-red-600">₹{safeNum(product.priceDetails.finalPrice).toFixed(2)} / Piece</span>
+                      <span className="text-xs font-bold text-red-600">{safeNum(product?.priceDetails?.finalPrice).toFixed(2)} / Piece</span>
                       <span className="text-[10px] text-gray-500">(Inclusive of all taxes)</span>
                     </div>
                   </div>
