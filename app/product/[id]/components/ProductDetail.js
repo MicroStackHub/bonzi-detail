@@ -149,10 +149,10 @@ export default function ProductDetail({ product, productDescription, priceData, 
               ))}
             </div>
 
-            {/* Two-column layout starts here */}
+            {/* Two-column layout starts here. Give more width to the interactive/actions area on larger screens */}
             <div className="flex flex-col xl:flex-row gap-2 sm:gap-4">
-              {/* Left Column */}
-              <div className="w-full">
+              {/* Left Column: interactive area gets more space on xl and above */}
+              <div className="w-full xl:w-2/3">
                 <ProductInteractive 
                   product={product} 
                   initialPriceData={priceData} 
@@ -161,7 +161,10 @@ export default function ProductDetail({ product, productDescription, priceData, 
                 />
               </div>
 
-              <SellerInfo product={product} />
+              {/* Right Column: seller info kept narrower so actions have more room */}
+              <div className="w-full xl:w-1/3 xl:max-w-[260px]">
+                <SellerInfo product={product} />
+              </div>
             </div>
 
             <ProductPolicies product={product} />

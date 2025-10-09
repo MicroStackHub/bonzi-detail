@@ -367,8 +367,8 @@ export default function ProductInteractive({ product, initialPriceData, productI
 
       {/* Bulk pricing info */}
       {(priceData?.bulk_price?.length > 0 || product?.bulkPricing?.length > 0) && stock > 0 && (
-        <div className="text-sm sm:text-base font-semibold text-orange-600">
-         buy in bulk? <a href="#" className="underline font-semibold"> bulk pricing options</a>
+        <div className="text-xs sm:text-sm font-medium text-orange-600">
+         buy in bulk? <a href="#" className="underline font-medium"> bulk pricing options</a>
         </div>
       )}
     </div>

@@ -49,7 +49,7 @@ export default function SellerInfo({ product }) {
 
   return (
     <>
-      <div className="w-full flex flex-col gap-2 ml-auto max-w-[280px]">
+  <div className="w-full flex flex-col gap-2 max-w-[260px]">
         <div className="p-2 max-[360px]:p-1.5 bg-gray-50 rounded-lg flex flex-col gap-1.5">
           <div className="text-[11px] text-gray-600">Sold By</div>
           <div className="font-bold text-orange-600 text-xs max-[360px]:text-[11px]">{product.seller}</div>
