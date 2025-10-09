@@ -12,6 +12,9 @@ import { getSavePercentage } from '../lib/fetchProduct';
 
 export default function ProductDetail({ product, productDescription, priceData, productId, error }) {
   const [selectedColorImage, setSelectedColorImage] = useState(null);
+  // Derive stock from API-like shape (priceData.stock or product.stock per product_detail.txt)
+  const stock = (priceData && typeof priceData.stock === 'number') ? priceData.stock : (typeof product?.stock === 'number' ? product.stock : 0);
+  const hasBulkTiers = (priceData?.bulk_price && priceData.bulk_price.length > 0) || (product?.bulkPricing && product.bulkPricing.length > 0);
 
   const handleColorChange = (colorImage) => {
     setSelectedColorImage(colorImage);
@@ -36,10 +39,10 @@ export default function ProductDetail({ product, productDescription, priceData, 
 
   return (
     <div className="bg-gray-100 py-2 mx-auto">
-      <div className="w-full sm:max-w-7xl sm:mx-auto px-0 ">
+      <div className="w-full sm:max-w-7xl sm:mx-auto px-0 sm:px-4 ">
 
         {/* Main Product Section */}
-        <div className="bg-white p-2 sm:p-4 md:p-5 rounded-none sm:rounded-lg shadow-none sm:shadow-sm flex flex-col lg:flex-row gap-2 sm:gap-4 lg:gap-6">
+  <div className="bg-white p-2 sm:p-4 md:p-5 rounded-none sm:rounded-lg shadow-none sm:shadow-sm flex flex-col lg:flex-row gap-2 sm:gap-4 lg:gap-6 max-[360px]:p-2 max-[360px]:gap-2">
           {/* Left: Product Gallery */}
           <ProductGallery product={product} selectedColorImage={selectedColorImage} />
 
@@ -50,7 +53,8 @@ export default function ProductDetail({ product, productDescription, priceData, 
               <ShareButton />
             </div>
 
-            <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 text-gray-600">
+            {/* Ratings and quick stats */}
+            <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 text-gray-600 max-[360px]:text-[11px]">
               <span className="flex items-center">
                 {[...Array(5)].map((_, i) => (
                   <span key={i} className={`text-[8px] sm:text-[10px] ${i < Math.floor(product.rating) ? 'text-yellow-400' : 'text-gray-300'}`}>⭐</span>
@@ -58,10 +62,15 @@ export default function ProductDetail({ product, productDescription, priceData, 
               </span>
               <span className="text-[10px] sm:text-xs">{product.rating} ({product.reviews} feedbacks)</span>
               <span className="text-[10px] sm:text-xs">{product.orders} orders</span>
+              {stock <= 0 && (
+                <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-semibold bg-red-100 text-red-700">
+                  Out of Stock
+                </span>
+              )}
             </div>
 
             <div className="flex flex-col sm:flex-row justify-between items-start gap-2 sm:gap-3">
-              <div className="bg-gray-50 p-2.5 sm:p-3 rounded-md flex-1 w-full">
+              <div className="bg-gray-50 p-2.5 sm:p-3 rounded-md flex-1 w-full max-[360px]:p-2">
                 {priceData ? (
                   <div>
                     <div className="flex flex-wrap items-center gap-1.5 mb-1">
@@ -95,7 +104,11 @@ export default function ProductDetail({ product, productDescription, priceData, 
                 )}
               </div>
 
-              <BulkPriceButton product={product} priceData={priceData} />
+              {hasBulkTiers && stock > 0 && (
+                <div className="w-full sm:w-auto max-[360px]:w-full">
+                  <BulkPriceButton product={product} priceData={priceData} />
+                </div>
+              )}
             </div>
 
             <div className="flex gap-1.5 text-center text-[10px] sm:text-xs border-y py-2 sm:py-3 overflow-x-auto scrollbar-hide md:grid md:grid-cols-5 md:gap-1">
@@ -127,11 +140,11 @@ export default function ProductDetail({ product, productDescription, priceData, 
               }
               ].map((item, index) => (
                 <div key={index} className="flex-shrink-0 w-16 sm:w-20 md:w-auto">
-                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-3.5 w-3.5 sm:h-4 sm:w-4 mx-auto text-${item.color}-500`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 sm:h-5 sm:w-5 mx-auto text-${item.color}-500`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d={item.icon} />
                   </svg>
-                  <div className={`font-semibold text-${item.color}-500 mt-0.5 text-[9px] sm:text-[10px]`}>{item.title}</div>
-                  <div className="text-gray-600 text-[9px] sm:text-[10px]">{item.value}</div>
+                  <div className={`font-semibold text-${item.color}-500 mt-0.5 text-[10px] sm:text-xs`}>{item.title}</div>
+                  <div className="text-gray-600 text-[10px] sm:text-xs">{item.value}</div>
                 </div>
               ))}
             </div>

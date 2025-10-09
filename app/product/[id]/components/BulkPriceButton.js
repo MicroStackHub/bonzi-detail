@@ -4,23 +4,26 @@ import { useState } from 'react';
 
 export default function BulkPriceButton({ product, priceData }) {
   const [showBulkPrice, setShowBulkPrice] = useState(false);
+  const stock = (priceData && typeof priceData.stock === 'number') ? priceData.stock : (typeof product?.stock === 'number' ? product.stock : 0);
+  const disabled = stock <= 0;
 
   return (
     <div 
-      className="relative w-full sm:w-auto"
-      onMouseEnter={() => setShowBulkPrice(true)}
-      onMouseLeave={() => setShowBulkPrice(false)}
+      className={`relative w-full sm:w-auto ${disabled ? 'pointer-events-none opacity-60' : ''}`}
+      onMouseEnter={() => !disabled && setShowBulkPrice(true)}
+      onMouseLeave={() => !disabled && setShowBulkPrice(false)}
     >
       <button 
-        className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-md font-semibold flex items-center justify-center gap-1.5 sm:gap-2 transition-colors duration-200 text-xs sm:text-sm w-full"
+        className={`bg-orange-500 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-md font-semibold flex items-center justify-center gap-1.5 sm:gap-2 transition-colors duration-200 text-xs sm:text-sm w-full ${disabled ? 'bg-gray-300 text-gray-600 cursor-not-allowed' : 'hover:bg-orange-600'}`}
         aria-label="View bulk pricing options"
+        disabled={disabled}
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
         </svg>
         Bulk Price
       </button>
-      {showBulkPrice && (
+      {showBulkPrice && !disabled && (
         <div className="absolute top-full right-0 mt-2 w-64 sm:w-72 bg-white border rounded-lg shadow-lg z-10 p-3">
           <h4 className="font-bold text-xs sm:text-sm mb-2 text-gray-900">Seller Bulk Price Details:</h4>
           <div className="overflow-x-auto">

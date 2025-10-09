@@ -50,16 +50,16 @@ export default function SellerInfo({ product }) {
   return (
     <>
       <div className="w-full flex flex-col gap-2">
-        <div className="p-3 bg-gray-50 rounded-lg flex flex-col gap-2">
+        <div className="p-3 max-[360px]:p-2 bg-gray-50 rounded-lg flex flex-col gap-2">
           <div className="text-sm text-gray-600">Sold By</div>
-          <div className="font-bold text-orange-600 text-sm">{product.seller}</div>
+          <div className="font-bold text-orange-600 text-sm max-[360px]:text-[13px]">{product.seller}</div>
           <div className="flex flex-col text-gray-700 gap-1">
-            <span className='text-xs'>{product.positiveSentiment}% Positive Sentiment</span>
-            <span className='text-xs'>{product.followers} Followers</span>
+            <span className='text-xs max-[360px]:text-[11px]'>{product.positiveSentiment}% Positive Sentiment</span>
+            <span className='text-xs max-[360px]:text-[11px]'>{product.followers} Followers</span>
           </div>
           <div className="flex flex-col gap-2 mt-1">
             <button 
-              className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-3 py-1 rounded font-semibold shadow text-sm"
+              className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-3 py-1 max-[360px]:px-2.5 max-[360px]:py-1 rounded font-semibold shadow text-sm max-[360px]:text-xs"
               onClick={() => setShowContactModal(true)}
               aria-label="Contact the seller"
             >
@@ -67,7 +67,7 @@ export default function SellerInfo({ product }) {
             </button>
             <div className="flex flex-row gap-2">
               <button 
-                className={`px-3 py-1 rounded shadow text-sm transition-colors ${
+                className={`px-3 py-1 max-[360px]:px-2.5 max-[360px]:py-1 rounded shadow text-sm max-[360px]:text-xs transition-colors ${
                   isFollowing
                     ? 'bg-red-500 text-white border border-red-500 hover:bg-red-600'
                     : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'}
@@ -79,7 +79,7 @@ export default function SellerInfo({ product }) {
                 {isFollowLoading ? '...' : (isFollowing ? 'Unfollow' : '+ Follow')}
               </button>
               <button 
-                className="bg-white border border-gray-300 text-gray-700 px-3 py-1 rounded shadow text-sm"
+                className="bg-white border border-gray-300 text-gray-700 px-3 py-1 max-[360px]:px-2.5 max-[360px]:py-1 rounded shadow text-sm max-[360px]:text-xs"
                 onClick={handleVisitStore}
                 aria-label="Visit seller's store"
               >

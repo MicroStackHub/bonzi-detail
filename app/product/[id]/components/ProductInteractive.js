@@ -179,7 +179,7 @@ export default function ProductInteractive({ product, initialPriceData, productI
       {/* Color */}
       {product.colors && Array.isArray(product.colors) && product.colors.length > 0 && (
         <div className="flex items-start gap-3">
-          <span className="font-medium text-gray-500 w-20 flex-shrink-0">Color:</span>
+          <span className="font-medium text-gray-500 w-20 max-[360px]:w-16 max-[360px]:text-[11px] flex-shrink-0">Color:</span>
           <div className="flex flex-wrap gap-2 sm:gap-2 overflow-x-auto">
             {product.colors.map((color) => (
               <button 
@@ -229,15 +229,15 @@ export default function ProductInteractive({ product, initialPriceData, productI
       {/* Quantity */}
       {stock > 0 ? (
       <div className="flex items-start gap-4">
-        <span className="font-medium text-gray-500 w-20 flex-shrink-0">Quantity:</span>
+        <span className="font-medium text-gray-500 w-20 max-[360px]:w-16 max-[360px]:text-[11px] flex-shrink-0">Quantity:</span>
         <div className="flex flex-col items-start">
           <div className="flex items-center border border-gray-200 rounded overflow-hidden">
             <button 
-              className="w-9 h-9 bg-red-500 text-white font-bold flex items-center justify-center border-none rounded-none hover:bg-red-600 transition-colors duration-150"
+              className="w-9 h-9 max-[360px]:w-8 max-[360px]:h-8 bg-red-500 text-white font-bold flex items-center justify-center border-none rounded-none hover:bg-red-600 transition-colors duration-150"
               onClick={() => handleQuantityChange(-1)}
               aria-label="Decrease quantity"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 max-[360px]:h-3.5 max-[360px]:w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
               </svg>
             </button>
@@ -248,14 +248,14 @@ export default function ProductInteractive({ product, initialPriceData, productI
               onBlur={handleQuantityBlur}
               min="1"
               max={stock}
-              className="w-12 h-9 text-center font-semibold border-none focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-12 h-9 max-[360px]:w-11 max-[360px]:h-8 text-center font-semibold border-none focus:outline-none focus:ring-2 focus:ring-orange-500"
             />
             <button 
-              className="w-9 h-9 bg-green-500 text-white font-bold flex items-center justify-center border-none rounded-none hover:bg-green-600 transition-colors duration-150"
+              className="w-9 h-9 max-[360px]:w-8 max-[360px]:h-8 bg-green-500 text-white font-bold flex items-center justify-center border-none rounded-none hover:bg-green-600 transition-colors duration-150"
               onClick={() => handleQuantityChange(1)}
               aria-label="Increase quantity"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 max-[360px]:h-3.5 max-[360px]:w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
               </svg>
             </button>
@@ -277,7 +277,7 @@ export default function ProductInteractive({ product, initialPriceData, productI
 
       {/* COD */}
       <div className="flex items-center gap-4">
-        <span className="font-medium text-gray-500 w-20 flex-shrink-0">COD:</span>
+        <span className="font-medium text-gray-500 w-20 max-[360px]:w-16 max-[360px]:text-[11px] flex-shrink-0">COD:</span>
         <span className={`font-bold text-xs ${product.codAvailable ? 'text-green-600' : 'text-gray-700'}`}>
           {product.codAvailable ? 'Available' : 'Not Available'}
         </span>
@@ -285,7 +285,7 @@ export default function ProductInteractive({ product, initialPriceData, productI
 
       {/* Total Price */}
       <div className="flex items-start gap-4">
-        <span className="font-medium text-gray-500 w-20 flex-shrink-0">Total Price:</span>
+        <span className="font-medium text-gray-500 w-20 max-[360px]:w-16 max-[360px]:text-[11px] flex-shrink-0">Total Price:</span>
         {/* Keep price visible while fetching to avoid layout shift */}
         <div className="relative">
           {priceLoading && (
@@ -314,25 +314,25 @@ export default function ProductInteractive({ product, initialPriceData, productI
       </div>
 
       {/* Action */}
-      <div className="flex items-center gap-3">
-        <span className="font-medium text-gray-500 w-20 flex-shrink-0">Action:</span>
+      <div className="flex items-center gap-3 flex-wrap">
+        <span className="font-medium text-gray-500 w-20 max-[360px]:w-16 max-[360px]:text-[11px] flex-shrink-0">Action:</span>
         {stock > 0 ? (
           <>
             <button 
-              className="w-24 h-10 bg-orange-500 text-white rounded-lg font-semibold shadow text-sm flex items-center justify-center transition hover:bg-orange-600"
+              className="w-24 h-10 max-[360px]:w-20 max-[360px]:h-9 bg-orange-500 text-white rounded-lg font-semibold shadow text-sm max-[360px]:text-xs flex items-center justify-center transition hover:bg-orange-600"
               aria-label="Buy this product now"
             >
               Buy Now
             </button>
             <button 
-              className="w-24 h-10 bg-white border border-orange-500 text-orange-500 rounded-lg font-semibold shadow text-sm flex items-center justify-center transition hover:bg-orange-50"
+              className="w-24 h-10 max-[360px]:w-20 max-[360px]:h-9 bg-white border border-orange-500 text-orange-500 rounded-lg font-semibold shadow text-sm max-[360px]:text-xs flex items-center justify-center transition hover:bg-orange-50"
               onClick={handleAddToCart}
               aria-label="Add this product to cart"
             >
               Add To Cart
             </button>
             <button 
-              className="text-orange-500 hover:text-orange-600 p-2 text-xl flex items-center justify-center"
+              className="text-orange-500 hover:text-orange-600 p-2 text-xl max-[360px]:text-lg flex items-center justify-center"
               aria-label="Add to wishlist"
             >
               ♡
@@ -345,7 +345,7 @@ export default function ProductInteractive({ product, initialPriceData, productI
 
       {/* Promotions */}
       <div className="flex items-center gap-4">
-        <span className="font-medium text-gray-500 w-20 flex-shrink-0">Promotions:</span>
+        <span className="font-medium text-gray-500 w-20 max-[360px]:w-16 max-[360px]:text-[11px] flex-shrink-0">Promotions:</span>
         <button 
           className="bg-gray-100 border border-gray-300 text-gray-700 px-3 py-1.5 sm:px-2 sm:py-2 rounded-lg shadow-sm flex items-center gap-1.5 sm:gap-2 text-xs hover:bg-gray-200 w-fit"
           aria-label="View available seller coupons"
@@ -358,9 +358,11 @@ export default function ProductInteractive({ product, initialPriceData, productI
       </div>
 
       {/* Bulk pricing info */}
-      <div className="text-sm sm:text-base font-semibold text-orange-600">
-         buy in bulk? <a href="#" className="underline font-semibold">bulk pricing options</a>
-      </div>
+      {(priceData?.bulk_price?.length > 0 || product?.bulkPricing?.length > 0) && stock > 0 && (
+        <div className="text-sm sm:text-base font-semibold text-orange-600">
+          Want to buy in bulk? <a href="#" className="underline font-semibold">Learn about bulk pricing options</a>
+        </div>
+      )}
     </div>
   );
 }

@@ -36,10 +36,10 @@ export default function ProductGallery({ product, selectedColorImage }) {
   };
 
   return (
-    <div className="w-full lg:w-1/2 flex flex-col items-center">
+  <div className="w-full lg:w-1/2 flex flex-col items-center">
       {/* Main Image Container */}
       <div className="w-full bg-white rounded-lg overflow-hidden mb-3 sm:mb-4">
-        <div className="relative pb-[100%]">
+        <div className="relative pb-[100%] max-[360px]:pb-[95%]">
           {selectedMedia ? (
             <div className="absolute inset-0 flex items-center justify-center bg-gray-50">
               {selectedMedia.type === 'video' ? (
@@ -72,9 +72,9 @@ export default function ProductGallery({ product, selectedColorImage }) {
           )}
           
           {/* Controls */}
-          <div className="absolute top-4 right-4 flex gap-2">
+          <div className="absolute top-4 right-4 flex gap-2 max-[360px]:top-3 max-[360px]:right-3">
             <button
-              className="p-2 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white text-gray-700 shadow-lg transition-all duration-200 hover:scale-105"
+              className="p-2 max-[360px]:p-1.5 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white text-gray-700 shadow-lg transition-all duration-200 hover:scale-105"
               aria-label="Share product"
               onClick={() => {
                 if (navigator.share) {
@@ -86,15 +86,15 @@ export default function ProductGallery({ product, selectedColorImage }) {
                 }
               }}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 max-[360px]:h-4 max-[360px]:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
               </svg>
             </button>
             <button
-              className="p-2 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white text-gray-700 shadow-lg transition-all duration-200 hover:scale-105"
+              className="p-2 max-[360px]:p-1.5 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white text-gray-700 shadow-lg transition-all duration-200 hover:scale-105"
               aria-label="Add to favorites"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 max-[360px]:h-4 max-[360px]:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
             </button>
@@ -104,7 +104,7 @@ export default function ProductGallery({ product, selectedColorImage }) {
 
       {/* Thumbnails */}
       <div className="relative w-full">
-        <div className="flex gap-2 sm:gap-3 justify-start items-center overflow-x-auto w-full py-2 px-1 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+  <div className="flex gap-2 sm:gap-3 justify-start items-center overflow-x-auto w-full py-2 px-1 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
           {/* Regular media thumbnails */}
           {product.media && product.media.length > 0 && product.media.map((media, idx) => (
             <button
@@ -117,7 +117,7 @@ export default function ProductGallery({ product, selectedColorImage }) {
               onClick={() => setSelectedMedia(media)}
               aria-label={`View ${media.type === 'video' ? 'video' : 'image'} ${idx + 1} of ${product.media.length}`}
             >
-              <div className="relative w-16 sm:w-20 aspect-square">
+              <div className="relative w-16 sm:w-20 max-[360px]:w-14 aspect-square">
                 {media.type === 'video' ? (
                   <>
                     <Image 
@@ -164,7 +164,7 @@ export default function ProductGallery({ product, selectedColorImage }) {
                 })}
                 aria-label={`View ${color.name} color variant`}
               >
-                <div className="relative w-16 sm:w-20 aspect-square">
+                <div className="relative w-16 sm:w-20 max-[360px]:w-14 aspect-square">
                   <Image 
                     src={color.image} 
                     alt={`${color.name} color variant`}
