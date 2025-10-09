@@ -69,91 +69,84 @@ export default function ProductDetail({ product, productDescription, priceData, 
               )}
             </div>
 
-            {/* Price Section - Improved Layout */}
-            <div className="space-y-2">
-              <div className="flex items-baseline gap-2">
-                <span className="text-sm text-gray-600">MRP:</span>
-                <span className="text-lg line-through text-gray-500">
-                  ₹{priceData?.product_mrp ? priceData.product_mrp.replace('INR ', '') : product.priceDetails.mrp}
-                </span>
-                {getSavePercentage(priceData, product) && (
-                  <span className="text-sm text-green-600 font-semibold">Save {getSavePercentage(priceData, product)}%</span>
+            <div className="flex flex-col sm:flex-row justify-between items-start gap-2 sm:gap-3">
+              <div className="bg-gray-50 p-2.5 sm:p-3 rounded-md flex-1 w-full max-[360px]:p-2">
+                {priceData ? (
+                  <div>
+                    <div className="flex flex-wrap items-center gap-1.5 mb-1">
+                      <span className="line-through text-gray-500 text-xs">MRP: ₹{priceData.mrp}</span>
+                      <span className="text-green-600 font-semibold text-[10px]">Save {Math.round(priceData.save_percentage)}%</span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-1.5 mb-1">
+                      <span className="text-base sm:text-lg font-bold text-orange-600">Price: ₹{priceData.sale_price ? parseFloat(priceData.sale_price.replace('INR ', '')).toFixed(2) : 'N/A'}</span>
+                      <span className="text-[10px] text-gray-500">(Exclusive of all taxes)</span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="text-xs font-bold text-red-600">₹{priceData.sale_price_with_tax ? parseFloat(priceData.sale_price_with_tax.replace('INR ', '')).toFixed(2) : 'N/A'} / Piece</span>
+                      <span className="text-[10px] text-gray-500">(Inclusive of all taxes)</span>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="flex flex-wrap items-center gap-1.5 mb-1">
+                      <span className="line-through text-gray-500 text-xs">MRP: ₹{product.priceDetails.mrp.toFixed(2)}</span>
+                      <span className="text-green-600 font-semibold text-[10px]">Save {getSavePercentage(priceData, product)}%</span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-1.5 mb-1">
+                      <span className="text-base sm:text-lg font-bold text-orange-600">Price: ₹{product.priceDetails.price.toFixed(2)}</span>
+                      <span className="text-[10px] text-gray-500">(Exclusive of all taxes)</span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="text-xs font-bold text-red-600">₹{product.priceDetails.finalPrice.toFixed(2)} / Piece</span>
+                      <span className="text-[10px] text-gray-500">(Inclusive of all taxes)</span>
+                    </div>
+                  </div>
                 )}
               </div>
 
-              <div className="flex items-baseline gap-2">
-                <span className="text-sm text-gray-600">Price:</span>
-                <span className="text-2xl font-bold text-orange-600">
-                  ₹{priceData?.product_amount ? priceData.product_amount.replace('INR ', '') : product.priceDetails.price}
-                </span>
-                <span className="text-xs text-gray-500">(Exclusive of all taxes)</span>
-              </div>
-
-              <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-bold text-orange-600">
-                  ₹{priceData?.product_sale_amount ? priceData.product_sale_amount.replace('INR ', '') : product.priceDetails.finalPrice}
-                </span>
-                <span className="text-sm text-gray-600">/ Piece</span>
-                <span className="text-xs text-gray-500">(Inclusive of all taxes)</span>
-              </div>
-
               {hasBulkTiers && stock > 0 && (
-                <div className="pt-2">
-                  <BulkPriceButton priceData={priceData} product={product} />
+                <div className="w-full sm:w-auto max-[360px]:w-full">
+                  <BulkPriceButton product={product} priceData={priceData} />
                 </div>
               )}
             </div>
 
-            {/* Shipping Info with Icons */}
-            <div className="bg-gray-50 rounded-lg p-3">
-              <div className="grid grid-cols-5 gap-2">
-                <div className="text-center">
-                  <div className="text-orange-500 text-2xl mb-1">
-                    <svg className="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <div className="text-xs font-semibold text-gray-700">Replacement</div>
-                  <div className="text-xs text-gray-500">{product.replacementDays || 7} Days</div>
+            <div className="flex gap-1.5 text-center text-[10px] sm:text-xs border-y py-2 sm:py-3 overflow-x-auto scrollbar-hide md:grid md:grid-cols-5 md:gap-1">
+              {[{
+                icon: "M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0011.664 0l3.181-3.183m-4.991-2.696a8.25 8.25 0 00-11.664 0l-3.181 3.183",
+                title: "Replacement",
+                value: product.shippingInfo.Replacement,
+                color: "orange"
+              }, {
+                icon: "M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z",
+                title: "Processing",
+                value: product.shippingInfo.Processing,
+                color: "blue"
+              }, {
+                icon: "M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.125-.504 1.125-1.125V14.25m-17.25 4.5v-9m17.25 9v-9m-17.25-9l5.25-5.25h9l5.25 5.25m-17.25 0h17.25",
+                title: "Shipping",
+                value: product.shippingInfo.Shipping,
+                color: "yellow"
+              }, {
+                icon: "M13.5 21v-7.5A2.25 2.25 0 0011.25 11.25H10.5a2.25 2.25 0 00-2.25 2.25V21M3 3h18M5.25 3v18m13.5-18v18M9 6.75h6.375a.75.75 0 01.75.75v3.375a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75V7.5a.75.75 0 01.75-.75z",
+                title: "Seller",
+                value: product.shippingInfo.Seller,
+                color: "orange"
+              }, {
+                icon: "M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.286zm0 13.036h.008v.008h-.008v-.008z",
+                title: "Warranty",
+                value: product.shippingInfo.Warranty,
+                color: "green"
+              }
+              ].map((item, index) => (
+                <div key={index} className="flex-shrink-0 w-16 sm:w-20 md:w-auto">
+                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 sm:h-5 sm:w-5 mx-auto text-${item.color}-500`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d={item.icon} />
+                  </svg>
+                  <div className={`font-semibold text-${item.color}-500 mt-0.5 text-[10px] sm:text-xs`}>{item.title}</div>
+                  <div className="text-gray-600 text-[10px] sm:text-xs">{item.value}</div>
                 </div>
-                <div className="text-center">
-                  <div className="text-blue-500 text-2xl mb-1">
-                    <svg className="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <div className="text-xs font-semibold text-gray-700">Processing</div>
-                  <div className="text-xs text-gray-500">{product.processingDays || 3} days</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-yellow-600 text-2xl mb-1">
-                    <svg className="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
-                      <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z" />
-                    </svg>
-                  </div>
-                  <div className="text-xs font-semibold text-gray-700">Shipping</div>
-                  <div className="text-xs text-gray-500">{product.shippingDays || 12} days</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-green-500 text-2xl mb-1">
-                    <svg className="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <div className="text-xs font-semibold text-gray-700">Seller</div>
-                  <div className="text-xs text-gray-500">{product.sellerLocation || 'India'}</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-teal-500 text-2xl mb-1">
-                    <svg className="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <div className="text-xs font-semibold text-gray-700">Warranty</div>
-                  <div className="text-xs text-gray-500">{product.warrantyMonths || 6} Months</div>
-                </div>
-              </div>
+              ))}
             </div>
 
             {/* Two-column layout starts here */}
