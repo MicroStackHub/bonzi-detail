@@ -129,6 +129,12 @@ export default function ProductInteractive({ product, initialPriceData, productI
 
   const handleAddToCart = async () => {
     try {
+      // Bearer token to save in localStorage
+      const bearerToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5MjBjMTIwZS0zY2IwLTQ3OGMtOTY0Yi1hM2ZhZmFjMDFhNGIiLCJqdGkiOiJhNGQzOWM5NjEyZjNkMjBiNDMwOThiNmZjNmMwZGY4ZWU5ZGQ2OTk0ZWFiMjVjOGQ2Y2Y3YWViYWE5MmY5NzY4ZjZhZDI0MzNlZmQ5M2FmOSIsImlhdCI6MTc2MDAxODg4OS45MDI2NDEsIm5iZiI6MTc2MDAxODg4OS45MDI2NDQsImV4cCI6MTc5MTU1NDg4OS44NjYwNTgsInN1YiI6IjUiLCJzY29wZXMiOlsiKiJdfQ.Jz0-usKv6r92872cz71UvFbU75Ah0GZEo8RqCts6JmVdnAn5FXU-kWePf8ldB9hMqHvQJfgAFzRjKUDEMqBOo684ISIGVmhdO5b51r4oWLMrHWdpJnPB9MX4UJzVyfgRl0CfgitJcCgsqIVgwl1FdIhVfcKkCptaSEzITgdyhLqCMIys_CaU6CXcGPbO2usSEVGJTDAVCc_1KGXKvnyHTj29ZPcM09EHJR-9hD8OtCUmBuU3CYnhEgHCzkfSuost-5ropuSJ51QmKdVYHMQFINRCIZILzuk-hBXaCCvdsh0dFc7ELZ4K_qFE2SYX9AuZVrlR9qgItMkLxaSI6m_ZC3nRKGqLDRDv5Lf85u1liLoEoWMl6VlUz5hSVfyHBikoXMKZja81Zv1AJZ67Xb5cOQUDyc4ozHim2rmoEKAd0YBaPdfgxbLicD6uS5c0Je9GSc9wc381Zy6hOTNFArneU3ydZ4C2SKIyatqMjRxUETpgDL1qeeDtS15ZbXRaHBZqGzBXaub2EHMnVQV81akgiR054XPUViHcf-sbVdzUI-gZF_5JeKIyKuS1fWwxfbNONPTGQFo1FFJyeKsnBG-LHAitAfxBvikkXf0kyUwC2q6XkKie31mUDS46IvU0XrNtrpKn7drV6WEFCpeMuh7OIX1WVsM6KuxeF4WdLF8s6B8';
+      
+      // Save token to localStorage
+      localStorage.setItem('bearerToken', bearerToken);
+
       const payload = {
         product_id: parseInt(productId),
         product_qty: quantity,
@@ -140,7 +146,7 @@ export default function ProductInteractive({ product, initialPriceData, productI
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5MjBjMTIwZS0zY2IwLTQ3OGMtOTY0Yi1hM2ZhZmFjMDFhNGIiLCJqdGkiOiI2Zjc1Y2EwZWQzODQyNTNhYTNjODU2MzFlYzRkMjJlYzIyYjU2NzFkMGE0MzgzYjc4MGNkNWEzODcyNWRjZTAzYWFjM2VjOTczMGU1NjRiNyIsImlhdCI6MTc1OTUzMTk5NC4wMTc5MTcsIm5iZiI6MTc1OTUzMTk5NC4wMTc5MjEsImV4cCI6MTc5MTA2Nzk5My45OTc0NDIsInN1YiI6IjUiLCJzY29wZXMiOlsiKiJdfQ.maL879O50zK45IlcGMZychVDLjIoKotGFZtlIloi1jCJbtLlFaqh7L30VUHrjDbWn9QNHskuwu8w1gTzb3k0f0ZiPJEyo0RButhjqkpQlLrtdGs1QhtirWmx9nZnw31OF5qe8RcJXZ41Wuv_FggkiO4ufVxSYkfSbprnnTV49qrzBQ8PCdNAMGlNdhqJeybC0blgvOF8KAADMNkF04YogxMy_8vRLZDe59mCwurrPg2ZrJEwFLuYcfSEp93aoUbMZYntB6cL3acwONqsURGS7xtpQObaXAFlLvtBMbXP-K-_hHOTBPZrLciAOFcjeEAx5_AelLQkbZvNXeGjfknc-0Tlh1rlHpZj4wwaHa59R2avDLcmJRJjRBoPhNlbTzm7WF51mk0qu1erTj3bxh-sz8RQasw53P3GwHJboSWm25VmhoHQYl9RvaNBTxk1UOFKLNdQPHlB8My5D2bMxa9hVqx0qz35REtkui_xAeenxJsHXfoXuIGfzq_YhdRSET5GW7zCaHKTsgbY_hq_OwszocQ1U_XMcL8_Qz-6g0BKWppC3sQN5OzBJgDGNET6TsnF3JpJ7f3NaxMkggf1yEsYrBYK6qKuI-PBZV0NX34vH4cJC_7pWlz5EavNzQ7TIb3OtW0XBzhl23-xxNPJ0Rnk592syGbMMwTwrpSjmubTGRU`,
+          'Authorization': `Bearer ${bearerToken}`,
         },
         body: JSON.stringify(payload)
       });
@@ -149,6 +155,8 @@ export default function ProductInteractive({ product, initialPriceData, productI
 
       if (data.success) {
         toast.success(data.message || 'Product added to cart successfully!');
+        // Trigger a custom event to update cart count in header
+        window.dispatchEvent(new Event('cartUpdated'));
       } else {
         toast.error(data.message || 'Failed to add product to cart');
       }

@@ -7,8 +7,6 @@ import {
 } from 'react-icons/fa';
 import LanguageSelector from './LanguageSelector';
 
-const cartCount = 0;
-
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showCategoriesDropdown, setShowCategoriesDropdown] = useState(false);
@@ -17,6 +15,7 @@ export default function Header() {
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [categoryOpen, setCategoryOpen] = useState(false);
   const categoryRef = useRef(null);
+  const [cartCount, setCartCount] = useState(0);
 
   const categories = [
     { name: 'Apparel Accessories', icon: <FaTshirt /> },
@@ -35,6 +34,53 @@ export default function Header() {
     { name: 'Sports & Entertainment', icon: <FaFutbol /> },
     { name: 'Toys & Hobbies', icon: <FaGamepad /> },
   ];
+
+  // Fetch cart data on component mount and set up polling
+  useEffect(() => {
+    const fetchCartCount = async () => {
+      try {
+        // Get bearer token from local storage
+        const bearerToken = localStorage.getItem('bearerToken') || 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5MjBjMTIwZS0zY2IwLTQ3OGMtOTY0Yi1hM2ZhZmFjMDFhNGIiLCJqdGkiOiJhNGQzOWM5NjEyZjNkMjBiNDMwOThiNmZjNmMwZGY4ZWU5ZGQ2OTk0ZWFiMjVjOGQ2Y2Y3YWViYWE5MmY5NzY4ZjZhZDI0MzNlZmQ5M2FmOSIsImlhdCI6MTc2MDAxODg4OS45MDI2NDEsIm5iZiI6MTc2MDAxODg4OS45MDI2NDQsImV4cCI6MTc5MTU1NDg4OS44NjYwNTgsInN1YiI6IjUiLCJzY29wZXMiOlsiKiJdfQ.Jz0-usKv6r92872cz71UvFbU75Ah0GZEo8RqCts6JmVdnAn5FXU-kWePf8ldB9hMqHvQJfgAFzRjKUDEMqBOo684ISIGVmhdO5b51r4oWLMrHWdpJnPB9MX4UJzVyfgRl0CfgitJcCgsqIVgwl1FdIhVfcKkCptaSEzITgdyhLqCMIys_CaU6CXcGPbO2usSEVGJTDAVCc_1KGXKvnyHTj29ZPcM09EHJR-9hD8OtCUmBuU3CYnhEgHCzkfSuost-5ropuSJ51QmKdVYHMQFINRCIZILzuk-hBXaCCvdsh0dFc7ELZ4K_qFE2SYX9AuZVrlR9qgItMkLxaSI6m_ZC3nRKGqLDRDv5Lf85u1liLoEoWMl6VlUz5hSVfyHBikoXMKZja81Zv1AJZ67Xb5cOQUDyc4ozHim2rmoEKAd0YBaPdfgxbLicD6uS5c0Je9GSc9wc381Zy6hOTNFArneU3ydZ4C2SKIyatqMjRxUETpgDL1qeeDtS15ZbXRaHBZqGzBXaub2EHMnVQV81akgiR054XPUViHcf-sbVdzUI-gZF_5JeKIyKuS1fWwxfbNONPTGQFo1FFJyeKsnBG-LHAitAfxBvikkXf0kyUwC2q6XkKie31mUDS46IvU0XrNtrpKn7drV6WEFCpeMuh7OIX1WVsM6KuxeF4WdLF8s6B8';
+
+        const response = await fetch('https://api.glst.in/api/v3/cart', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${bearerToken}`,
+          },
+        });
+
+        const data = await response.json();
+
+        if (data.success && data.data) {
+          setCartCount(data.data.cart_count || 0);
+        } else {
+          setCartCount(0);
+        }
+      } catch (error) {
+        console.error('Error fetching cart count:', error);
+        setCartCount(0);
+      }
+    };
+
+    // Initial fetch
+    fetchCartCount();
+
+    // Listen for cart update events
+    const handleCartUpdate = () => {
+      fetchCartCount();
+    };
+    window.addEventListener('cartUpdated', handleCartUpdate);
+
+    // Poll every 5 seconds to keep cart count updated
+    const interval = setInterval(fetchCartCount, 5000);
+
+    // Cleanup interval and event listener on unmount
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('cartUpdated', handleCartUpdate);
+    };
+  }, []);
 
   useEffect(() => {
     const handleDocClick = (e) => {
