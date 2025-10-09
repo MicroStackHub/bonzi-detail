@@ -206,35 +206,7 @@ export default function ProductGallery({ product, selectedColorImage }) {
             </button>
           ))}
 
-          {/* Color image thumbnails */}
-          {product.colors && product.colors.length > 0 && product.colors.map((color, idx) => (
-            color.image && (
-              <button
-                key={`color-${color.id}`}
-                className={`relative flex-shrink-0 rounded-lg overflow-hidden transition-all duration-200 ${
-                  selectedMedia && selectedMedia.url === color.image 
-                    ? 'ring-2 ring-orange-500 scale-105' 
-                    : 'ring-1 ring-gray-200 hover:ring-orange-300'
-                }`}
-                onClick={() => setSelectedMedia({
-                  type: 'image',
-                  url: color.image,
-                  thumbnail: color.image
-                })}
-                aria-label={`View ${color.name} color variant`}
-              >
-                <div className="relative w-16 sm:w-20 max-[360px]:w-14 aspect-square">
-                  <Image 
-                    src={color.image} 
-                    alt={`${color.name} color variant`}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 64px, 80px"
-                  />
-                </div>
-              </button>
-            )
-          ))}
+          {/* Color thumbnails were removed here; color images are included in product.media and deduplicated upstream */}
         </div>
       </div>
     </div>

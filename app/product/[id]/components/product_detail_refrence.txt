@@ -1,0 +1,275 @@
+{
+    "response_code": 200,
+    "success": true,
+    "message": "product data successfully",
+    "data": {
+        "display_product_id": 4,
+        "product_id": 4,
+        "slug": "compact-wireless-folding-bluetooth-keyboard-for-notebook-phone-and-tablet-portable-lightweight-mini-keyboard-for-office-travel/9f2e99c1-6233-486c-b495-3402d0e75683",
+        "short_link": "https://link.glst.in/hqGIfy",
+        "short_desc": "The Compact Wireless Folding Bluetooth Keyboard is a portable, lightweight mini keyboard designed for notebooks, phones, and tablets. Perfect for office work, travel, or on-the-go use, it offers a foldable design for easy storage and effortless typing anywhere.",
+        "store_id": 1,
+        "category_id": 1,
+        "sub_category_id": 5,
+        "sub_sub_category_id": null,
+        "product_name": "Compact Wireless Folding Bluetooth Keyboard for Notebook Phone and Tablet Portable Lightweight Mini Keyboard for Office Travel.",
+        "display_min_price": "250.00",
+        "display_max_price": null,
+        "display_image": "https://admin.glst.in/media-storage/1/4/2025061811060850875.png",
+        "display_min_mrp": "999.00",
+        "display_max_mrp": null,
+        "brand_name": "Generic",
+        "product_keywords": [
+            "Wireless Bluetooth Keyboard",
+            "Compact Folding Keyboard",
+            "Mini Keyboard"
+        ],
+        "has_video": "https://admin.glst.in/media-storage/1/4/2025061811060889957.mp4",
+        "product_status": 1,
+        "prodcut_approved": 0,
+        "searchCount": 0,
+        "feedback_rating": {
+            "total_feedback": 1,
+            "avg_rate": "5",
+            "rate1": "0",
+            "rate2": "0",
+            "rate3": "0",
+            "rate4": "0",
+            "rate5": "1",
+            "rate1avg_count": "0",
+            "rate2avg_count": "0",
+            "rate3avg_count": "0",
+            "rate4avg_count": "0",
+            "rate5avg_count": "100"
+        },
+        "saleCount": 0,
+        "isCOD": 1,
+        "created_at": "2025-06-18T05:36:09.000000Z",
+        "updated_at": "2025-08-18T14:17:31.000000Z",
+        "discount_percentage": "75",
+        "display_min_tax": 22.5,
+        "display_min_price_with_tax": 272.5,
+        "display_max_tax": 0,
+        "display_max_price_with_tax": 0,
+        "coupon_and_discount": [],
+        "stock": 3,
+        "isWishlist": false,
+        "product": {
+            "product_id": 4,
+            "uuid": "9f2e99c1-6233-486c-b495-3402d0e75683",
+            "slug": "compact-wireless-folding-bluetooth-keyboard-for-notebook-phone-and-tablet-portable-lightweight-mini-keyboard-for-office-travel/9f2e99c1-6233-486c-b495-3402d0e75683",
+            "sort_code": "365n2xk",
+            "store_id": 1,
+            "CatID": 1,
+            "SubCatID": 5,
+            "SubSubCatID": null,
+            "ProductName": "Compact Wireless Folding Bluetooth Keyboard for Notebook Phone and Tablet Portable Lightweight Mini Keyboard for Office Travel.",
+            "short_desc": "The Compact Wireless Folding Bluetooth Keyboard is a portable, lightweight mini keyboard designed for notebooks, phones, and tablets. Perfect for office work, travel, or on-the-go use, it offers a foldable design for easy storage and effortless typing anywhere.",
+            "ProductCode": "5949999112638",
+            "BrandName": "Generic",
+            "sellersku": null,
+            "sellersku_id": null,
+            "HSNCode": "90041000",
+            "ProductMadeIn": "China",
+            "HasWarranty": "No",
+            "WarrantyType": "0",
+            "WarrantyPeriodTime": null,
+            "WarrantyPeriod": "0",
+            "ProductCondition": "1",
+            "ProductConditionComment": "Ready To Use.",
+            "productKeywords": "[\"Wireless Bluetooth Keyboard\",\"Compact Folding Keyboard\",\"Mini Keyboard\"]",
+            "UnitType": "Piece",
+            "Soldin": "Units",
+            "SoldinNoOfUnitsInLot": null,
+            "ProcessingTimeInDays": "15",
+            "BulkProcessingTimeInDays": 0,
+            "VideoFileName": "[\"media-storage\\/1\\/4\\/2025061811060889957.mp4\"]",
+            "ProductDescFile": "https://admin.glst.in/media-storage/1/4/2025061811060970625.txt",
+            "HasVariation": "1",
+            "is_bulk_price": "0",
+            "HasBulkPriceForNoVariation": null,
+            "SellingPrice": null,
+            "InitialStock": null,
+            "CurrentStock": null,
+            "tax_template_id": 1,
+            "package_weight": "0.10",
+            "package_length": "10",
+            "package_width": "10",
+            "package_height": "8",
+            "shipping_template_id": 1,
+            "isCOD": 1,
+            "refund_policy_template": "The buyer covers the cost of return shipping",
+            "salestype": "Immediate Sales",
+            "start_date": null,
+            "end_date": "2027-06-02 00:00:00",
+            "launch_date": null,
+            "product_group_id": null,
+            "product_sub_group_id": null,
+            "product_return_period": "7 Days",
+            "legal_disclaimer": null,
+            "term_and_condition_consent": "1",
+            "product_status": "1",
+            "prodcut_approved": 0,
+            "created_at": "2025-06-18T05:36:08.000000Z",
+            "updated_at": "2025-06-18T13:40:45.000000Z",
+            "deleted_at": null,
+            "shipping_template": {
+                "id": 1,
+                "type": "Free",
+                "shipping_days": 4,
+                "product_origin": "Bangalore",
+                "shipping_city": []
+            },
+            "tax_template": {
+                "id": 1,
+                "store_id": 1,
+                "name": "General",
+                "help_text": "tax-template/685249e57f131.txt",
+                "tax_template_rate": [
+                    {
+                        "id": 1,
+                        "tax_template_id": 1,
+                        "name": "IGST",
+                        "value": "9.00"
+                    },
+                    {
+                        "id": 2,
+                        "tax_template_id": 1,
+                        "name": "CGST",
+                        "value": "9.00"
+                    },
+                    {
+                        "id": 3,
+                        "tax_template_id": 1,
+                        "name": "SGST",
+                        "value": "18.00"
+                    },
+                    {
+                        "id": 4,
+                        "tax_template_id": 1,
+                        "name": "CESS",
+                        "value": "0.00"
+                    }
+                ]
+            }
+        },
+        "product_image": [
+            {
+                "product_image_id": 17,
+                "product_id": 4,
+                "store_id": null,
+                "ImageLink": "https://admin.glst.in/media-storage/1/4/2025061811060850875.png",
+                "DefaultImageStatus": "1",
+                "index": 0,
+                "created_at": "2025-06-18T05:36:09.000000Z",
+                "updated_at": "2025-06-18T05:36:09.000000Z"
+            },
+            {
+                "product_image_id": 18,
+                "product_id": 4,
+                "store_id": null,
+                "ImageLink": "https://admin.glst.in/media-storage/1/4/2025061811060854010.png",
+                "DefaultImageStatus": "1",
+                "index": 1,
+                "created_at": "2025-06-18T05:36:09.000000Z",
+                "updated_at": "2025-06-18T05:36:09.000000Z"
+            },
+            {
+                "product_image_id": 19,
+                "product_id": 4,
+                "store_id": null,
+                "ImageLink": "https://admin.glst.in/media-storage/1/4/2025061811060915710.png",
+                "DefaultImageStatus": "1",
+                "index": 2,
+                "created_at": "2025-06-18T05:36:09.000000Z",
+                "updated_at": "2025-06-18T05:36:09.000000Z"
+            },
+            {
+                "product_image_id": 20,
+                "product_id": 4,
+                "store_id": null,
+                "ImageLink": "https://admin.glst.in/media-storage/1/4/202506181106099807.png",
+                "DefaultImageStatus": "1",
+                "index": 3,
+                "created_at": "2025-06-18T05:36:09.000000Z",
+                "updated_at": "2025-06-18T05:36:09.000000Z"
+            },
+            {
+                "product_image_id": 21,
+                "product_id": 4,
+                "store_id": null,
+                "ImageLink": "https://admin.glst.in/media-storage/1/4/2025061811060990924.png",
+                "DefaultImageStatus": "1",
+                "index": 4,
+                "created_at": "2025-06-18T05:36:09.000000Z",
+                "updated_at": "2025-06-18T05:36:09.000000Z"
+            }
+        ],
+        "product_size": [],
+        "product_color": [
+            {
+                "product_variation_colorid": 5,
+                "product_id": 4,
+                "color": "Red",
+                "image": "https://admin.glst.in/media-storage/1/4/2025061819104563194.png",
+                "created_at": "2025-06-18T08:10:45.000000Z",
+                "updated_at": "2025-06-18T08:10:45.000000Z"
+            },
+            {
+                "product_variation_colorid": 6,
+                "product_id": 4,
+                "color": "orange",
+                "image": "https://admin.glst.in/media-storage/1/4/2025061819104534240.png",
+                "created_at": "2025-06-18T08:10:45.000000Z",
+                "updated_at": "2025-06-18T08:10:45.000000Z"
+            }
+        ],
+        "shipping_package_included": [
+            {
+                "shipping_detail_id": 9,
+                "product_id": 4,
+                "quantity": 1,
+                "content": "Key board",
+                "created_at": "2025-06-18T13:40:45.000000Z",
+                "updated_at": "2025-06-18T13:40:45.000000Z"
+            }
+        ],
+        "bulk_price": [],
+        "product_specification": [
+            {
+                "PropertyName": "Compatibility",
+                "PropertyValue": "All Devices",
+                "product_id": 4,
+                "image": "https://admin.glst.in/media-storage/product_specification/Unknown.png"
+            },
+            {
+                "PropertyName": "Connectivity",
+                "PropertyValue": "Bluetooth 5.0 for Wireless Connection",
+                "product_id": 4,
+                "image": "https://admin.glst.in/media-storage/product_specification/Unknown.png"
+            },
+            {
+                "PropertyName": "Design",
+                "PropertyValue": "Sleek",
+                "product_id": 4,
+                "image": "https://admin.glst.in/media-storage/product_specification/Unknown.png"
+            },
+            {
+                "PropertyName": "Size",
+                "PropertyValue": "Compact",
+                "product_id": 4,
+                "image": "https://admin.glst.in/media-storage/product_specification/Unknown.png"
+            }
+        ],
+        "business_detail": {
+            "store_id": 1,
+            "CompanyName": "Global Logica Software Technologies",
+            "State": 19,
+            "state_detail": {
+                "name": "Karnataka",
+                "id": 19
+            }
+        },
+        "whishlist_post": null
+    }
+}

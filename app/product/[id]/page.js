@@ -75,7 +75,21 @@ export default async function ProductDetailPage({ params }) {
 
   try {
     const { product, productDescription } = await fetchProductData(id);
-    const priceData = await fetchPriceData(id);
+  const priceResult = await fetchPriceData(id);
+  const priceData = priceResult && priceResult.data ? priceResult.data : null;
+  const priceWarning = priceResult && priceResult.warning ? priceResult.warning : null;
+
+    // Fetch FAQs server-side for this product
+    let faqList = [];
+    try {
+      const faqUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.glst.in'}/api/v1/get-product-faq?product_id=${id}&limit=15&page=1`;
+      const faqRes = await fetch(faqUrl);
+      const faqJson = await faqRes.json();
+      faqList = (faqJson && faqJson.data && Array.isArray(faqJson.data.data)) ? faqJson.data.data : [];
+    } catch (faqErr) {
+      // silently continue with empty faqList
+      faqList = [];
+    }
 
     // Build Product JSON-LD schema
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.bonzicart.com';
@@ -118,7 +132,9 @@ export default async function ProductDetailPage({ params }) {
           product={product} 
           productDescription={productDescription} 
           priceData={priceData} 
-          productId={id} 
+          productId={id}
+          faq={faqList}
+          priceWarning={priceWarning}
         />
         <script
           type="application/ld+json"

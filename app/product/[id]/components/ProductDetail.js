@@ -1,6 +1,7 @@
-'use client';
+ 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import ProductGallery from './ProductGallery';
 import ProductInteractive from './ProductInteractive';
 import SellerInfo from './SellerInfo';
@@ -10,8 +11,12 @@ import ProductPolicies from './ProductPolicies';
 import { GoBackButton, ShareButton } from './ErrorHandlers';
 import { getSavePercentage } from '../lib/fetchProduct';
 
-export default function ProductDetail({ product, productDescription, priceData, productId, error }) {
+export default function ProductDetail({ product, productDescription, priceData, productId, error, faq, priceWarning }) {
   const [selectedColorImage, setSelectedColorImage] = useState(null);
+  const safeNum = (v) => {
+    const n = Number(String(v || 0).replace(/[^0-9.\-]/g, ''));
+    return Number.isFinite(n) ? n : 0;
+  };
   // Derive stock from API-like shape (priceData.stock or product.stock per product_detail.txt)
   const stock = (priceData && typeof priceData.stock === 'number') ? priceData.stock : (typeof product?.stock === 'number' ? product.stock : 0);
   const hasBulkTiers = (priceData?.bulk_price && priceData.bulk_price.length > 0) || (product?.bulkPricing && product.bulkPricing.length > 0);
@@ -19,6 +24,13 @@ export default function ProductDetail({ product, productDescription, priceData, 
   const handleColorChange = (colorImage) => {
     setSelectedColorImage(colorImage);
   };
+
+  // Show server-side price warnings (e.g., stock limit exceeded) on client mount
+  useEffect(() => {
+    if (priceWarning) {
+      toast.error(priceWarning);
+    }
+  }, [priceWarning]);
   if (error) {
     return (
       <div className="flex flex-col justify-center items-center min-h-screen p-4">
@@ -89,15 +101,15 @@ export default function ProductDetail({ product, productDescription, priceData, 
                 ) : (
                   <div>
                     <div className="flex flex-wrap items-center gap-1.5 mb-1">
-                      <span className="line-through text-gray-500 text-xs">MRP: ₹{product.priceDetails.mrp.toFixed(2)}</span>
+                      <span className="line-through text-gray-500 text-xs">MRP: ₹{safeNum(product.priceDetails.mrp).toFixed(2)}</span>
                       <span className="text-green-600 font-semibold text-[10px]">Save {getSavePercentage(priceData, product)}%</span>
                     </div>
                     <div className="flex flex-wrap items-center gap-1.5 mb-1">
-                      <span className="text-base sm:text-lg font-bold text-orange-600">Price: ₹{product.priceDetails.price.toFixed(2)}</span>
+                      <span className="text-base sm:text-lg font-bold text-orange-600">Price: ₹{safeNum(product.priceDetails.price).toFixed(2)}</span>
                       <span className="text-[10px] text-gray-500">(Exclusive of all taxes)</span>
                     </div>
                     <div className="flex flex-wrap items-center gap-1.5">
-                      <span className="text-xs font-bold text-red-600">₹{product.priceDetails.finalPrice.toFixed(2)} / Piece</span>
+                      <span className="text-xs font-bold text-red-600">₹{safeNum(product.priceDetails.finalPrice).toFixed(2)} / Piece</span>
                       <span className="text-[10px] text-gray-500">(Inclusive of all taxes)</span>
                     </div>
                   </div>
@@ -172,7 +184,7 @@ export default function ProductDetail({ product, productDescription, priceData, 
         </div>
 
         {/* Product Tabs */}
-        <ProductTabs product={product} productDescription={productDescription} />
+            <ProductTabs product={product} productDescription={productDescription} faq={faq} />
 
       </div>
     </div>

@@ -1,3 +1,5 @@
+
+
 async function fetchProductData(productId) {
   try {
     const [productResponse, descriptionResponse] = await Promise.all([
@@ -43,42 +45,77 @@ async function fetchPriceData(productId) {
     const data = await response.json();
 
     if (data.success) {
-      return data.data;
+      return { data: data.data, warning: null };
     } else {
       console.error('Price API Error:', data.message);
-      // Don't fail completely for stock limit exceeded, just return null
+      // If stock limit exceeded, return a warning so the client can surface a toast
       if (data.message && data.message.toLowerCase().includes('stock limit exceeded')) {
         console.log('Stock limit exceeded for initial load, will use product default pricing');
-        return null;
+        return { data: null, warning: data.message };
       }
-      return null;
+      return { data: null, warning: null };
     }
   } catch (error) {
     console.error('Price fetch error:', error);
-    return null;
+    return { data: null, warning: null };
   }
 }
 
 function transformApiData(apiData) {
   const media = [];
 
-  // Add video first if available
+  // Utility to canonicalize URLs/paths for deduplication
+  const canonicalize = (u) => {
+    if (!u || typeof u !== 'string') return '';
+    try {
+      if (u.startsWith('http')) {
+        const parsed = new URL(u);
+        return (parsed.origin + parsed.pathname).toLowerCase();
+      }
+    } catch (e) {
+      // ignore
+    }
+    // strip query params if any and normalize
+    return u.split('?')[0].toLowerCase();
+  };
+
+  const seen = new Set();
+
+  // Add video first if available (use thumbnail if provided)
   if (apiData.has_video) {
-    media.push({
-      type: 'video',
-      url: apiData.has_video,
-      thumbnail: apiData.display_image || (apiData.product_image && apiData.product_image[0]?.ImageLink)
+    const url = apiData.has_video;
+    const key = canonicalize(url);
+    if (url && !seen.has(key)) {
+      media.push({
+        type: 'video',
+        url,
+        thumbnail: apiData.display_image || (apiData.product_image && apiData.product_image[0]?.ImageLink)
+      });
+      seen.add(key);
+    }
+  }
+
+  // Then add images (product_image)
+  if (apiData.product_image && apiData.product_image.length > 0) {
+    apiData.product_image.forEach((img) => {
+      const url = img.ImageLink;
+      const key = canonicalize(url);
+      if (url && !seen.has(key)) {
+        media.push({ type: 'image', url, thumbnail: url });
+        seen.add(key);
+      }
     });
   }
 
-  // Then add images
-  if (apiData.product_image && apiData.product_image.length > 0) {
-    apiData.product_image.forEach((img) => {
-      media.push({
-        type: 'image',
-        url: img.ImageLink,
-        thumbnail: img.ImageLink
-      });
+  // Include color variant images in the media list (deduplicate)
+  if (apiData.product_color && apiData.product_color.length > 0) {
+    apiData.product_color.forEach((c) => {
+      const url = c.image;
+      const key = canonicalize(url);
+      if (url && !seen.has(key)) {
+        media.push({ type: 'image', url, thumbnail: url });
+        seen.add(key);
+      }
     });
   }
 

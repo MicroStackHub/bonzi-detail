@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-export default function ProductTabs({ product, productDescription }) {
+export default function ProductTabs({ product, productDescription, faq = [] }) {
   const [activeTab, setActiveTab] = useState('details');
   const [feedbackSubTab, setFeedbackSubTab] = useState('product');
   const [showSpecifications, setShowSpecifications] = useState(false);
@@ -226,9 +226,18 @@ export default function ProductTabs({ product, productDescription }) {
         )}
         {activeTab === 'faq' && (
           <div className="p-4">
-            <div className="text-center text-gray-500 py-8">
-              No FAQs available yet.
-            </div>
+            {faq && faq.length > 0 ? (
+              <div className="space-y-4">
+                {faq.map((item, idx) => (
+                  <div key={idx} className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                    <div className="font-semibold text-gray-800 mb-2">{item.faq_question}</div>
+                    <div className="text-gray-600 text-sm">{item.faq_answer}</div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center text-gray-500 py-8">No FAQs available yet.</div>
+            )}
           </div>
         )}
       </div>

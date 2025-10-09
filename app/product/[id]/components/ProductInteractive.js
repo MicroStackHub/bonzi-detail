@@ -5,11 +5,16 @@ import toast from 'react-hot-toast';
 
 export default function ProductInteractive({ product, initialPriceData, productId, onColorChange }) {
   const [quantity, setQuantity] = useState(1);
+  const safeNum = (v) => {
+    const n = Number(String(v || 0).replace(/[^0-9.\-]/g, ''));
+    return Number.isFinite(n) ? n : 0;
+  };
   const [showBulkPrice, setShowBulkPrice] = useState(false);
   const [selectedColor, setSelectedColor] = useState(null);
   const [priceData, setPriceData] = useState(initialPriceData);
   const [priceLoading, setPriceLoading] = useState(false);
   const stock = priceData?.stock ?? product.stock ?? 0;
+  const hasColors = product.colors && Array.isArray(product.colors) && product.colors.length > 0;
 
   // Fetch price data when quantity changes
   const fetchPriceData = async (qty) => {
@@ -18,42 +23,33 @@ export default function ProductInteractive({ product, initialPriceData, productI
     try {
       setPriceLoading(true);
       
-      // Prepare request body, only include color_id if it's actually selected
+      // Prepare request body, include color_id/size_id and both product_qty and quantity for compatibility
       const requestBody = {
         product_id: parseInt(productId),
         product_qty: qty,
+        quantity: qty,
+        size_id: "",
         bulk_price: true
       };
 
-      // Only add color_id if a color is actually selected
+      // Include color_id if selected
       if (selectedColor && selectedColor !== "") {
         requestBody.color_id = selectedColor;
       }
       
-      // Try POST method first (as per API documentation)
-      let response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/get-product-price`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestBody)
-      });
-
-      // If POST fails with 405, fallback to GET method
-      if (!response.ok && response.status === 405) {
-        console.log('POST method not supported, falling back to GET');
-        const colorParam = selectedColor && selectedColor !== "" ? `&color_id=${selectedColor}` : "";
-        response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/get-product-price?product_id=${productId}&product_qty=${qty}${colorParam}&bulk_price=true`);
-      }
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
+      // Use GET-only: build query with product_qty and quantity and include color_id/size_id
+      const colorParam = selectedColor && selectedColor !== '' ? `&color_id=${encodeURIComponent(selectedColor)}` : `&color_id=`;
+      const sizeParam = `&size_id=`;
+      const url = `/api/get-product-price?product_id=${encodeURIComponent(productId)}&product_qty=${encodeURIComponent(qty)}${colorParam}${sizeParam}&quantity=${encodeURIComponent(qty)}&bulk_price=true&default_state=`;
+      const response = await fetch(url);
       const data = await response.json();
 
       if (data.success) {
         setPriceData(data.data);
+        // If API tells us stock is invalid, hide actions and show warning
+        if (data.data.stock_invalid) {
+          toast.error(data.message || 'Stock limit exceeded');
+        }
         // Update the maximum quantity based on stock from API response
         if (data.data.stock && qty > data.data.stock) {
           setQuantity(Math.min(qty, data.data.stock));
@@ -61,8 +57,11 @@ export default function ProductInteractive({ product, initialPriceData, productI
         }
       } else {
         console.error('Price API Error:', data.message);
-        // Don't show toast for stock limit exceeded as it's expected behavior
-        if (!data.message.toLowerCase().includes('stock limit exceeded')) {
+        if (data.message && data.message.toLowerCase().includes('stock limit exceeded')) {
+          toast.error(data.message);
+          // set an empty priceData so UI falls back to product defaults and hides action buttons via stock check
+          setPriceData({ stock_invalid: true, stock: 0 });
+        } else {
           toast.error(data.message || 'Failed to update price');
         }
       }
@@ -75,6 +74,12 @@ export default function ProductInteractive({ product, initialPriceData, productI
   };
 
   const handleQuantityChange = (amount) => {
+    // Require color selection for products with variants
+    if (hasColors && !selectedColor) {
+      toast.error('Please select a color first');
+      return;
+    }
+
     const currentStock = priceData?.stock || product.stock || 999;
     const newQuantity = Math.max(1, Math.min(currentStock, quantity + amount));
     
@@ -88,6 +93,11 @@ export default function ProductInteractive({ product, initialPriceData, productI
   };
 
   const handleQuantityInputChange = (e) => {
+    // If product has colors, require selection before manual input
+    if (hasColors && !selectedColor) {
+      toast.error('Please select a color before changing quantity');
+      return;
+    }
     const value = e.target.value;
     
     // Allow empty string during typing
@@ -129,10 +139,47 @@ export default function ProductInteractive({ product, initialPriceData, productI
 
   const handleAddToCart = async () => {
     try {
-      // Bearer token to save in localStorage
+      // Validation: if product has colors, require selection
+      if (product.colors && product.colors.length > 0 && !selectedColor) {
+        toast.error('Please select a color before adding to cart');
+        return;
+      }
+
+      // Run a server-side price/stock validation before adding to cart
+      const validateBody = {
+        product_id: parseInt(productId),
+        product_qty: quantity,
+        quantity: quantity,
+        color_id: selectedColor || "",
+        size_id: "",
+        bulk_price: true
+      };
+
+      // Validate via GET using product_qty and color_id
+      const vColor = selectedColor && selectedColor !== '' ? `&color_id=${encodeURIComponent(selectedColor)}` : `&color_id=`;
+      const vSize = `&size_id=`;
+      const validateUrl = `/api/get-product-price?product_id=${encodeURIComponent(productId)}&product_qty=${encodeURIComponent(quantity)}${vColor}${vSize}&quantity=${encodeURIComponent(quantity)}&bulk_price=true&default_state=`;
+      const validateResp = await fetch(validateUrl);
+      const validateData = await validateResp.json();
+
+      if (!validateData || !validateData.success) {
+        const msg = (validateData && validateData.message) || 'Unable to validate stock for this selection';
+        toast.error(msg);
+        return;
+      }
+
+      const priceInfo = validateData.data;
+      // If API says stock invalid or stock < quantity, block add
+      if (priceInfo.stock_invalid || (typeof priceInfo.stock === 'number' && priceInfo.stock < quantity)) {
+        const msg = priceInfo.stock_invalid ? (validateData.message || 'Stock limit exceeded') : `Only ${priceInfo.stock || 0} items available`;
+        toast.error(msg);
+        // update local priceData so UI reflects out-of-stock
+        setPriceData({ stock_invalid: !!priceInfo.stock_invalid, stock: priceInfo.stock || 0 });
+        return;
+      }
+
+      // Bearer token to save in localStorage (kept client-side for cart API)
       const bearerToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5MjBjMTIwZS0zY2IwLTQ3OGMtOTY0Yi1hM2ZhZmFjMDFhNGIiLCJqdGkiOiJhNGQzOWM5NjEyZjNkMjBiNDMwOThiNmZjNmMwZGY4ZWU5ZGQ2OTk0ZWFiMjVjOGQ2Y2Y3YWViYWE5MmY5NzY4ZjZhZDI0MzNlZmQ5M2FmOSIsImlhdCI6MTc2MDAxODg4OS45MDI2NDEsIm5iZiI6MTc2MDAxODg4OS45MDI2NDQsImV4cCI6MTc5MTU1NDg4OS44NjYwNTgsInN1YiI6IjUiLCJzY29wZXMiOlsiKiJdfQ.Jz0-usKv6r92872cz71UvFbU75Ah0GZEo8RqCts6JmVdnAn5FXU-kWePf8ldB9hMqHvQJfgAFzRjKUDEMqBOo684ISIGVmhdO5b51r4oWLMrHWdpJnPB9MX4UJzVyfgRl0CfgitJcCgsqIVgwl1FdIhVfcKkCptaSEzITgdyhLqCMIys_CaU6CXcGPbO2usSEVGJTDAVCc_1KGXKvnyHTj29ZPcM09EHJR-9hD8OtCUmBuU3CYnhEgHCzkfSuost-5ropuSJ51QmKdVYHMQFINRCIZILzuk-hBXaCCvdsh0dFc7ELZ4K_qFE2SYX9AuZVrlR9qgItMkLxaSI6m_ZC3nRKGqLDRDv5Lf85u1liLoEoWMl6VlUz5hSVfyHBikoXMKZja81Zv1AJZ67Xb5cOQUDyc4ozHim2rmoEKAd0YBaPdfgxbLicD6uS5c0Je9GSc9wc381Zy6hOTNFArneU3ydZ4C2SKIyatqMjRxUETpgDL1qeeDtS15ZbXRaHBZqGzBXaub2EHMnVQV81akgiR054XPUViHcf-sbVdzUI-gZF_5JeKIyKuS1fWwxfbNONPTGQFo1FFJyeKsnBG-LHAitAfxBvikkXf0kyUwC2q6XkKie31mUDS46IvU0XrNtrpKn7drV6WEFCpeMuh7OIX1WVsM6KuxeF4WdLF8s6B8';
-      
-      // Save token to localStorage
       localStorage.setItem('bearerToken', bearerToken);
 
       const payload = {
@@ -300,16 +347,22 @@ export default function ProductInteractive({ product, initialPriceData, productI
             <div className="absolute inset-0 bg-gray-200/60 animate-pulse rounded"></div>
           )}
           <div className={`flex flex-col gap-1 ${priceLoading ? 'opacity-50' : ''}`}>
-            {priceData ? (
-              <div className="text-green-600 font-bold text-xl">
-                ₹{priceData.total_sale_price_with_tax ? priceData.total_sale_price_with_tax.replace('INR ', '') : (priceData.total_sale_price || 0).toFixed(2)}
-                <span className="text-gray-600 font-normal text-xs ml-1">(incl. tax)</span>
+            {((priceData && priceData.stock_invalid) || stock <= 0) ? (
+              <div className="text-red-600 font-bold text-lg">
+                Out of Stock
               </div>
             ) : (
-              <div className="text-green-600 font-extrabold text-xl">
-                ₹{(product.priceDetails.finalPrice * quantity).toFixed(2)}
-                <span className="text-gray-600 font-normal text-xs ml-1">(incl. tax)</span>
-              </div>
+              priceData ? (
+                <div className="text-green-600 font-bold text-xl">
+                  ₹{priceData.total_sale_price_with_tax ? priceData.total_sale_price_with_tax.replace('INR ', '') : (priceData.total_sale_price || 0).toFixed(2)}
+                  <span className="text-gray-600 font-normal text-xs ml-1">(incl. tax)</span>
+                </div>
+              ) : (
+                <div className="text-green-600 font-extrabold text-xl">
+                  ₹{(safeNum(product.priceDetails.finalPrice) * quantity).toFixed(2)}
+                  <span className="text-gray-600 font-normal text-xs ml-1">(incl. tax)</span>
+                </div>
+              )
             )}
             {/* Bulk pricing notice */}
             {priceData?.bulk_price && priceData.bulk_price.length > 0 && quantity >= priceData.bulk_price[0].bulk_price_from && (
@@ -327,15 +380,19 @@ export default function ProductInteractive({ product, initialPriceData, productI
         {stock > 0 ? (
           <div className="flex items-center gap-2">
             <button 
-              className="px-3 py-1.5 bg-orange-500 text-white font-semibold text-[11px] rounded hover:bg-orange-600 transition cursor-pointer shadow-sm"
+              className={`px-3 py-1.5 ${hasColors && !selectedColor ? 'bg-orange-200 text-white cursor-not-allowed' : 'bg-orange-500 text-white hover:bg-orange-600'} font-semibold text-[11px] rounded transition shadow-sm`}
               aria-label="Buy this product now"
+              disabled={hasColors && !selectedColor}
+              title={hasColors && !selectedColor ? 'Select a color first' : 'Buy this product now'}
             >
               Buy Now
             </button>
             <button 
-              className="px-3 py-1.5 bg-white border border-orange-500 text-orange-500 font-semibold text-[11px] rounded hover:bg-orange-50 transition cursor-pointer shadow-sm"
+              className={`px-3 py-1.5 ${hasColors && !selectedColor ? 'bg-white border border-gray-200 text-gray-400 cursor-not-allowed' : 'bg-white border border-orange-500 text-orange-500 hover:bg-orange-50'} font-semibold text-[11px] rounded transition shadow-sm`}
               onClick={handleAddToCart}
               aria-label="Add this product to cart"
+              disabled={hasColors && !selectedColor}
+              title={hasColors && !selectedColor ? 'Select a color first' : 'Add to cart' }
             >
               Add To Cart
             </button>
