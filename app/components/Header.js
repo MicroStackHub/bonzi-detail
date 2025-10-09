@@ -14,6 +14,9 @@ export default function Header() {
   const [showCategoriesDropdown, setShowCategoriesDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState('All Categories');
+  const [categoryOpen, setCategoryOpen] = useState(false);
+  const categoryRef = useRef(null);
 
   const categories = [
     { name: 'Apparel Accessories', icon: <FaTshirt /> },
@@ -33,6 +36,22 @@ export default function Header() {
     { name: 'Toys & Hobbies', icon: <FaGamepad /> },
   ];
 
+  useEffect(() => {
+    const handleDocClick = (e) => {
+      if (categoryRef.current && !categoryRef.current.contains(e.target)) {
+        setCategoryOpen(false);
+      }
+    };
+    const handleKey = (e) => {
+      if (e.key === 'Escape') setCategoryOpen(false);
+    };
+    document.addEventListener('mousedown', handleDocClick);
+    document.addEventListener('keydown', handleKey);
+    return () => {
+      document.removeEventListener('mousedown', handleDocClick);
+      document.removeEventListener('keydown', handleKey);
+    };
+  }, []);
   return (
     <header className={`w-full z-50 bg-white transition-all duration-300 sticky top-0`}>
       <div className="w-full py-2 sm:py-4">
@@ -130,22 +149,50 @@ export default function Header() {
           </div>
 
           <div className="mt-3 sm:mt-0 sm:flex-1 sm:max-w-xl sm:mx-6">
-            <div className="flex w-full rounded-md overflow-hidden shadow-sm border border-gray-200">
-              <div className="relative group">
-                <label htmlFor="category-select" className="sr-only">Select category</label>
-                <select
-                  id="category-select"
-                  className="px-2 py-2 border-0 bg-white text-gray-800 text-xs focus:outline-none focus:ring-1 focus:ring-orange-500 appearance-none transition-colors duration-200 h-9 hover:bg-orange-50"
-                  style={{ minWidth: 'auto', maxWidth: '150px' }}
+            <div className="flex w-full rounded-md overflow-visible shadow-sm border border-gray-200">
+              {/* Custom dynamic-width category dropdown near search */}
+              <div className="relative" ref={categoryRef}>
+                <button
+                  type="button"
+                  aria-haspopup="listbox"
+                  aria-expanded={categoryOpen}
+                  onClick={() => setCategoryOpen((v) => !v)}
+                  className="px-2 py-2 h-10 text-sm md:text-md bg-white hover:bg-orange-50 focus:outline-none focus:ring-1 focus:ring-orange-500 whitespace-nowrap flex items-center gap-1.5 w-auto min-w-[6rem] max-w-[50%] md:max-w-[18rem]"
                 >
-                  <option value="">All Categories</option>
-                  {categories.map((category, index) => (
-                    <option key={index} value={category.name}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
+                  <span className="text-gray-800">{selectedCategory}</span>
+                  <svg className="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
 
+                {categoryOpen && (
+                  <div className="absolute top-full left-0 mt-1 bg-white rounded-md shadow-lg z-50 w-auto min-w-0 inline-block">
+                    <ul role="listbox" className="py-1 max-h-[70vh] overflow-auto">
+                      <li>
+                        <button
+                          type="button"
+                          role="option"
+                          className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-orange-500 hover:text-white whitespace-nowrap"
+                          onClick={() => { setSelectedCategory('All Categories'); setCategoryOpen(false); }}
+                        >
+                          All Categories
+                        </button>
+                      </li>
+                      {categories.map((category, idx) => (
+                        <li key={idx}>
+                          <button
+                            type="button"
+                            role="option"
+                            className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-orange-500 hover:text-white whitespace-nowrap"
+                            onClick={() => { setSelectedCategory(category.name); setCategoryOpen(false); }}
+                          >
+                            {category.name}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
 
               <div className="relative flex-1 flex">
@@ -154,7 +201,7 @@ export default function Header() {
                   id="search-input"
                   type="text"
                   placeholder="Search for products..."
-                  className="pl-3 pr-10 py-2 border-0 border-l border-gray-200 focus:outline-none focus:ring-1 focus:ring-orange-500 block w-full text-sm text-gray-700 h-9"
+                  className="pl-3 pr-10 py-2.5 border-0 border-l border-gray-200 focus:outline-none focus:ring-1 focus:ring-orange-500 block w-full text-sm text-gray-700 h-10"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />

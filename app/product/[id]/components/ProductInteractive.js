@@ -231,9 +231,9 @@ export default function ProductInteractive({ product, initialPriceData, productI
       <div className="flex items-start gap-4">
         <span className="font-medium text-gray-500 w-20 flex-shrink-0">Quantity:</span>
         <div className="flex flex-col items-start">
-          <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+          <div className="flex items-center border border-gray-200 rounded overflow-hidden">
             <button 
-              className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold transition-colors duration-200 flex items-center justify-center" 
+              className="w-9 h-9 bg-red-500 text-white font-bold flex items-center justify-center border-none rounded-none hover:bg-red-600 transition-colors duration-150"
               onClick={() => handleQuantityChange(-1)}
               aria-label="Decrease quantity"
             >
@@ -248,10 +248,10 @@ export default function ProductInteractive({ product, initialPriceData, productI
               onBlur={handleQuantityBlur}
               min="1"
               max={stock}
-              className="px-4 py-2 border-l border-r border-gray-300 text-center min-w-[50px] font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-12 h-9 text-center font-semibold border-none focus:outline-none focus:ring-2 focus:ring-orange-500"
             />
             <button 
-              className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold transition-colors duration-200 flex items-center justify-center" 
+              className="w-9 h-9 bg-green-500 text-white font-bold flex items-center justify-center border-none rounded-none hover:bg-green-600 transition-colors duration-150"
               onClick={() => handleQuantityChange(1)}
               aria-label="Increase quantity"
             >
@@ -316,25 +316,31 @@ export default function ProductInteractive({ product, initialPriceData, productI
       {/* Action */}
       <div className="flex items-center gap-3">
         <span className="font-medium text-gray-500 w-20 flex-shrink-0">Action:</span>
-        <button 
-          className="w-24 h-10 bg-orange-500 text-white rounded-lg font-semibold shadow text-sm flex items-center justify-center transition hover:bg-orange-600"
-          aria-label="Buy this product now"
-        >
-          Buy Now
-        </button>
-        <button 
-          className="w-24 h-10 bg-white border border-orange-500 text-orange-500 rounded-lg font-semibold shadow text-sm flex items-center justify-center transition hover:bg-orange-50"
-          onClick={handleAddToCart}
-          aria-label="Add this product to cart"
-        >
-          Add To Cart
-        </button>
-        <button 
-          className="text-orange-500 hover:text-orange-600 p-2 text-xl flex items-center justify-center"
-          aria-label="Add to wishlist"
-        >
-          ♡
-        </button>
+        {stock > 0 ? (
+          <>
+            <button 
+              className="w-24 h-10 bg-orange-500 text-white rounded-lg font-semibold shadow text-sm flex items-center justify-center transition hover:bg-orange-600"
+              aria-label="Buy this product now"
+            >
+              Buy Now
+            </button>
+            <button 
+              className="w-24 h-10 bg-white border border-orange-500 text-orange-500 rounded-lg font-semibold shadow text-sm flex items-center justify-center transition hover:bg-orange-50"
+              onClick={handleAddToCart}
+              aria-label="Add this product to cart"
+            >
+              Add To Cart
+            </button>
+            <button 
+              className="text-orange-500 hover:text-orange-600 p-2 text-xl flex items-center justify-center"
+              aria-label="Add to wishlist"
+            >
+              ♡
+            </button>
+          </>
+        ) : (
+          <span className="text-red-500 font-semibold text-base ml-2">Out of Stock</span>
+        )}
       </div>
 
       {/* Promotions */}
@@ -352,8 +358,8 @@ export default function ProductInteractive({ product, initialPriceData, productI
       </div>
 
       {/* Bulk pricing info */}
-      <div className="text-[10px] sm:text-[10px] text-orange-600">
-        Want to buy in bulk? <a href="#" className="underline font-semibold">Learn about bulk pricing options</a>
+      <div className="text-sm sm:text-base font-semibold text-orange-600">
+         buy in bulk? <a href="#" className="underline font-semibold">bulk pricing options</a>
       </div>
     </div>
   );

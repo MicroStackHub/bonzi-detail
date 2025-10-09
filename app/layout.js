@@ -27,11 +27,33 @@ export default function RootLayout({ children }) {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <Header />
-          <main className="flex-grow w-full">
+          <main className="flex-grow w-full min-h-screen">
             {children}
           </main>
           <Footer />
-          <Toaster position="top" />
+          <Toaster
+            position="top-center"
+            toastOptions={{
+              // Default
+              style: {
+                fontWeight: 500,
+                fontSize: '1rem',
+                borderRadius: '8px',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+              },
+              // Warning toast
+              error: {
+                style: {
+                  background: '#f87171', // Tailwind red-400
+                  color: '#fff',
+                },
+                iconTheme: {
+                  primary: '#fff',
+                  secondary: '#b91c1c', // Tailwind red-700
+                },
+              },
+            }}
+          />
         </div>
       </body>
     </html>

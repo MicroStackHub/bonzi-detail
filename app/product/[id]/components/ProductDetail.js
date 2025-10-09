@@ -69,7 +69,7 @@ export default function ProductDetail({ product, productDescription, priceData, 
                       <span className="text-green-600 font-semibold text-[10px]">Save {Math.round(priceData.save_percentage)}%</span>
                     </div>
                     <div className="flex flex-wrap items-center gap-1.5 mb-1">
-                      <span className="text-sm sm:text-base font-bold text-orange-600">Price: ₹{priceData.sale_price ? parseFloat(priceData.sale_price.replace('INR ', '')).toFixed(2) : 'N/A'}</span>
+                      <span className="text-base sm:text-lg font-bold text-orange-600">Price: ₹{priceData.sale_price ? parseFloat(priceData.sale_price.replace('INR ', '')).toFixed(2) : 'N/A'}</span>
                       <span className="text-[10px] text-gray-500">(Exclusive of all taxes)</span>
                     </div>
                     <div className="flex flex-wrap items-center gap-1.5">
@@ -84,7 +84,7 @@ export default function ProductDetail({ product, productDescription, priceData, 
                       <span className="text-green-600 font-semibold text-[10px]">Save {getSavePercentage(priceData, product)}%</span>
                     </div>
                     <div className="flex flex-wrap items-center gap-1.5 mb-1">
-                      <span className="text-sm sm:text-base font-bold text-orange-600">Price: ₹{product.priceDetails.price.toFixed(2)}</span>
+                      <span className="text-base sm:text-lg font-bold text-orange-600">Price: ₹{product.priceDetails.price.toFixed(2)}</span>
                       <span className="text-[10px] text-gray-500">(Exclusive of all taxes)</span>
                     </div>
                     <div className="flex flex-wrap items-center gap-1.5">
