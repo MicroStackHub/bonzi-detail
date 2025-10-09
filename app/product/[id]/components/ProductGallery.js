@@ -31,11 +31,13 @@ export default function ProductGallery({ product, selectedColorImage }) {
     const y = e.clientY - rect.top;
     
     // Ensure magnifier stays within image bounds
-    const magnifierSize = 150;
-    const halfSize = magnifierSize / 2;
+    const magnifierWidth = 300;
+    const magnifierHeight = 200;
+    const halfWidth = magnifierWidth / 2;
+    const halfHeight = magnifierHeight / 2;
     
-    const boundedX = Math.max(halfSize, Math.min(x, rect.width - halfSize));
-    const boundedY = Math.max(halfSize, Math.min(y, rect.height - halfSize));
+    const boundedX = Math.max(halfWidth, Math.min(x, rect.width - halfWidth));
+    const boundedY = Math.max(halfHeight, Math.min(y, rect.height - halfHeight));
     
     setMagnifierPosition({ x: boundedX, y: boundedY });
   };
@@ -101,22 +103,22 @@ export default function ProductGallery({ product, selectedColorImage }) {
                   {/* Magnifying Glass */}
                   {showMagnifier && (
                     <div
-                      className="absolute pointer-events-none border-4 border-white rounded-full overflow-hidden shadow-2xl bg-white"
+                      className="absolute pointer-events-none border-4 border-white rounded-lg overflow-hidden shadow-2xl bg-white"
                       style={{
-                        width: '150px',
-                        height: '150px',
-                        left: `${magnifierPosition.x - 75}px`,
-                        top: `${magnifierPosition.y - 75}px`,
+                        width: '300px',
+                        height: '200px',
+                        left: `${magnifierPosition.x - 150}px`,
+                        top: `${magnifierPosition.y - 100}px`,
                         backgroundImage: `url(${selectedMedia.url})`,
                         backgroundSize: `${imgRef.current?.offsetWidth * 2.5}px ${imgRef.current?.offsetHeight * 2.5}px`,
-                        backgroundPosition: `-${magnifierPosition.x * 2.5 - 75}px -${magnifierPosition.y * 2.5 - 75}px`,
+                        backgroundPosition: `-${magnifierPosition.x * 2.5 - 150}px -${magnifierPosition.y * 2.5 - 100}px`,
                         backgroundRepeat: 'no-repeat',
                         zIndex: 50,
                         boxShadow: '0 8px 16px rgba(0,0,0,0.3)'
                       }}
                     >
-                      {/* Inner circle border for better visibility */}
-                      <div className="absolute inset-0 rounded-full border-2 border-gray-300 opacity-50"></div>
+                      {/* Inner border for better visibility */}
+                      <div className="absolute inset-0 rounded-lg border-2 border-gray-300 opacity-50"></div>
                     </div>
                   )}
                 </div>
