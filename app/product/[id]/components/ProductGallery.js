@@ -1,13 +1,16 @@
+
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { GlassMagnifier } from 'react-image-magnifiers';
 
 export default function ProductGallery({ product, selectedColorImage }) {
   const [selectedMedia, setSelectedMedia] = useState(
     product.media && product.media.length > 0 ? product.media[0] : null
   );
+  const [showMagnifier, setShowMagnifier] = useState(false);
+  const [magnifierPosition, setMagnifierPosition] = useState({ x: 0, y: 0 });
+  const imgRef = useRef(null);
 
   // Update selected media when color image changes
   useEffect(() => {
@@ -19,6 +22,24 @@ export default function ProductGallery({ product, selectedColorImage }) {
       });
     }
   }, [selectedColorImage]);
+
+  const handleMouseMove = (e) => {
+    if (!imgRef.current) return;
+    
+    const rect = imgRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    setMagnifierPosition({ x, y });
+  };
+
+  const handleMouseEnter = () => {
+    setShowMagnifier(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowMagnifier(false);
+  };
 
   const getColorCode = (colorName) => {
     const colorMap = {
@@ -53,17 +74,44 @@ export default function ProductGallery({ product, selectedColorImage }) {
                   className="w-full h-full object-contain"
                 />
               ) : (
-                <div className="group relative w-full h-full">
-                  <GlassMagnifier
-                    className="object-contain"
-                    imageSrc={selectedMedia.url}
-                    imageAlt={product.name}
-                    magnifierSize="200px" 
-                    square={false} 
-                    zoomLevel={1.5} 
-                    direction="right"
-                    style={{ width: '100%', height: '100%' }}
+                <div 
+                  className="group relative w-full h-full cursor-crosshair"
+                  onMouseMove={handleMouseMove}
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
+                  ref={imgRef}
+                >
+                  <Image 
+                    src={selectedMedia.url} 
+                    alt={product.name} 
+                    fill
+                    className="object-contain transition-transform duration-300"
+                    priority
+                    quality={85}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 800px"
                   />
+                  
+                  {/* Magnifying Glass */}
+                  {showMagnifier && (
+                    <div
+                      className="absolute pointer-events-none border-4 border-gray-400 rounded-full overflow-hidden shadow-2xl"
+                      style={{
+                        width: '200px',
+                        height: '200px',
+                        left: `${magnifierPosition.x - 100}px`,
+                        top: `${magnifierPosition.y - 100}px`,
+                        backgroundImage: `url(${selectedMedia.url})`,
+                        backgroundSize: '400%',
+                        backgroundPositionX: `-${magnifierPosition.x * 3}px`,
+                        backgroundPositionY: `-${magnifierPosition.y * 3}px`,
+                        backgroundRepeat: 'no-repeat',
+                        zIndex: 10
+                      }}
+                    >
+                      {/* Inner circle border for better visibility */}
+                      <div className="absolute inset-0 rounded-full border-2 border-white"></div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
