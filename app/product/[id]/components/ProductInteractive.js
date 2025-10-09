@@ -325,22 +325,22 @@ export default function ProductInteractive({ product, initialPriceData, productI
       <div className="flex items-center gap-3">
         <span className="font-medium text-gray-500 w-20 max-[360px]:w-16 max-[360px]:text-[11px] flex-shrink-0">Action:</span>
         {stock > 0 ? (
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-2">
             <button 
-              className="px-2.5 py-1.5 bg-orange-500 text-white font-semibold text-[11px] hover:bg-orange-600 transition cursor-pointer"
+              className="px-3 py-1.5 bg-orange-500 text-white font-semibold text-[11px] rounded hover:bg-orange-600 transition cursor-pointer shadow-sm"
               aria-label="Buy this product now"
             >
               Buy Now
             </button>
             <button 
-              className="px-2.5 py-1.5 bg-white border border-orange-500 text-orange-500 font-semibold text-[11px] hover:bg-orange-50 transition cursor-pointer"
+              className="px-3 py-1.5 bg-white border border-orange-500 text-orange-500 font-semibold text-[11px] rounded hover:bg-orange-50 transition cursor-pointer shadow-sm"
               onClick={handleAddToCart}
               aria-label="Add this product to cart"
             >
               Add To Cart
             </button>
             <button 
-              className="w-7 h-7 border border-gray-300 text-orange-500 hover:text-orange-600 hover:border-orange-500 text-base flex items-center justify-center transition cursor-pointer"
+              className="w-8 h-8 border border-gray-300 text-orange-500 hover:text-orange-600 hover:border-orange-500 text-lg flex items-center justify-center transition cursor-pointer rounded shadow-sm"
               aria-label="Add to wishlist"
             >
               ♡

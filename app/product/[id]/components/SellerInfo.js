@@ -49,25 +49,25 @@ export default function SellerInfo({ product }) {
 
   return (
     <>
-      <div className="w-full flex flex-col gap-2">
-        <div className="p-3 max-[360px]:p-2 bg-gray-50 rounded-lg flex flex-col gap-2">
-          <div className="text-sm text-gray-600">Sold By</div>
-          <div className="font-bold text-orange-600 text-sm max-[360px]:text-[13px]">{product.seller}</div>
-          <div className="flex flex-col text-gray-700 gap-1">
-            <span className='text-xs max-[360px]:text-[11px]'>{product.positiveSentiment}% Positive Sentiment</span>
-            <span className='text-xs max-[360px]:text-[11px]'>{product.followers} Followers</span>
+      <div className="w-full flex flex-col gap-2 ml-auto max-w-[280px]">
+        <div className="p-2 max-[360px]:p-1.5 bg-gray-50 rounded-lg flex flex-col gap-1.5">
+          <div className="text-[11px] text-gray-600">Sold By</div>
+          <div className="font-bold text-orange-600 text-xs max-[360px]:text-[11px]">{product.seller}</div>
+          <div className="flex flex-col text-gray-700 gap-0.5">
+            <span className='text-[10px] max-[360px]:text-[9px]'>{product.positiveSentiment}% Positive Sentiment</span>
+            <span className='text-[10px] max-[360px]:text-[9px]'>{product.followers} Followers</span>
           </div>
-          <div className="flex flex-col gap-2 mt-1">
+          <div className="flex flex-col gap-1.5 mt-0.5">
             <button 
-              className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-3 py-1 max-[360px]:px-2.5 max-[360px]:py-1 rounded font-semibold shadow text-sm max-[360px]:text-xs cursor-pointer"
+              className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-2 py-1 max-[360px]:px-1.5 max-[360px]:py-0.5 rounded font-semibold shadow text-[11px] max-[360px]:text-[10px] cursor-pointer"
               onClick={() => setShowContactModal(true)}
               aria-label="Contact the seller"
             >
               Contact Seller
             </button>
-            <div className="flex flex-row gap-2">
+            <div className="flex flex-row gap-1.5">
               <button 
-                className={`px-3 py-1 max-[360px]:px-2.5 max-[360px]:py-1 rounded shadow text-sm max-[360px]:text-xs transition-colors cursor-pointer
+                className={`px-2 py-1 max-[360px]:px-1.5 max-[360px]:py-0.5 rounded shadow text-[11px] max-[360px]:text-[10px] transition-colors cursor-pointer
                   ${
                     isFollowing
                       ? 'bg-red-500 text-white border border-red-500 hover:bg-red-600'
@@ -81,7 +81,7 @@ export default function SellerInfo({ product }) {
               </button>
               <button 
                 onClick={handleVisitStore}
-                className="bg-white border border-gray-300 text-gray-700 px-2.5 py-1.5 max-[360px]:px-2 max-[360px]:py-1 rounded shadow text-[11px] max-[360px]:text-[10px] hover:bg-gray-50 transition-colors cursor-pointer"
+                className="bg-white border border-gray-300 text-gray-700 px-2 py-1 max-[360px]:px-1.5 max-[360px]:py-0.5 rounded shadow text-[10px] max-[360px]:text-[9px] hover:bg-gray-50 transition-colors cursor-pointer"
                 aria-label="Visit seller's store"
               >
                 Visit Store
