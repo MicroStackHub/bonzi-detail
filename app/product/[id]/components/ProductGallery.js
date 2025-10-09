@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { GlassMagnifier } from 'react-image-magnifiers';
 
 export default function ProductGallery({ product, selectedColorImage }) {
   const [selectedMedia, setSelectedMedia] = useState(
@@ -30,7 +31,7 @@ export default function ProductGallery({ product, selectedColorImage }) {
       'violet': '#EE82EE', 'magenta': '#FF00FF', 'cyan': '#00FFFF', 'teal': '#008080',
       'indigo': '#4B0082', 'coral': '#FF7F50', 'default': '#FFFFFF'
     };
-    
+
     const normalizedColor = colorName.toLowerCase().trim();
     return colorMap[normalizedColor] || colorMap['default'];
   };
@@ -53,14 +54,15 @@ export default function ProductGallery({ product, selectedColorImage }) {
                 />
               ) : (
                 <div className="group relative w-full h-full">
-                  <Image 
-                    src={selectedMedia.url} 
-                    alt={product.name} 
-                    fill
-                    className="object-contain transition-transform duration-300 ease-out hover:scale-105"
-                    priority
-                    quality={85}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 800px"
+                  <GlassMagnifier
+                    className="object-contain"
+                    imageSrc={selectedMedia.url}
+                    imageAlt={product.name}
+                    magnifierSize="200px" 
+                    square={false} 
+                    zoomLevel={1.5} 
+                    direction="right"
+                    style={{ width: '100%', height: '100%' }}
                   />
                 </div>
               )}
@@ -70,7 +72,7 @@ export default function ProductGallery({ product, selectedColorImage }) {
               <div className="text-gray-400 text-sm">No image available</div>
             </div>
           )}
-          
+
           {/* Controls */}
           <div className="absolute top-4 right-4 flex gap-2 max-[360px]:top-3 max-[360px]:right-3">
             <button
@@ -146,7 +148,7 @@ export default function ProductGallery({ product, selectedColorImage }) {
               </div>
             </button>
           ))}
-          
+
           {/* Color image thumbnails */}
           {product.colors && product.colors.length > 0 && product.colors.map((color, idx) => (
             color.image && (
