@@ -322,32 +322,32 @@ export default function ProductInteractive({ product, initialPriceData, productI
       </div>
 
       {/* Action */}
-      <div className="flex items-center gap-3 flex-wrap">
+      <div className="flex items-center gap-3">
         <span className="font-medium text-gray-500 w-20 max-[360px]:w-16 max-[360px]:text-[11px] flex-shrink-0">Action:</span>
         {stock > 0 ? (
-          <>
+          <div className="flex items-center gap-2">
             <button 
-              className="w-24 h-10 max-[360px]:w-20 max-[360px]:h-9 bg-orange-500 text-white rounded-lg font-semibold shadow text-sm max-[360px]:text-xs flex items-center justify-center transition hover:bg-orange-600"
+              className="px-4 py-2 bg-orange-500 text-white font-semibold text-xs hover:bg-orange-600 transition"
               aria-label="Buy this product now"
             >
               Buy Now
             </button>
             <button 
-              className="w-24 h-10 max-[360px]:w-20 max-[360px]:h-9 bg-white border border-orange-500 text-orange-500 rounded-lg font-semibold shadow text-sm max-[360px]:text-xs flex items-center justify-center transition hover:bg-orange-50"
+              className="px-3 py-2 bg-white border border-orange-500 text-orange-500 font-semibold text-xs hover:bg-orange-50 transition"
               onClick={handleAddToCart}
               aria-label="Add this product to cart"
             >
               Add To Cart
             </button>
             <button 
-              className="text-orange-500 hover:text-orange-600 p-2 text-xl max-[360px]:text-lg flex items-center justify-center"
+              className="w-8 h-8 border border-gray-300 text-orange-500 hover:text-orange-600 hover:border-orange-500 text-lg flex items-center justify-center transition"
               aria-label="Add to wishlist"
             >
               ♡
             </button>
-          </>
+          </div>
         ) : (
-          <span className="text-red-500 font-semibold text-base ml-2">Out of Stock</span>
+          <span className="text-red-500 font-semibold text-sm">Out of Stock</span>
         )}
       </div>
 
