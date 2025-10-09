@@ -250,6 +250,8 @@ export default function Header() {
                   className="pl-3 pr-10 max-[360px]:pr-9 py-2.5 max-[360px]:py-2 border-0 border-l border-gray-200 focus:outline-none focus:ring-1 focus:ring-orange-500 block w-full text-sm max-[360px]:text-xs text-gray-700 h-10 max-[360px]:h-9"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
+                  spellCheck="false"
+                  autoComplete="off"
                 />
                 <button
                   type="button"
