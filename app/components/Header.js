@@ -54,8 +54,8 @@ export default function Header() {
   }, []);
   return (
     <header className={`w-full z-50 bg-white transition-all duration-300 sticky top-0`}>
-      <div className="w-full py-2 px-0 sm:px-4 sm:py-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+      <div className="w-full py-2 px-0 sm:py-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-0 sm:px-4">
           <div className="flex items-center justify-between sm:flex-shrink-0">
             <div className="flex-shrink-0 min-w-[120px] max-[360px]:min-w-[96px]">
               {scrolled ? (
@@ -289,26 +289,16 @@ export default function Header() {
         </div>
 
         {/* SECOND ROW - Quick Links */}
-        <div className="mt-3">
+        <div className="mt-3 px-0 sm:px-4">
           <div className="flex justify-between items-center">
-            <div className="flex justify-center flex-1">
-              {/* Scrollable on >= sm to avoid overflow on mid-width screens */}
-              <div className="hidden sm:block sm:overflow-x-auto sm:scrollbar-hide w-full" aria-label="Quick links">
-                <div className="flex sm:justify-center sm:space-x-8 min-w-max text-sm px-2">
-                  <a href="https://www.bonzicart.com/sales/deals-special-offers" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-2 py-1.5 rounded transition-colors whitespace-nowrap">Deals & Special Offers</a>
-                  <a href="https://www.bonzicart.com/sales/exclusive-sales" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-2 py-1.5 rounded transition-colors whitespace-nowrap">Exclusive Sales</a>
-                  <a href="https://www.bonzicart.com/sales/diy" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-2 py-1.5 rounded transition-colors whitespace-nowrap">DIY</a>
-                  <a href="https://www.bonzicart.com/sales/smart-home" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-2 py-1.5 rounded transition-colors whitespace-nowrap">SMART HOME</a>
-                </div>
-              </div>
-
-              {/* Scrollable on < sm */}
-              <div className="sm:hidden overflow-x-auto scrollbar-hide w-full pb-1 -mx-2 px-2" aria-label="Quick links">
-                <div className="flex space-x-4 max-[360px]:space-x-3 text-sm max-[360px]:text-xs min-w-max">
-                  <a href="https://www.bonzicart.com/sales/deals-special-offers" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-2 py-1.5 max-[360px]:py-1 rounded transition-colors whitespace-nowrap">Deals & Special Offers</a>
-                  <a href="https://www.bonzicart.com/sales/exclusive-sales" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-2 py-1.5 max-[360px]:py-1 rounded transition-colors whitespace-nowrap">Exclusive Sales</a>
-                  <a href="https://www.bonzicart.com/sales/diy" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-2 py-1.5 max-[360px]:py-1 rounded transition-colors whitespace-nowrap">DIY</a>
-                  <a href="https://www.bonzicart.com/sales/smart-home" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-2 py-1.5 max-[360px]:py-1 rounded transition-colors whitespace-nowrap">SMART HOME</a>
+            <div className="flex justify-center flex-1 overflow-hidden">
+              {/* Always scrollable - unified approach for all screens */}
+              <div className="overflow-x-auto scrollbar-hide w-full" aria-label="Quick links">
+                <div className="flex justify-start sm:justify-center space-x-3 sm:space-x-4 lg:space-x-6 min-w-max text-xs sm:text-sm px-2 sm:px-0">
+                  <a href="https://www.bonzicart.com/sales/deals-special-offers" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-1.5 py-1 sm:px-2 sm:py-1.5 rounded transition-colors whitespace-nowrap">Deals & Special Offers</a>
+                  <a href="https://www.bonzicart.com/sales/exclusive-sales" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-1.5 py-1 sm:px-2 sm:py-1.5 rounded transition-colors whitespace-nowrap">Exclusive Sales</a>
+                  <a href="https://www.bonzicart.com/sales/diy" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-1.5 py-1 sm:px-2 sm:py-1.5 rounded transition-colors whitespace-nowrap">DIY</a>
+                  <a href="https://www.bonzicart.com/sales/smart-home" className="text-gray-600 hover:text-orange-500 bg-gray-100 hover:bg-orange-50 px-1.5 py-1 sm:px-2 sm:py-1.5 rounded transition-colors whitespace-nowrap">SMART HOME</a>
                 </div>
               </div>
             </div>
