@@ -63,11 +63,11 @@ export default function ProductDetail({ product, productDescription, priceData, 
   }
 
   return (
-    <div className="bg-gray-100 py-2 mx-auto">
-      <div className="w-full sm:max-w-7xl sm:mx-auto px-0 sm:px-4 ">
+    <div className="mx-auto">
+      <div className="w-full sm:max-w-7xl sm:mx-auto px-0 sm:px-0">
 
-        {/* Main Product Section */}
-  <div className="bg-white p-2 sm:p-4 md:p-5 rounded-none sm:rounded-lg shadow-none sm:shadow-sm flex flex-col lg:flex-row gap-2 sm:gap-4 lg:gap-6 max-[360px]:p-2 max-[360px]:gap-2">
+    {/* Main Product Section */}
+  <div className="pt-3 sm:pt-4 px-0 pb-0 flex flex-col lg:flex-row gap-1 sm:gap-2 lg:gap-4 max-[360px]:p-0 max-[360px]:gap-1">
           {/* Left: Product Gallery */}
           <ProductGallery product={product} selectedColorImage={selectedColorImage} />
 

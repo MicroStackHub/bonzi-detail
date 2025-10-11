@@ -47,7 +47,7 @@ async function fetchPriceData(productId) {
     if (data.success) {
       return { data: data.data, warning: null };
     } else {
-      console.error('Price API Error:', data.message);
+     // console.error('Price API Error:', data.message);
       // If stock limit exceeded, return a warning so the client can surface a toast
       if (data.message && data.message.toLowerCase().includes('stock limit exceeded')) {
         console.log('Stock limit exceeded for initial load, will use product default pricing');

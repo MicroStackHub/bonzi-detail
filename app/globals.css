@@ -179,7 +179,76 @@ html body iframe[src*="translate"] {
 
 /* Force light mode */
 body {
-  background: #ffffff;
+  background: #f3f4f6; /* light gray page background */
   color: #171717;
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Boxed site container: white content area centered on light-gray background */
+.site-box-wrapper {
+  display: flex;
+  justify-content: center;
+  background: #f3f4f6; /* match body */
+  padding: 15px 8px;
+}
+.site-box {
+  width: 100%;
+  max-width: 1200px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(16,24,40,0.04);
+  overflow: hidden;
+}
+.site-box main {
+  padding: 0; /* layout may apply its own padding */
+}
+
+/* Ensure header/footer keep white background (inside site box) */
+.site-box header, .site-box footer {
+  background: transparent;
+}
+
+/* Scoped header rules to protect visual layout from accidental global overrides */
+.site-header {
+  position: sticky; /* enforce stickiness */
+  top: 0;
+  z-index: 50; /* match component intent */
+  background: #ffffff; /* explicit white background */
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.site-header > div {
+  /* Ensure header inner container keeps its own padding and max-width */
+  background: transparent;
+}
+
+/* Strongly scoped header safeguards: prevent other components from changing header layout */
+.site-header,
+.site-header * {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent global border/padding resets from collapsing header layout */
+/* Note: don't change positioning of utility classes like .absolute/.relative here —
+   that breaks dropdowns which rely on Tailwind's positioning. Keep only non-positional safeguards. */
+.site-header .flex,
+.site-header .grid {
+  /* Ensure layout helpers inside header keep expected pointer behavior without forcing position. */
+  pointer-events: auto;
+}
+
+/* Ensure interactive header controls keep intended sizes and don't inherit global font-size resets */
+.site-header input,
+.site-header button,
+.site-header a {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Box shadow and border protection: keep header visually separate on top */
+.site-header { 
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+  border-bottom: 1px solid transparent;
+}
+

@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+// Header styles are applied using Tailwind utility classes to keep styles scoped and predictable.
+// Removed CSS module import to avoid style bleed; global or Tailwind classes are used instead.
 import Link from 'next/link';
 import {
   FaTshirt, FaLaptop, FaMobileAlt, FaMicrochip, FaHome, FaBlender, FaTools, FaGem, FaLightbulb, FaSuitcase, FaShoePrints, FaBook, FaShieldAlt, FaFutbol, FaGamepad
@@ -99,9 +101,10 @@ export default function Header() {
     };
   }, []);
   return (
-    <header className={`w-full z-50 bg-white transition-all duration-300 sticky top-0`}>
+    <header className={`site-header w-full z-50 bg-white transition-all duration-300 sticky top-0`}>
       <div className="w-full py-2 px-0 sm:py-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-0 sm:px-4">
+        <div className="sm:max-w-7xl mx-auto px-0 sm:px-4 md:px-6 lg:px-8 w-full">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-0 sm:px-4">
           <div className="flex items-center justify-between sm:flex-shrink-0">
             <div className="flex-shrink-0 min-w-[120px] max-[360px]:min-w-[96px]">
               {scrolled ? (
@@ -169,15 +172,12 @@ export default function Header() {
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs max-[360px]:text-[10px] rounded-full px-1">0</span>
               </button>
 
-              <button
-                className="relative"
-                aria-label="View shopping cart"
-              >
+              <Link href="https://www.bonzicart.com/shopping-cart" className="relative" aria-label="View shopping cart">
                 <svg className="w-5 h-5 max-[360px]:w-4 max-[360px]:h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17M17 13v4a2 2 0 01-2 2H9a2 2 0 01-2-2v-4m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
                 </svg>
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs max-[360px]:text-[10px] rounded-full px-1">{cartCount}</span>
-              </button>
+              </Link>
 
               {/* <div className="sm:hidden">
                 <LanguageSelector />
@@ -195,7 +195,7 @@ export default function Header() {
           </div>
 
           <div className="mt-3 sm:mt-0 sm:flex-1 sm:max-w-xl sm:mx-6">
-            <div className="flex w-full rounded-md overflow-visible shadow-sm border border-gray-200 max-[360px]:text-[12px]">
+            <div className="flex w-full rounded-md overflow-visible shadow-sm max-[360px]:text-[12px] border border-gray-200">
               {/* Custom dynamic-width category dropdown near search */}
               <div className="relative" ref={categoryRef}>
                 <button
@@ -203,7 +203,7 @@ export default function Header() {
                   aria-haspopup="listbox"
                   aria-expanded={categoryOpen}
                   onClick={() => setCategoryOpen((v) => !v)}
-                  className="px-2 py-2 h-10 max-[360px]:h-9 text-sm max-[360px]:text-xs md:text-md bg-white hover:bg-orange-50 focus:outline-none focus:ring-1 focus:ring-orange-500 whitespace-nowrap flex items-center gap-1.5 w-auto min-w-[6rem] max-[360px]:min-w-[5rem] max-w-[50%] md:max-w-[18rem]"
+                  className="px-2 py-2 h-10 max-[360px]:h-9 text-sm max-[360px]:text-xs md:text-md bg-white hover:bg-orange-50 focus:outline-none focus:ring-0 focus:border-gray-300 active:outline-none active:ring-0 active:border-gray-300 whitespace-nowrap flex items-center gap-1.5 w-auto min-w-[6rem] max-[360px]:min-w-[5rem] max-w-[50%] md:max-w-[18rem]"
                 >
                   <span className="text-gray-800">{selectedCategory}</span>
                   <svg className="w-4 h-4 max-[360px]:w-3.5 max-[360px]:h-3.5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -247,11 +247,11 @@ export default function Header() {
                   id="search-input"
                   type="text"
                   placeholder="Search for products..."
-                  className="pl-3 pr-10 max-[360px]:pr-9 py-2.5 max-[360px]:py-2 border-0 border-l border-gray-200 focus:outline-none focus:ring-1 focus:ring-orange-500 block w-full text-sm max-[360px]:text-xs text-gray-700 h-10 max-[360px]:h-9"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   spellCheck="false"
                   autoComplete="off"
+                  className="pl-3 pr-10 max-[360px]:pr-9 py-2.5 max-[360px]:py-2 focus:outline-none focus:ring-0 focus:border-0 block w-full text-sm max-[360px]:text-xs text-gray-700 h-10 max-[360px]:h-9"
                 />
                 <button
                   type="button"
@@ -277,15 +277,12 @@ export default function Header() {
               <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1">0</span>
             </button>
 
-            <button
-              className="relative"
-              aria-label="View shopping cart"
-            >
+            <Link href="https://www.bonzicart.com/shopping-cart" className="relative" aria-label="View shopping cart">
               <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17M17 13v4a2 2 0 01-2 2H9a2 2 0 01-2-2v-4m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
               </svg>
               <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1">{cartCount}</span>
-            </button>
+            </Link>
 
             <div className="relative">
               <button
@@ -355,6 +352,7 @@ export default function Header() {
               <LanguageSelector />
             </div>
           </div>
+        </div>
         </div>
       </div>
     </header>
