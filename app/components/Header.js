@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 // Header styles are applied using Tailwind utility classes to keep styles scoped and predictable.
 // Removed CSS module import to avoid style bleed; global or Tailwind classes are used instead.
 import Link from 'next/link';
@@ -18,6 +19,10 @@ export default function Header() {
   const [categoryOpen, setCategoryOpen] = useState(false);
   const categoryRef = useRef(null);
   const [cartCount, setCartCount] = useState(0);
+  const [suggestions, setSuggestions] = useState([]);
+  const [categoryFacets, setCategoryFacets] = useState([]);
+  const debounceTimerRef = useRef(null);
+  const router = useRouter();
 
   const categories = [
     { name: 'Apparel Accessories', icon: <FaTshirt /> },
@@ -83,6 +88,141 @@ export default function Header() {
       window.removeEventListener('cartUpdated', handleCartUpdate);
     };
   }, []);
+
+  // --- Typesense integration for search/autocomplete (client-side) ---
+  useEffect(() => {
+    // fetch category facets once on mount
+    const fetchCategories = async () => {
+      try {
+        const typesenseHost = 'https://search.bonzicart.com';
+        const apiKey = 'Surat';
+        const collectionName = 'bnz-product';
+        const params = new URLSearchParams({ q: '*', query_by: 'name', facet_by: 'categories', per_page: '0' });
+        const url = `${typesenseHost}/collections/${collectionName}/documents/search?${params.toString()}`;
+        console.debug('[Typesense] categories GET ->', url);
+        const res = await fetch(url, { method: 'GET', headers: { 'X-TYPESENSE-API-KEY': apiKey } });
+        if (!res.ok) {
+          const text = await res.text();
+          console.warn('Typesense categories fetch not ok', res.status, text);
+          return;
+        }
+        const json = await res.json();
+        const categories = json.facet_counts?.find(f => f.field_name === 'categories');
+        if (categories) {
+          setCategoryFacets(categories.counts || []);
+        }
+      } catch (err) {
+        // surface errors to console for debugging
+        console.debug('Typesense categories fetch failed', err);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // Debounced suggestions fetch
+  const fetchSuggestions = (query) => {
+    if (!query || query.trim().length < 2) {
+      setSuggestions([]);
+      return;
+    }
+
+    // debounce
+    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    debounceTimerRef.current = setTimeout(async () => {
+      try {
+        const typesenseHost = 'https://search.bonzicart.com';
+        const apiKey = 'Surat';
+        const collectionName = 'bnz-product';
+        const params = new URLSearchParams({
+          q: query,
+          query_by: 'name,brand',
+          prefix: 'true',
+          per_page: '10',
+          facet_by: 'brand,categories'
+        });
+        const url = `${typesenseHost}/collections/${collectionName}/documents/search?${params.toString()}`;
+        console.debug('[Typesense] suggestions GET ->', url);
+        const res = await fetch(url, { method: 'GET', headers: { 'X-TYPESENSE-API-KEY': apiKey } });
+        if (!res.ok) {
+          const txt = await res.text();
+          console.warn('Typesense suggestions fetch not ok', res.status, txt);
+          setSuggestions([]);
+          return;
+        }
+        const json = await res.json();
+        console.debug('[Typesense] suggestions response', json);
+        const suggestionsArr = generateCompletionSuggestions(query, json);
+        setSuggestions(suggestionsArr);
+      } catch (err) {
+        console.debug('Typesense suggestions fetch failed', err);
+        setSuggestions([]);
+      }
+    }, 250);
+  };
+
+  // ported suggestion generator (sanitizes and extracts next-word completions)
+  const generateCompletionSuggestions = (query, response) => {
+    const suggestionsSet = new Set();
+    const lowerQuery = (query || '').toLowerCase();
+
+    const cleanText = (text) => {
+      return (text || '')
+        .replace(/[^a-zA-Z0-9\s%\-]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    };
+
+    const queryWords = lowerQuery.split(/\s+/).filter(Boolean);
+    const lastWord = queryWords[queryWords.length - 1] || '';
+
+    (response.hits || []).forEach(hit => {
+      const name = hit.document?.name || '';
+      const words = name.split(/\s+/);
+      if (name.toLowerCase().startsWith(lowerQuery)) {
+        const remaining = words.slice(queryWords.length);
+        if (remaining.length > 0) suggestionsSet.add(cleanText(query + ' ' + remaining[0]));
+        if (remaining.length > 1) suggestionsSet.add(cleanText(query + ' ' + remaining.slice(0,2).join(' ')));
+      }
+
+      for (let i = 0; i < words.length; i++) {
+        if (words[i].toLowerCase().startsWith(lastWord)) {
+          if (i < words.length - 1) {
+            suggestionsSet.add(cleanText((queryWords.slice(0, -1).join(' ') + ' ' + words.slice(i, i + 2).join(' ')).trim()));
+          }
+          if (i < words.length - 2) {
+            suggestionsSet.add(cleanText((queryWords.slice(0, -1).join(' ') + ' ' + words.slice(i, i + 3).join(' ')).trim()));
+          }
+        }
+      }
+    });
+
+    const brandFacet = response.facet_counts?.find(f => f.field_name === 'brand');
+    if (brandFacet) {
+      brandFacet.counts.forEach(b => {
+        if (b.value.toLowerCase().startsWith(lowerQuery)) suggestionsSet.add(cleanText(b.value));
+      });
+    }
+
+  const catFacet = response.facet_counts?.find(f => f.field_name === 'categories');
+    if (catFacet) {
+      catFacet.counts.forEach(c => {
+        if (c.value.toLowerCase().startsWith(lowerQuery)) suggestionsSet.add(cleanText(c.value));
+      });
+    }
+
+    return Array.from(suggestionsSet).filter(s => s.length > 0).slice(0, 10);
+  };
+
+  // perform search (navigate)
+  const performSearch = (explicitQuery) => {
+    // prefer explicitQuery, fall back to searchQuery, then empty string
+    const q = (explicitQuery ?? searchQuery ?? '').trim();
+    let link = '/search';
+    if (selectedCategory) link += '/' + encodeURIComponent(selectedCategory);
+    link = `${link}?query=${encodeURIComponent(q)}`;
+    // use router to navigate
+    router.push(link);
+  };
 
   useEffect(() => {
     const handleDocClick = (e) => {
@@ -195,7 +335,7 @@ export default function Header() {
           </div>
 
           <div className="mt-3 sm:mt-0 sm:flex-1 sm:max-w-xl sm:mx-6">
-            <div className="flex w-full rounded-md overflow-visible shadow-sm max-[360px]:text-[12px] border border-gray-200">
+            <div className="relative flex w-full rounded-md overflow-visible shadow-sm max-[360px]:text-[12px] border border-gray-200">
               {/* Custom dynamic-width category dropdown near search */}
               <div className="relative" ref={categoryRef}>
                 <button
@@ -248,11 +388,12 @@ export default function Header() {
                   type="text"
                   placeholder="Search for products..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => { setSearchQuery(e.target.value); fetchSuggestions(e.target.value); }}
                   spellCheck="false"
                   autoComplete="off"
                   className="pl-3 pr-10 max-[360px]:pr-9 py-2.5 max-[360px]:py-2 focus:outline-none focus:ring-0 focus:border-0 block w-full text-sm max-[360px]:text-xs text-gray-700 h-10 max-[360px]:h-9"
                 />
+                {/* Suggestions dropdown rendered from outer container to span category + input + button */}
                 <button
                   type="button"
                   className="absolute inset-y-0 right-0 flex items-center px-3 max-[360px]:px-2 bg-orange-500 text-white hover:bg-orange-600 transition-colors"
@@ -263,6 +404,15 @@ export default function Header() {
                   </svg>
                 </button>
               </div>
+              {suggestions && suggestions.length > 0 && (
+                <ul className="absolute left-0 right-0 top-full mt-8 bg-white border border-gray-200 rounded-md shadow-lg z-50 max-h-60 overflow-auto text-sm">
+                  {suggestions.map((s, idx) => (
+                    <li key={idx} className="px-3 py-2 hover:bg-gray-100 cursor-pointer" onMouseDown={() => { setSearchQuery(s); setSuggestions([]); performSearch(s); }}>
+                      {s}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
 
